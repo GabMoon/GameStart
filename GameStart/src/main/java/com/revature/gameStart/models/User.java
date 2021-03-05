@@ -27,8 +27,8 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, name = "role_id", columnDefinition = "integer default 1")
-    private int role;
+    @Column(nullable = false)//Potentially need @Enumerated?
+    private UserRole role;
 
     @ManyToMany
     @JoinTable(
@@ -51,14 +51,14 @@ public class User {
         this.email = email;
     }
 
-    public User(int id, String firstName, String lastName, String username, String password, String email, int role) {
+    public User(int id, String firstName, String lastName, String username, String password, String email, UserRole role) {
         this(firstName, lastName, username, password, email);
 
         this.id = id;
         this.role = role;
     }
 
-    public User(int id, String firstName, String lastName, String username, String password, String email, int role, List<Game> favorites) {
+    public User(int id, String firstName, String lastName, String username, String password, String email, UserRole role, List<Game> favorites) {
         this(id, firstName, lastName, username, password, email, role);
 
         this.favorites = favorites;
@@ -113,11 +113,11 @@ public class User {
         this.email = email;
     }
 
-    public int getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
@@ -133,7 +133,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", role=" + role +
+                ", role=" + role.toString() +
                 ", numFavorites=" + favorites.size() +
                 '}';
     }
