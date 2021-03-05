@@ -8,10 +8,10 @@ spring:
   # Basic Datasource/JDBC configurations
   datasource:
     platform: postgres
-    url: jdbc:postgresql://java-enterprise-2101192.cb6ljnanwiyj.us-east-2.rds.amazonaws.com:5432/P2DB
+    url: 
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: Revature2020!
+    username: 
+    password: 
   # Spring Data JPA configurations
   jpa:
     database: POSTGRESQL
