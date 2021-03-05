@@ -11,6 +11,7 @@ drop table if exists publisher;
 drop table if exists app_user;
 
 
+
 create table app_user(
     id serial,
     first_name varchar(25) not null,
@@ -19,6 +20,7 @@ create table app_user(
     password varchar(25) not null,
     email varchar(256) not null Unique,
     role_name varchar(25) not null default 'Basic',
+
 
     constraint user_PK primary key (id)
 );
@@ -32,17 +34,13 @@ create table publisher (
     primary key (id)
 );
 
-
-
-
-
 create table game(
     id            	serial,
     name            varchar(50) not null,
     genre           varchar(25) not null,
     description     text,
     rating          int default -1,
-   
+
     constraint game_pk
     primary key (id)
 );
@@ -56,6 +54,8 @@ create table game_publisher(
     constraint game_publisher_game_id_FK foreign key (game_id) references game
 
 );
+
+
 
 create table review(
     description text default null,
@@ -270,8 +270,3 @@ select g.name as GAME, p."name" as Publisher, d."name" as Developer ,array_to_st
 	from game g, developer d, publisher p, platform plat, game_developer gd , game_platform gp
 	where g.publisher_id = p.id and gd.developer_id = d.id and gd.game_id = g.id and gp.game_id = g.id and gp.platform_id = plat.id
 	group by g.name, p."name",d."name" ;
-
-
-
-
-
