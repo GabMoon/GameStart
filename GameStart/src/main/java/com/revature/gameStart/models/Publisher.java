@@ -1,11 +1,11 @@
 package com.revature.gameStart.models;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "publisher")
 public class Publisher {
 
     //Attributes ----------------------------------------------------
@@ -15,6 +15,15 @@ public class Publisher {
 
     @Column(nullable = false)
     private String name;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "game_publisher",
+            joinColumns = @JoinColumn (name = "publisher_id"),
+            inverseJoinColumns = @JoinColumn (name = "game_id")
+    )
+    private List<Game> gamesPublished;
 
 
 

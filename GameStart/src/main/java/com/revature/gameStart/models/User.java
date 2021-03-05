@@ -27,16 +27,13 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)//Potentially need @Enumerated?
+    @Column(name = "role_name", nullable = false)
+    @Enumerated(EnumType.STRING)
+
     private UserRole role;
 
-    @ManyToMany
-    @JoinTable(
-            name = "favorite",
-            joinColumns = @JoinColumn (name = "user_id"),
-            inverseJoinColumns = @JoinColumn (name = "game_id")
-    )
-    private List<Game> favorites;
+    @OneToMany(mappedBy = "user", targetEntity = Review.class)
+    private List<Review> reviews;
 
     //Constructors --------------------------------------------------
     public User() {
@@ -58,11 +55,11 @@ public class User {
         this.role = role;
     }
 
-    public User(int id, String firstName, String lastName, String username, String password, String email, UserRole role, List<Game> favorites) {
-        this(id, firstName, lastName, username, password, email, role);
-
-        this.favorites = favorites;
-    }
+//    public User(int id, String firstName, String lastName, String username, String password, String email, UserRole role, List<Game> favorites) {
+//        this(id, firstName, lastName, username, password, email, role);
+//
+//        this.favorites = favorites;
+//    }
 
     //Getters & Setters ---------------------------------------------
     public int getId() {
@@ -134,7 +131,6 @@ public class User {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", role=" + role.toString() +
-                ", numFavorites=" + favorites.size() +
                 '}';
     }
 
@@ -145,12 +141,11 @@ public class User {
         User user = (User) o;
         return id == user.id && role == user.role && Objects.equals(firstName, user.firstName)
                 && Objects.equals(lastName, user.lastName) && Objects.equals(username, user.username)
-                && Objects.equals(password, user.password) && Objects.equals(email, user.email)
-                && Objects.equals(favorites, user.favorites);
+                && Objects.equals(password, user.password) && Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, username, password, email, role, favorites);
+        return Objects.hash(id, firstName, lastName, username, password, email, role);
     }
 }

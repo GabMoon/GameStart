@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class ReviewId  implements Serializable {
-    private int creator;
+    private User user;
 
-    private int gameId;
+    private Game game;
 
-    public ReviewId(int creator, int gameId) {
-        this.creator = creator;
-        this.gameId = gameId;
+    public ReviewId(User creator_id, Game game_id) {
+        this.user = creator_id;
+        this.game = game_id;
     }
 
     @Override
@@ -18,11 +18,11 @@ public class ReviewId  implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReviewId reviewId = (ReviewId) o;
-        return creator == reviewId.creator && gameId == reviewId.gameId;
+        return user == reviewId.user && game == reviewId.game;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(creator, gameId);
+        return Objects.hash(user, game);
     }
 }

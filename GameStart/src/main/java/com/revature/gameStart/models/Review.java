@@ -1,10 +1,12 @@
 package com.revature.gameStart.models;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @IdClass(ReviewId.class)
+@Table(name = "review")
 public class Review {
 
     //Attributes ----------------------------------------------------
@@ -14,15 +16,15 @@ public class Review {
     @Column(nullable = false)
     private int score;
 
-    @Id @ManyToOne
-    @JoinColumn(name = "game")
-    @Column(nullable = false, name = "game_id")
-    private int gameId;
+    @Id
+    @ManyToOne
+    @JoinColumn(name="creator_id", nullable = false)
+    private User user;
 
-    @Id @ManyToOne
-    @JoinColumn(name = "user")
-    @Column(nullable = false, name = "creator_id")
-    private int creatorId;
+    @Id
+    @ManyToOne
+    @JoinColumn(name="game_id", nullable = false)
+    private Game game;
 
 
     //Constructors --------------------------------------------------
@@ -30,13 +32,13 @@ public class Review {
     public Review() {
     }
 
-    public Review(int score, int gameId, int creatorId) {
+    public Review(int score, Game gameId, User creatorId) {
         this.score = score;
-        this.gameId = gameId;
-        this.creatorId = creatorId;
+        this.game = gameId;
+        this.user = creatorId;
     }
 
-    public Review(String description, int score, int gameId, int creatorId) {
+    public Review(String description, int score, Game gameId, User creatorId) {
         this(score, gameId, creatorId);
 
         this.description = description;
@@ -60,35 +62,37 @@ public class Review {
         this.score = score;
     }
 
-    public int getGameId() {
-        return gameId;
+    public Game getGame() {
+        return game;
     }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
-    public int getCreatorId() {
-        return creatorId;
+    public User getUser() {
+        return user;
     }
 
-    public void setCreatorId(int creatorId) {
-        this.creatorId = creatorId;
+    public void setUser(User user) {
+        this.user = user;
     }
+
 
     //Other ---------------------------------------------------------
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Review review = (Review) o;
-        return score == review.score && gameId == review.gameId && creatorId == review.creatorId && Objects.equals(description, review.description);
+        return score == review.score && Objects.equals(description, review.description) && Objects.equals(game, review.game) && Objects.equals(user, review.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(description, score, gameId, creatorId);
+        return Objects.hash(description, score, game, user);
     }
 
     @Override
@@ -96,8 +100,8 @@ public class Review {
         return "Review{" +
                 "description='" + description + '\'' +
                 ", score=" + score +
-                ", gameId=" + gameId +
-                ", creatorId=" + creatorId +
+                ", game=" + game +
+                ", user=" + user +
                 '}';
     }
 }
