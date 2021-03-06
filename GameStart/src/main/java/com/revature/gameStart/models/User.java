@@ -53,6 +53,7 @@ public class User {
 
         this.id = id;
         this.role = role;
+
     }
 
 //    public User(int id, String firstName, String lastName, String username, String password, String email, UserRole role, List<Game> favorites) {
