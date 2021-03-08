@@ -6,21 +6,21 @@ import java.util.Arrays;
 
 public class GameWrapperClass {
 
-    Game[] results;
+    private RawgGame[] results;
 
     public GameWrapperClass() {
 
     }
 
-    GameWrapperClass(Game[] games) {
+    GameWrapperClass(RawgGame[] games) {
         results = games;
     }
 
-    public Game[] getResults() {
+    public RawgGame[] getResults() {
         return results;
     }
 
-    public GameWrapperClass setResults(Game[] results) {
+    public GameWrapperClass setResults(RawgGame[] results) {
         this.results = results;
         return this;
     }
