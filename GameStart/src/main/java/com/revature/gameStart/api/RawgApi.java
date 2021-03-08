@@ -35,21 +35,21 @@ public class RawgApi {
 
     static {
         try {
-            props.load(new FileReader("GameStart/src/main/resources/application.properties"));
+            props.load(new FileReader("src/main/resources/application.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @Autowired
-    public RawgApi(RestTemplateBuilder restTemplateBuilder) {
-        this.rawgClient = restTemplateBuilder.build();
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
-        messageConverters.add(converter);
-        this.rawgClient.setMessageConverters(messageConverters);
-    }
+//    @Autowired
+//    public RawgApi(RestTemplateBuilder restTemplateBuilder) {
+//        this.rawgClient = restTemplateBuilder.build();
+//        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+//        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+//        messageConverters.add(converter);
+//        this.rawgClient.setMessageConverters(messageConverters);
+//    }
 
     public RawgApi() {
 
