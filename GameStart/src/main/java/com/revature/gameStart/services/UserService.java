@@ -102,6 +102,7 @@ public class UserService {
 
     public SortedSet<User> sortUsers(String sortCriterion, Set<User> usersForSorting){
 
+        // DOES NOT WORK. I AM NOT ACTUALLY SORTING ANYTHING
         SortedSet<User> usersSet = new TreeSet<>(Comparator.comparing(User:: getId, Integer:: compareTo));
 
         switch(sortCriterion.toLowerCase()) {
