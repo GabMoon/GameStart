@@ -6,6 +6,7 @@ import com.revature.gameStart.exceptions.ResourceNotFoundException;
 import com.revature.gameStart.exceptions.ResourcePersistenceException;
 import com.revature.gameStart.models.User;
 import com.revature.gameStart.models.UserRole;
+import com.revature.gameStart.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,13 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
 
+    private UserRepository userRepository;
     public ArrayList<User> users = new ArrayList<>();
 
     @Autowired
     public UserService() {
         super();
+        this.userRepository = userRepository;
         users.add(new User(1, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC));
         users.add(new User(2, "Banana", "Split", "BS", "Pass", "bs@amurica.com", UserRole.BASIC));
         users.add(new User(3, "Chocolate", "Cake", "CC", "Pass", "Cc@amurica.com", UserRole.BASIC));
@@ -49,6 +52,8 @@ public class UserService {
     public List<User> getAllUsers(){
 
         List<User> userList;
+
+        //userList = (List<User>) userRepository.findAll();
 
         userList = users;
 
