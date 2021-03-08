@@ -13,6 +13,7 @@ spring:
     username: ${db.username}
     password: ${db.password}
 
+
   # Spring Data JPA configurations
   jpa:
     database: POSTGRESQL
