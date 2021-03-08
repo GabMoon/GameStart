@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -24,9 +25,21 @@ public class RawgApi {
     private static Properties props = new Properties();
 
     static {
+        boolean found = false;
         try {
             props.load(new FileReader("GameStart/src/main/resources/application.properties"));
         } catch (IOException e) {
+            found = true;
+        }
+        try {
+            props.load(new FileReader("src/main/resources/application.properties"));
+        } catch (IOException e) {
+            found = true;
+        }
+
+        if (!found) try {
+            throw new FileNotFoundException();
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
