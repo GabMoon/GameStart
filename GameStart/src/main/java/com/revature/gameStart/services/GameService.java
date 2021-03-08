@@ -44,4 +44,9 @@ public class GameService {
         Optional<Game> game = gameRepo.findGameByName(name);
         return game.orElse(null);
     }
+
+    public Game getGameBySlug(String slug){
+        Optional<Game> game = gameRepo.findGameBySlug(slug);
+        return game.orElse(null);
+    }
 }
