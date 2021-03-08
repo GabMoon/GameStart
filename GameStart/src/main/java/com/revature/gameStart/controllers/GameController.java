@@ -30,9 +30,14 @@ public class GameController {
         return gameService.getAllGames();
     }
 
-//    @GetMapping(path = "/id/{id}")
-//    public Game getGameById(@PathVariable int id){
-//        return gameService.getGameById(id);
-//    }
+    @GetMapping(path = "/id/{id}")
+    public Game getGameById(@PathVariable int id){
+        return gameService.getGameById(id);
+    }
+
+    @GetMapping(path = "/name/{name}")
+    public Game getGameByName(@PathVariable String name){
+        return gameService.getGameByName(name);
+    }
 
 }
