@@ -57,6 +57,8 @@ public class Game {
        this.description = description;
        this.rating = rating;
     }
+
+
     //Getters and Setters -------------------------------------------
 
     public int getId() {
