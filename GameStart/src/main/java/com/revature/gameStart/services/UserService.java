@@ -19,45 +19,39 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private UserRepository userRepository;
-    public ArrayList<User> users = new ArrayList<>();
 
     @Autowired
-    public UserService() {
+    public UserService(UserRepository userRepository) {
         super();
         this.userRepository = userRepository;
-        users.add(new User(1, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC));
-        users.add(new User(2, "Banana", "Split", "BS", "Pass", "bs@amurica.com", UserRole.BASIC));
-        users.add(new User(3, "Chocolate", "Cake", "CC", "Pass", "Cc@amurica.com", UserRole.BASIC));
+
     }
 
+    @Transactional
     public User getUserById(int id){
         if (id <= 0) {
             throw new InvalidRequestException();
         }
-
-        return new User(3,"Chocolate", "Cake", "CC", "Pass", "Cc@amurica.com", UserRole.BASIC);
+        return userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
+    @Transactional
     public void register(User newUser){
         if (!isUserValid(newUser)) throw new InvalidRequestException();
 
         if (getUserByUsername(newUser.getUsername()) != null) {
             throw new ResourcePersistenceException("Username is already in use");
         }
-
-        users.add(newUser);
-
+        userRepository.save(newUser);
     }
 
     public List<User> getAllUsers(){
 
         List<User> userList;
 
-        //userList = (List<User>) userRepository.findAll();
+        userList = (List<User>) userRepository.findAll();
 
-        userList = users;
-
-        if (users.isEmpty()) {
+        if (userList.isEmpty()) {
             throw new ResourceNotFoundException();
         }
 
@@ -66,17 +60,13 @@ public class UserService {
 
     public Set<User> getUsersByRole(UserRole role){
 
-        Set<User> usersSet = new HashSet<>();
+        Set<User> usersSet;
 
         if (role == null) {
             throw new InvalidRequestException();
         }
 
-        for(User user : users){
-            if (user.getRole() == role) {
-                usersSet.add(user);
-            }
-        }
+        usersSet = userRepository.findUsersByRole(role.toString());
 
         if (usersSet.isEmpty()) {
             throw new ResourceNotFoundException();
@@ -89,9 +79,7 @@ public class UserService {
         if (username == null || username.trim().equals("")) {
             throw new InvalidRequestException();
         }
-        for(User user : users)
-            if (user.getUsername().equals(username)) return user;
-        throw new ResourceNotFoundException();
+        return userRepository.findUserByUsername(username).orElseThrow(ResourceNotFoundException::new);
     }
 
     // Currently no way to test because this field does not exist in User. It is a column that exists in User, but not in the model
@@ -154,24 +142,12 @@ public class UserService {
             throw new InvalidRequestException();
         }
 
-        Optional<User> persistedUser = Optional.empty();
-
-        for(User user : users) {
-            if(user.getUsername().equals(updatedUser.getUsername())) {
-                persistedUser = Optional.of(user);
-            }
-        }
+        Optional<User> persistedUser = userRepository.findUserByUsername(updatedUser.getUsername());
 
         if(persistedUser.isPresent() && persistedUser.get().getId() != updatedUser.getId()) {
             throw new ResourcePersistenceException("That username is taken by someone else");
         }
-
-        for(int i = 0; i < users.size(); i++) {
-            if (users.get(i).getId() == updatedUser.getId()) {
-                users.set(i, updatedUser);
-            }
-        }
-
+        userRepository.save(updatedUser);
     }
 
     public Boolean isUserValid(User user){
