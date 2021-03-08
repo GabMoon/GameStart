@@ -35,7 +35,7 @@ public class RawgApi {
 
     static {
         try {
-            props.load(new FileReader("src/main/resources/application.properties"));
+            props.load(new FileReader("GameStart/src/main/resources/application.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,19 +60,32 @@ public class RawgApi {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         headers.set("token", props.getProperty("rawgToken"));
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity<Game> game = new HttpEntity<Game>(headers);
+        //headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<Game> game = new HttpEntity<>(headers);
+
 ////        return rawgClient.getForEntity(rawgUrl+"/games/portal-2", Game.class).getBody();
 //
 ////        Game games = rawgClient.getForObject(rawgUrl+"/games/portal-2", Game.class);
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Game[]> response = restTemplate.getForEntity(rawgUrl+"/games", Game[].class);
+        //estTemplate.headForHeaders()
+        GameWrapperClass response = restTemplate.getForObject(rawgUrl+"/games", GameWrapperClass.class);
 
-        Game[] games = response.getBody();
+        Game[] games = response.getResults();
 
         return games;
 
+    }
+
+    public Game getGame(String name) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        headers.set("token", props.getProperty("rawgToken"));
+        //headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<Game> game = new HttpEntity<>(headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(rawgUrl+"/games/"+name, Game.class);
     }
 
 }
