@@ -53,6 +53,7 @@ public class User {
 
         this.id = id;
         this.role = role;
+
     }
 
 //    public User(int id, String firstName, String lastName, String username, String password, String email, UserRole role, List<Game> favorites) {
@@ -143,6 +144,8 @@ public class User {
                 && Objects.equals(lastName, user.lastName) && Objects.equals(username, user.username)
                 && Objects.equals(password, user.password) && Objects.equals(email, user.email);
     }
+
+
 
     @Override
     public int hashCode() {
