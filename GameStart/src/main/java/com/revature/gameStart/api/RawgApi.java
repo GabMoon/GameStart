@@ -35,7 +35,7 @@ public class RawgApi {
 
     static {
         try {
-            props.load(new FileReader("GameStart/src/main/resources/application.properties"));
+            props.load(new FileReader("src/main/resources/application.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
