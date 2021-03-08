@@ -1,6 +1,42 @@
 server:
-  port: 5000 #Elastic
+  port: 5000 # ElasticBeanstalk expects for Java apps to be deployed on port 5000
 
 spring:
+  # Basic application info
   application:
     name: GameStart
+  # Basic Datasource/JDBC configurations
+  datasource:
+    platform: postgres
+    url: ${db.url}
+    driver-class-name: org.postgresql.Driver
+    username: ${db.username}
+    password: ${db.password}
+
+  # Spring Data JPA configurations
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+
+# Spring Boot Actuator configurations
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # DO NOT EXPOSE ALL ACTUATOR ENDPOINTS IN PRODUCTION
+
+# .properties file version of the above .yml configuration
+#-----------------------------------------------------------
+# spring.application.name=quizzard-api
+# spring.h2.console.enabled=true
+# spring.h2.console.path=/h2
+# spring.datasource.url=jdbc:h2:mem:quizzard-db
+# spring.datasource.driver-class-name=org.h2.Driver
+# spring.datasource.username=sa
+# spring.datasource.password=password
+# spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+# spring.jpa.show-sql=true
+# spring.jpa.hibernate.ddl-auto=create
+# management.endpoints.web.exposure.include=*

@@ -2,6 +2,8 @@ drop table if exists game_platform;
 drop table if exists platform;
 drop table if exists game_developer;
 drop table if exists developer;
+drop table if exists game_genre;
+drop table if exists genre;
 drop table if exists favorite;
 drop table if exists review;
 
@@ -37,7 +39,6 @@ create table publisher (
 create table game(
     id            	serial,
     name            varchar(50) not null,
-    genre           varchar(25) not null,
     description     text,
     rating          int default -1,
 
@@ -76,9 +77,9 @@ create table favorite(
     user_id int ,
 
     constraint favorite_id_PK primary key (game_id,user_id),
-    constraint favorite_game_id foreign key (game_id) references game, 
+    constraint favorite_game_id foreign key (game_id) references game,
     constraint favorite_user_id foreign key (user_id) references app_user
-); 
+);
 
 
 
@@ -128,15 +129,39 @@ create table game_platform (
 
 );
 
+create table genre (
+	id		serial,
+	name	varchar(25) not null,
+
+    constraint genre_pk
+    primary key (id)
+);
+
+create table game_genre(
+	game_id		int,
+	genre_id	int,
+
+	constraint game_genre_pk
+    primary key (game_id, genre_id),
+
+    constraint game_id_fk
+    foreign key (game_id)
+    references game,
+
+    constraint genre_id_fk
+    foreign key (genre_id)
+    references genre
+);
 
 
---Inserts 
+
+--Inserts
 --user_role Table
 insert into user_role(role_name) values ('Administration');
 insert into user_role(role_name) values ('Basic');
 
 --app_user Table
---Calvin 
+--Calvin
 insert into app_user(first_name,last_name,username,password,email) values ('Calvin','Zheng','calvin123','password','calvin123@yahoo.com');
 --Daniel
 insert into app_user(first_name,last_name,username,password,email) values ('Daniel','Skwarcha','daniel123','password','daniel123@yahoo.com');
@@ -153,7 +178,7 @@ insert into publisher(name) values ('Rockstar Games');
 insert into publisher(name) values ('Facepunch Studios');
 
 --game Table
-insert into game(name,genre,description,publisher_id) 
+insert into game(name,genre,description,publisher_id)
     values ('Valheim','Open World Survival Craft','A brutal exploration and survival game for 1-10 players, set in a procedurally-generated purgatory inspired by viking culture. Battle, build, and conquer your way to a saga worthy of Odin’s patronage!', 1);
 
 insert into game(name,genre,description,publisher_id)
@@ -165,7 +190,7 @@ insert into game(name,genre,description,publisher_id)
 
 --review Table
 --Game 1 Valheim
-insert into review (description,score,game_id,creator_id) 
+insert into review (description,score,game_id,creator_id)
     values ('Great Game',5,1,1);
 
 insert into review (description, score, game_id, creator_id)
@@ -175,7 +200,7 @@ insert into review (description, score, game_id, creator_id)
     values ('Worst game I have ever played',1,1,3);
 
 --Game 2 GTA V
-insert into review (description,score,game_id,creator_id) 
+insert into review (description,score,game_id,creator_id)
     values ('Great Game',5,2,1);
 
 insert into review (description, score, game_id, creator_id)
@@ -185,7 +210,7 @@ insert into review (description, score, game_id, creator_id)
     values ('Worst game I have ever played',1,2,3);
 
 --Game 3 Rust
-insert into review (description,score,game_id,creator_id) 
+insert into review (description,score,game_id,creator_id)
     values ('Great Game',5,3,1);
 
 insert into review (description, score, game_id, creator_id)
@@ -194,7 +219,7 @@ insert into review (description, score, game_id, creator_id)
 insert into review (description, score, game_id, creator_id)
     values ('Worst game I have ever played',1,3,3);
 
-   
+
 --favorite Table
 --user 1 Calvin
 insert into favorite (game_id,user_id) values (1,1);
@@ -219,7 +244,7 @@ insert into developer(name) values ('Iron Gate AB');
 insert into developer(name) values ('Rockstar North');
 --Rust
 insert into developer(name) values ('Facepunch Studios');
- 
+
 
 --game_developer Table
 --valheim
@@ -259,7 +284,7 @@ select * from app_user au;
 select * from review;
 
 --get all user reviews with their firstname,lastname, game name, and rating
-select g.name, r.score,u.first_name , u.last_name from app_user u, review r, game g 
+select g.name, r.score,u.first_name , u.last_name from app_user u, review r, game g
 		where r.creator_id = u.id and r.game_id = g.id ;
 
 --get all games
