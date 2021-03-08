@@ -8,10 +8,10 @@ spring:
   # Basic Datasource/JDBC configurations
   datasource:
     platform: postgres
-    url: ${db.url}
+    url: jdbc:postgresql://java-revature.cf2cchkxcu2z.us-east-2.rds.amazonaws.com:5432/project2
     driver-class-name: org.postgresql.Driver
-    username: ${db.username}
-    password: ${db.password}
+    username: postgres
+    password: postgres
 
   # Spring Data JPA configurations
   jpa:
