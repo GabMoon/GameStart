@@ -24,7 +24,7 @@ public class GameService {
         this.gameRepo = repo;
     }
 
-    //Other ---------------------------------------------------------
+    //Get ---------------------------------------------------------
     public List<Game> getAllGames(){
         List<Game> games;
 
@@ -49,4 +49,5 @@ public class GameService {
         Optional<Game> game = gameRepo.findGameBySlug(slug);
         return game.orElse(null);
     }
+
 }

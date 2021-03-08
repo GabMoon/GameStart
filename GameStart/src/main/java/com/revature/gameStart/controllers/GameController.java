@@ -4,10 +4,7 @@ package com.revature.gameStart.controllers;
 import com.revature.gameStart.models.Game;
 import com.revature.gameStart.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.MediaType;
 import java.util.*;
@@ -30,6 +27,11 @@ public class GameController {
         return gameService.getAllGames();
     }
 
+//    @GetMapping
+//    public List<Game> getGamesByDeveloper(@RequestParam String dev){
+//        return gameService.getGameByDev(dev);
+//    }
+
     @GetMapping(path = "/id/{id}")
     public Game getGameById(@PathVariable int id){
         return gameService.getGameById(id);
@@ -44,5 +46,6 @@ public class GameController {
     public Game getGameBySlug(@PathVariable String slug){
         return gameService.getGameBySlug(slug);
     }
+
 
 }
