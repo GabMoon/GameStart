@@ -6,6 +6,7 @@ import com.revature.gameStart.exceptions.ResourceNotFoundException;
 import com.revature.gameStart.exceptions.ResourcePersistenceException;
 import com.revature.gameStart.models.User;
 import com.revature.gameStart.models.UserRole;
+import com.revature.gameStart.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
@@ -17,42 +18,40 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
 
-    public ArrayList<User> users = new ArrayList<>();
+    private UserRepository userRepository;
 
     @Autowired
-    public UserService() {
+    public UserService(UserRepository userRepository) {
         super();
-        users.add(new User(1, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC));
-        users.add(new User(2, "Banana", "Split", "BS", "Pass", "bs@amurica.com", UserRole.BASIC));
-        users.add(new User(3, "Chocolate", "Cake", "CC", "Pass", "Cc@amurica.com", UserRole.BASIC));
+        this.userRepository = userRepository;
+
     }
 
+    @Transactional
     public User getUserById(int id){
         if (id <= 0) {
             throw new InvalidRequestException();
         }
-
-        return new User(3,"Chocolate", "Cake", "CC", "Pass", "Cc@amurica.com", UserRole.BASIC);
+        return userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
+    @Transactional
     public void register(User newUser){
         if (!isUserValid(newUser)) throw new InvalidRequestException();
 
         if (getUserByUsername(newUser.getUsername()) != null) {
             throw new ResourcePersistenceException("Username is already in use");
         }
-
-        users.add(newUser);
-
+        userRepository.save(newUser);
     }
 
     public List<User> getAllUsers(){
 
         List<User> userList;
 
-        userList = users;
+        userList = (List<User>) userRepository.findAll();
 
-        if (users.isEmpty()) {
+        if (userList.isEmpty()) {
             throw new ResourceNotFoundException();
         }
 
@@ -61,17 +60,13 @@ public class UserService {
 
     public Set<User> getUsersByRole(UserRole role){
 
-        Set<User> usersSet = new HashSet<>();
+        Set<User> usersSet;
 
         if (role == null) {
             throw new InvalidRequestException();
         }
 
-        for(User user : users){
-            if (user.getRole() == role) {
-                usersSet.add(user);
-            }
-        }
+        usersSet = userRepository.findUsersByRole(role.toString());
 
         if (usersSet.isEmpty()) {
             throw new ResourceNotFoundException();
@@ -84,9 +79,7 @@ public class UserService {
         if (username == null || username.trim().equals("")) {
             throw new InvalidRequestException();
         }
-        for(User user : users)
-            if (user.getUsername().equals(username)) return user;
-        throw new ResourceNotFoundException();
+        return userRepository.findUserByUsername(username).orElseThrow(ResourceNotFoundException::new);
     }
 
     // Currently no way to test because this field does not exist in User. It is a column that exists in User, but not in the model
@@ -149,24 +142,12 @@ public class UserService {
             throw new InvalidRequestException();
         }
 
-        Optional<User> persistedUser = Optional.empty();
-
-        for(User user : users) {
-            if(user.getUsername().equals(updatedUser.getUsername())) {
-                persistedUser = Optional.of(user);
-            }
-        }
+        Optional<User> persistedUser = userRepository.findUserByUsername(updatedUser.getUsername());
 
         if(persistedUser.isPresent() && persistedUser.get().getId() != updatedUser.getId()) {
             throw new ResourcePersistenceException("That username is taken by someone else");
         }
-
-        for(int i = 0; i < users.size(); i++) {
-            if (users.get(i).getId() == updatedUser.getId()) {
-                users.set(i, updatedUser);
-            }
-        }
-
+        userRepository.save(updatedUser);
     }
 
     public Boolean isUserValid(User user){
