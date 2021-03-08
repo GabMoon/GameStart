@@ -11,12 +11,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class UserService {
 
-    public List<User> users = new ArrayList<>();
+    public ArrayList<User> users = new ArrayList<>();
 
     @Autowired
     public UserService() {
@@ -45,14 +46,38 @@ public class UserService {
 
     }
 
-    public Set<User> getAllUsers(){
+    public List<User> getAllUsers(){
 
-        return null;
+        List<User> userList;
+
+        userList = users;
+
+        if (users.isEmpty()) {
+            throw new ResourceNotFoundException();
+        }
+
+        return userList;
     }
 
-    public Set<User> getUsersByRole(){
+    public Set<User> getUsersByRole(UserRole role){
 
-        return null;
+        Set<User> usersSet = new HashSet<>();
+
+        if (role == null) {
+            throw new InvalidRequestException();
+        }
+
+        for(User user : users){
+            if (user.getRole() == role) {
+                usersSet.add(user);
+            }
+        }
+
+        if (usersSet.isEmpty()) {
+            throw new ResourceNotFoundException();
+        }
+
+        return usersSet;
     }
 
     public User getUserByUsername(String username){
@@ -64,20 +89,82 @@ public class UserService {
         throw new ResourceNotFoundException();
     }
 
-    public void confirmAccount(){
+    // Currently no way to test because this field does not exist in User. It is a column that exists in User, but not in the model
+//    public void confirmAccount(int userId){
+//
+//        if (userId <= 0) {
+//            throw new InvalidRequestException();
+//        }
+//
+//
+//
+//    }
 
+    public SortedSet<User> sortUsers(String sortCriterion, Set<User> usersForSorting){
+
+        SortedSet<User> usersSet = new TreeSet<>(Comparator.comparing(User:: getId, Integer:: compareTo));
+
+        switch(sortCriterion.toLowerCase()) {
+            case "username":
+                usersSet = usersSet.stream()
+                        .collect(Collectors.toCollection(() -> {
+                            return new TreeSet<>(Comparator.comparing(User::getUsername, String::compareTo));
+                        }));
+                break;
+            case "first":
+                usersSet = usersSet.stream()
+                        .collect(Collectors.toCollection(() -> {
+                            return new TreeSet<>(Comparator.comparing(User::getFirstName, String::compareTo));
+                        }));
+                break;
+            case "last":
+                usersSet = usersSet.stream()
+                        .collect(Collectors.toCollection(() -> {
+                            return new TreeSet<>(Comparator.comparing(User::getLastName, String::compareTo));
+                        }));
+                break;
+            case "role":
+                usersSet = usersSet.stream()
+                        .collect(Collectors.toCollection(() -> {
+                            return new TreeSet<>(Comparator.comparing(User:: getRole, Enum:: compareTo));
+                        }));
+                break;
+            default:
+                throw new InvalidRequestException();
+        }
+
+        return usersSet;
     }
+    // Currently not able to test this because this requires a column for confirm account that we decided not to use
+//    public Principal authenticate(String username, String password){
+//
+//
+//        return null;
+//    }
 
-    public SortedSet<User> sortUsers(){
+    public void updateProfile(User updatedUser){
 
-        return null;
-    }
+        if(!isUserValid(updatedUser)) {
+            throw new InvalidRequestException();
+        }
 
-    public Principal authenticate(){
-        return null;
-    }
+        Optional<User> persistedUser = Optional.empty();
 
-    public void updateProfile(){
+        for(User user : users) {
+            if(user.getUsername().equals(updatedUser.getUsername())) {
+                persistedUser = Optional.of(user);
+            }
+        }
+
+        if(persistedUser.isPresent() && persistedUser.get().getId() != updatedUser.getId()) {
+            throw new ResourcePersistenceException("That username is taken by someone else");
+        }
+
+        for(int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId() == updatedUser.getId()) {
+                users.set(i, updatedUser);
+            }
+        }
 
     }
 

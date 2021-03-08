@@ -11,8 +11,7 @@ import static org.junit.Assert.*;
 import io.micrometer.core.instrument.config.validate.Validated;
 import org.junit.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class UserServiceTest {
 
@@ -62,20 +61,19 @@ public class UserServiceTest {
     }
 
     // Test that an exception is thrown when trying to get a user with an id less than 0
-    @Test
+    @Test(expected = InvalidRequestException.class)
     public void UserIdLessThanZero() {
 
         //Arrange
-        User testUser = userService.users.get(1);
-        try {
+        User testUser;
 
-            //Act
-            testUser = userService.getUserById(-1);
-            fail("Should have thrown an exception");
-        }catch(InvalidRequestException e) {
-            assertTrue(true);
 
-        }
+        //Act
+        testUser = userService.getUserById(-1);
+
+        // Assert
+            // Do not have to assert
+
     }
 
     //---------------------------------------------------------getUserByUsername------------------------------------------------------------------------------------------------------------
@@ -157,4 +155,226 @@ public class UserServiceTest {
         // Already asserted new @Test. We are expecting a ResourcePersistenceException
     }
 
+// ---------------------------------------------- getAllUsers()---------------------------------------------------------------------------------------------
+    // Test that gets all users
+    @Test
+    public void getUsers() {
+        // Arrange
+            // Nothing to arrange
+        // Act
+        List<User> allUsers = userService.getAllUsers();
+        // Assert
+        assertTrue(!allUsers.isEmpty());
+    }
+
+    // Test that ResourceNotFoundException is thrown
+    @Test(expected = ResourceNotFoundException.class)
+    public void noUsersInList() {
+        // Arrange
+            userService.users.clear();
+        // Act
+        List<User> allUsers = userService.getAllUsers();
+
+        // Assert
+            // Nothing to assert because an exception is expected
+    }
+
+    //-----------------------------------------------getUsersByRole--------------------------------------------------------------------------------------------------------------------
+    // Test that gets Basic Users
+    @Test
+    public void getBasicUsers() {
+        // Arrange
+        UserRole userRole = UserRole.BASIC;
+        // Act
+        Set<User> usersSetRole = userService.getUsersByRole(userRole);
+        // Assert
+        assertTrue(!usersSetRole.isEmpty());
+    }
+    // Test that throws InvalidRequestException
+    @Test(expected = InvalidRequestException.class)
+    public void getNullUsers() {
+        // Arrange
+        UserRole userRole = null;
+        // Act
+        Set<User> userSetRole = userService.getUsersByRole(userRole);
+        // Assert
+            // Nothing to assert because an exception is expected
+    }
+    // Test that throws ResourceNotFoundException
+    @Test(expected = ResourceNotFoundException.class)
+    public void getNoUsers() {
+        // Arrange
+        UserRole userRoleAdmin = UserRole.ADMIN;
+        // Act
+        Set<User> userSetRole = userService.getUsersByRole(userRoleAdmin);
+        // Assert
+            // Nothing to assert because an exception is expected
+    }
+
+//-------------------------------------------------sortUsers-------------------------------------------------------------------------------------------
+    // Test that get users sorted by username
+    @Test
+    public void getUsersSortUsername(){
+        //Arrange
+        String sortCriterion = "username";
+        Set<User> usersForSorting = new HashSet<>(userService.users);
+        //Act
+        SortedSet<User> sortedUsers= userService.sortUsers(sortCriterion, usersForSorting);
+        // Assert
+        Iterator iterator = sortedUsers.iterator();
+        User currentUser = null;
+        User nextUser = null;
+        while(iterator.hasNext()) {
+
+            if (currentUser == null) {
+                currentUser = (User)iterator.next();
+            }
+            else {
+                nextUser = (User)iterator.next();
+                if(nextUser.getUsername().compareTo(currentUser.getUsername()) < 0) {
+                    fail();
+                    break;
+                }
+                currentUser = nextUser;
+            }
+        }
+
+        assertTrue(true);
+    }
+    // Test that get users sorted by First Name
+    @Test
+    public void getUsersSortFirstName(){
+        //Arrange
+        String sortCriterion = "first";
+        Set<User> usersForSorting = new HashSet<>(userService.users);
+        //Act
+        SortedSet<User> sortedUsers= userService.sortUsers(sortCriterion, usersForSorting);
+        // Assert
+        Iterator iterator = sortedUsers.iterator();
+        User currentUser = null;
+        User nextUser = null;
+        while(iterator.hasNext()) {
+
+            if (currentUser == null) {
+                currentUser = (User)iterator.next();
+            }
+            else {
+                nextUser = (User)iterator.next();
+                if(nextUser.getFirstName().compareTo(currentUser.getFirstName()) < 0) {
+                    fail();
+                    break;
+                }
+                currentUser = nextUser;
+            }
+        }
+
+        assertTrue(true);
+    }
+    // Test that get users sorted by Last Name
+    @Test
+    public void getUsersSortLastName(){
+        //Arrange
+        String sortCriterion = "last";
+        Set<User> usersForSorting = new HashSet<>(userService.users);
+        //Act
+        SortedSet<User> sortedUsers= userService.sortUsers(sortCriterion, usersForSorting);
+        // Assert
+        Iterator iterator = sortedUsers.iterator();
+        User currentUser = null;
+        User nextUser = null;
+        while(iterator.hasNext()) {
+
+            if (currentUser == null) {
+                currentUser = (User)iterator.next();
+            }
+            else {
+                nextUser = (User)iterator.next();
+                if(nextUser.getLastName().compareTo(currentUser.getLastName()) < 0) {
+                    fail();
+                    break;
+                }
+                currentUser = nextUser;
+            }
+        }
+
+        assertTrue(true);
+    }
+    // Test that get users sorted by role
+    @Test
+    public void getUsersSortRole(){
+        //Arrange
+        String sortCriterion = "role";
+        Set<User> usersForSorting = new HashSet<>(userService.users);
+        //Act
+        SortedSet<User> sortedUsers= userService.sortUsers(sortCriterion, usersForSorting);
+        // Assert
+        Iterator iterator = sortedUsers.iterator();
+        User currentUser = null;
+        User nextUser = null;
+        while(iterator.hasNext()) {
+
+            if (currentUser == null) {
+                currentUser = (User)iterator.next();
+            }
+            else {
+                nextUser = (User)iterator.next();
+                if(nextUser.getRole().compareTo(currentUser.getRole()) < 0) {
+                    fail();
+                    break;
+                }
+                currentUser = nextUser;
+            }
+        }
+
+        assertTrue(true);
+    }
+    // Test that throws InvalidRequestException
+    @Test(expected = InvalidRequestException.class)
+    public void getUsersThrowException(){
+        //Arrange
+        String sortCriterion = "anything";
+        Set<User> usersForSorting = new HashSet<>(userService.users);
+        //Act
+        SortedSet<User> sortedUsers= userService.sortUsers(sortCriterion, usersForSorting);
+        // Assert
+            // Nothing to assert because we expect an exception
+    }
+
+//-----------------------------------updateProfile----------------------------------------------------------------------
+    // Test that updates a user that exists
+    @Test
+    public void updateAUserThatExists(){
+        // Arrange
+        User previousUser = new User(1, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC);
+        User updatedUser = new User(1, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC);
+        updatedUser.setFirstName("Different");
+        // Act
+        userService.updateProfile(updatedUser);
+        // Assert
+        assertNotEquals(previousUser.getFirstName(), userService.users.get(0).getFirstName());
+    }
+
+    // Test that the updated is not valid
+    @Test(expected = InvalidRequestException.class)
+    public void updateAUserNotValid() {
+        // Arrange
+        User updatedUser = userService.users.get(0);
+        updatedUser.setFirstName("");
+        // Act
+        userService.updateProfile(updatedUser);
+        // Assert
+            // Nothing to assert because we expect an exception
+    }
+
+    // Test that the username is already taken
+    @Test(expected = ResourcePersistenceException.class)
+    public void updatedUserHasAUsernameThatIsAlreadyTaken(){
+        // Arrange
+
+        User updatedUser = new User(5, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC);
+        // Act
+        userService.updateProfile(updatedUser);
+        // Assert
+            // Nothing to assert because we expect an exception
+    }
 }

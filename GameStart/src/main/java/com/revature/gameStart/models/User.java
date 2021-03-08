@@ -145,6 +145,8 @@ public class User {
                 && Objects.equals(password, user.password) && Objects.equals(email, user.email);
     }
 
+
+
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, username, password, email, role);
