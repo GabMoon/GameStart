@@ -16,21 +16,12 @@ import java.util.Optional;
 @Transactional
 public class ReviewService {
 
-    public ArrayList<Review> reviews = new ArrayList<>();
     private ReviewRepository reviewRepo;
 
-    List<User> users = new ArrayList<>();
-    List<Game> games = new ArrayList<>();
-    List<Genre> genres = new ArrayList<>();
 
     @Autowired
     public ReviewService(ReviewRepository repo) {
         super();
-        genres.add(new Genre(1,"fps"));
-        users.add(new User(1, "ree", "ew", "APww", "Passwww", "aefp@amurica.com", UserRole.BASIC));
-        users.add(new User(2, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC));
-        games.add(new Game(1,"GTA", genres, "GTA game", 2));
-        reviews.add(new Review("work", 5, games.get(0), users.get(0)));
         this.reviewRepo = repo;
     }
 
@@ -73,6 +64,34 @@ public class ReviewService {
         return allReviews;
     }
 
+    public void updateReview(Review newReview){
+        if (!isReviewValid(newReview)) {
+            throw new InvalidRequestException();
+        }
+       //Optional<Review> persistedReview = reviewRepo.findReviewByUserAndGame(newReview.getUser().getId(),newReview.getGame().getId());
+        reviewRepo.save(newReview);
+        //reviewRepo.updateReview(newReview.getUser().getId(),newReview.getGame().getId(),newReview.getDescription(), newReview.getScore());
+
+    }
+
+    public void updateReviewDescription(int userId, int gameId,String description){
+        if(userId <= 0 || gameId<=0) throw  new InvalidRequestException();
+
+        reviewRepo.updateDescription(userId,gameId,description);
+    }
+
+    public void updateReviewScore(int userId, int gameId,int score){
+        if(userId <= 0 || gameId<=0) throw  new InvalidRequestException();
+
+        reviewRepo.updateScore(userId,gameId,score);
+    }
+
+
+    public void deleteReviewByUserIdAndGameId(int gameId,int userId){
+        if(userId <= 0 || gameId<=0) throw  new InvalidRequestException();
+
+        reviewRepo.deleteReviewByUserIdAndGameId(gameId,userId);
+    }
     public boolean isReviewValid(Review review) {
 
         if (review == null) return false;
