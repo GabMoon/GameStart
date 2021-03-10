@@ -1,13 +1,13 @@
 package com.revature.gameStart.services;
 
+import com.revature.gameStart.exceptions.ResourceNotFoundException;
+import com.revature.gameStart.exceptions.ResourcePersistenceException;
 import com.revature.gameStart.models.*;
 import com.revature.gameStart.repositories.ReviewRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +19,19 @@ import static org.mockito.Mockito.*;
 
 public class ReviewServiceTest {
 
-    @InjectMocks
-    private ReviewService reviewService;
+
+
+    @Spy
+    private ReviewService spyreviewService;
+
+    @Spy
+    private ReviewRepository spyreviewRepo;
 
     @Mock
     private ReviewRepository reviewRepository;
+
+    @InjectMocks
+    private ReviewService reviewService;
 
     List<Review> reviews = new ArrayList<>();
     List<User> users = new ArrayList<>();
@@ -33,6 +41,7 @@ public class ReviewServiceTest {
     @Before
     public void setUp() throws Exception{
         MockitoAnnotations.initMocks(this);
+        //spyreviewService = new ReviewService(reviewRepository);
 
         genres.add(new Genre(1,"fps"));
         users.add(new User(1, "ree", "ew", "APww", "Passwww", "aefp@amurica.com", UserRole.BASIC));
@@ -64,6 +73,17 @@ public class ReviewServiceTest {
         verify(reviewRepository, times(1)).save(reviews.get(0));
 
     }
+
+    @Test
+    public void registerReviewIfExistTest() {
+        Review existReview = new Review("work", 5, games.get(0), users.get(0));
+        List<Review> newReviews = new ArrayList<>();
+        newReviews.add(existReview);
+        reviewService.registerReview(newReviews.get(0));
+        assertEquals(reviews.get(0),newReviews.get(0));
+       // verify(reviewRepository, times(1)).save(reviews.get(1));
+    }
+
 
     @Test
     public void findAllTest() {
@@ -109,17 +129,44 @@ public class ReviewServiceTest {
     @Test
     public void updateReviewTest(){
         Review newReview = new Review("hiugyuvovy",0,games.get(0),users.get(0));
+       // when(reviewRepository.updateReview(newReview.getUser().getId(),newReview.getGame().getId(),newReview.getDescription(), newReview.getScore())).thenReturn(reviews.get(0));
+       Optional<Review> existReview = Optional.of(newReview);
+       doReturn(existReview).when(spyreviewRepo).findReviewByUserAndGame(1,1);
+   //     when(reviewRepository.save(newReview)).thenReturn(newReview);
+//        reviewService.updateReview(newReview);
+//        reviews.set(0,newReview);
+       when(reviewRepository.save(newReview)).thenReturn(newReview);
+
+        reviewService.updateReview(newReview);
+        assertEquals(reviews.get(0),newReview);
+       // verify(reviewRepository, times(1)).save(newReview);
+//        Mockito.doThrow(new Exception()).when(reviewRepository.save(newReview)).s;
+
+
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void updateReviewTestNotPresent(){
+        Review newReview = new Review("hiugyuvovy",0,games.get(0),users.get(0));
         //when(reviewRepository.updateReview(newReview.getUser().getId(),newReview.getGame().getId(),newReview.getDescription(), newReview.getScore())).thenReturn(reviews.get(0));
         when(reviewRepository.save(newReview)).thenReturn(newReview);
-        reviewService.updateReview(newReview);
+       reviewService.updateReview(newReview);
 
-        //assertEquals(reviews.get(0),newReview);
+       //assertEquals(reviews.get(0),newReview);
         verify(reviewRepository, times(1)).save(newReview);
-
     }
 
     @Test
     public void updateReviewDescriptionTest(){
+        when(reviewRepository.updateDescription(users.get(0).getId(),games.get(0).getId(),"CHANGED DESCRIPTION")).thenReturn(reviews.get(0));
+
+        reviewService.updateReviewDescription(users.get(0).getId(),games.get(0).getId(),"CHANGED DESCRIPTION");
+
+        verify(reviewRepository, times(1)).updateDescription(users.get(0).getId(),games.get(0).getId(),"CHANGED DESCRIPTION");
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void updateReviewDescriptionTestNotPresent(){
         when(reviewRepository.updateDescription(users.get(0).getId(),games.get(0).getId(),"CHANGED DESCRIPTION")).thenReturn(reviews.get(0));
 
         reviewService.updateReviewDescription(users.get(0).getId(),games.get(0).getId(),"CHANGED DESCRIPTION");

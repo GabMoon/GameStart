@@ -2,11 +2,13 @@ package com.revature.gameStart.services;
 
 import com.revature.gameStart.exceptions.InvalidRequestException;
 import com.revature.gameStart.exceptions.ResourceNotFoundException;
+import com.revature.gameStart.exceptions.ResourcePersistenceException;
 import com.revature.gameStart.models.*;
 import com.revature.gameStart.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,10 @@ public class ReviewService {
     private ReviewRepository reviewRepo;
 
 
+    public ReviewService(){
+        super();
+    }
+
     @Autowired
     public ReviewService(ReviewRepository repo) {
         super();
@@ -28,6 +34,12 @@ public class ReviewService {
     public void registerReview(Review newReview) {
 
         if(!isReviewValid(newReview)) throw new InvalidRequestException();
+
+        Optional<Review> persistedReview = reviewRepo.findReviewByUserAndGame(newReview.getUser().getId(),newReview.getGame().getId());
+        if(persistedReview.isPresent()){
+            throw new ResourcePersistenceException();
+        }
+
 
         reviewRepo.save(newReview);
 
@@ -68,14 +80,26 @@ public class ReviewService {
         if (!isReviewValid(newReview)) {
             throw new InvalidRequestException();
         }
-       //Optional<Review> persistedReview = reviewRepo.findReviewByUserAndGame(newReview.getUser().getId(),newReview.getGame().getId());
+       // System.out.println("Game id "+newReview.getGame().getId()+"User id"+newReview.getUser().getId());
+       Optional<Review> persistedReview = reviewRepo.findReviewByUserAndGame(newReview.getUser().getId(),newReview.getGame().getId());
+       // Optional<Review> persistedReview = reviewRepo.findReviewByUserAndGame(1,1);
+        if(!persistedReview.isPresent()){
+            System.out.println("value" + persistedReview.toString());
+            throw new ResourceNotFoundException();
+
+        }
         reviewRepo.save(newReview);
         //reviewRepo.updateReview(newReview.getUser().getId(),newReview.getGame().getId(),newReview.getDescription(), newReview.getScore());
 
     }
 
     public void updateReviewDescription(int userId, int gameId,String description){
-        if(userId <= 0 || gameId<=0) throw  new InvalidRequestException();
+        if(userId <= 0 || gameId<=0) throw new InvalidRequestException();
+
+        Optional<Review> persistedReview = reviewRepo.findReviewByUserAndGame(userId,gameId);
+        if(!persistedReview.isPresent()){
+            throw new ResourceNotFoundException();
+        }
 
         reviewRepo.updateDescription(userId,gameId,description);
     }
@@ -83,12 +107,21 @@ public class ReviewService {
     public void updateReviewScore(int userId, int gameId,int score){
         if(userId <= 0 || gameId<=0) throw  new InvalidRequestException();
 
+        Optional<Review> persistedReview = reviewRepo.findReviewByUserAndGame(userId,gameId);
+        if(!persistedReview.isPresent()){
+            throw new ResourceNotFoundException();
+        }
         reviewRepo.updateScore(userId,gameId,score);
     }
 
 
     public void deleteReviewByUserIdAndGameId(int gameId,int userId){
         if(userId <= 0 || gameId<=0) throw  new InvalidRequestException();
+
+        Optional<Review> persistedReview = reviewRepo.findReviewByUserAndGame(userId,gameId);
+        if(!persistedReview.isPresent()){
+            throw new ResourceNotFoundException();
+        }
 
         reviewRepo.deleteReviewByUserIdAndGameId(gameId,userId);
     }
