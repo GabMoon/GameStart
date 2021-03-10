@@ -8,6 +8,9 @@ public class ReviewId  implements Serializable {
 
     private Game game;
 
+    public ReviewId() {
+    }
+
     public ReviewId(User creator_id, Game game_id) {
         this.user = creator_id;
         this.game = game_id;
