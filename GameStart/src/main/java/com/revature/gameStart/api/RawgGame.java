@@ -33,7 +33,7 @@ public class RawgGame {
     }
 
     public RawgGame(String name, List<Genre> genres, List<Developer> developers, List<Publisher> publishers,
-                    List<PlatformWrapperClass> platforms, List<Platform> parent_platform) {
+                    List<PlatformWrapperClass> platforms) {
         this.name = name;
         this.genres = genres;
         this.developers = developers;
@@ -43,8 +43,8 @@ public class RawgGame {
 
 
     public RawgGame( String name, List<Genre> genres, String description, int rating, List<Developer> developers,
-                     List<Publisher> publishers, List<PlatformWrapperClass> platforms, List<Platform> parent_platform) {
-        this(name, genres, developers, publishers, platforms, parent_platform);
+                     List<Publisher> publishers, List<PlatformWrapperClass> platforms) {
+        this(name, genres, developers, publishers, platforms);
         this.description = description;
         this.rating = rating;
     }
