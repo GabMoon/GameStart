@@ -1,7 +1,10 @@
 package com.revature.gameStart.api;
 
+import com.revature.gameStart.controllers.GameController;
 import com.revature.gameStart.models.Game;
 import com.revature.gameStart.models.Platform;
+import com.revature.gameStart.repositories.GameRepository;
+import com.revature.gameStart.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
@@ -25,18 +28,28 @@ public class RawgApi {
     private RestTemplate rawgClient;
     private String rawgUrl = "https://api.rawg.io/api";
     private static Properties props = new Properties();
+    private static String token;
 
     static {
         boolean found = false;
         try {
             props.load(new FileReader("GameStart/src/main/resources/application.properties"));
-        } catch (IOException e) {
+            token = props.getProperty("rawgToken");
             found = true;
+        } catch (IOException e) {
         }
+
         try {
             props.load(new FileReader("src/main/resources/application.properties"));
-        } catch (IOException e) {
+            token = props.getProperty("rawgToken");
             found = true;
+        } catch (IOException e) {
+        }
+
+        try {
+            token = System.getProperty("rawgToken");
+            found = true;
+        } catch (Exception e) {
         }
 
         if (!found) try {
@@ -101,13 +114,34 @@ public class RawgApi {
         headers.set("Content-Type", "application/json");
         headers.set("token", props.getProperty("rawgToken"));
 
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(rawgUrl + "/games");
+
         if (pageSize != -1) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(rawgUrl+"/games")
-                .queryParam("page", pageNumber)
+            builder = builder.queryParam("page_size", pageSize);
+        }
+        if (pageNumber != -1) {
+            builder = builder.queryParam("page", pageNumber);
+        }
+
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+
+        RestTemplate restTemplate = new RestTemplate();
+        GameWrapperClass response = restTemplate.getForObject(builder.toUriString(), GameWrapperClass.class, entity);
+
+        return response.getResults();
     }
 
     public void saveGames() {
+        RawgGame[] rawGames = getPaginatedGames(-1, -1);
 
+        ArrayList<Game> games = new ArrayList<>();
+
+        for (RawgGame game : rawGames) {
+            games.add(convertRawgGame(game));
+        }
+
+        GameService service;
     }
 
     public Game convertRawgGame(RawgGame game) {
@@ -125,5 +159,6 @@ public class RawgApi {
 
     public Platform convertWrapperPlatform(PlatformWrapperClass platform) {
         Platform newPlat = new Platform(platform.getPlatform().getId(), platform.getPlatform().getName());
+        return newPlat;
     }
 }
