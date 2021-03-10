@@ -38,10 +38,11 @@ public class UserService {
     @Transactional
     public void register(User newUser){
         if (!isUserValid(newUser)) throw new InvalidRequestException();
-
+        System.out.println("I got past the first if");
         if (getUserByUsername(newUser.getUsername()) != null) {
             throw new ResourcePersistenceException("Username is already in use");
         }
+        System.out.println("I got past the second if " + newUser.toString());
         userRepository.save(newUser);
     }
 
@@ -71,7 +72,7 @@ public class UserService {
         if (usersSet.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-
+        System.out.println("The size of userset is " + usersSet.size());
         return usersSet;
     }
 
@@ -143,6 +144,7 @@ public class UserService {
         }
 
         Optional<User> persistedUser = userRepository.findUserByUsername(updatedUser.getUsername());
+
 
         if(persistedUser.isPresent() && persistedUser.get().getId() != updatedUser.getId()) {
             throw new ResourcePersistenceException("That username is taken by someone else");

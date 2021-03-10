@@ -14,17 +14,30 @@ import org.junit.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+
 import static org.mockito.Mockito.*;
 
 import java.util.*;
 
 public class UserServiceTest {
 
-    @InjectMocks
-    UserService mockUserService;
+
 
     @Mock
     UserRepository mockUserRepository;
+
+    @Spy
+    UserService spyUserService;
+
+    @Spy
+    UserRepository spyUserRepository;
+
+    @InjectMocks
+    UserService mockUserService;
+
+
+
 
     public ArrayList<User> users = new ArrayList<>();
     Optional<User> optionalBanana;
@@ -44,7 +57,9 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
+        spyUserService = new UserService(mockUserRepository);
         MockitoAnnotations.initMocks(this);
+
 
 
 
@@ -175,16 +190,20 @@ public class UserServiceTest {
 
     // -------------------------------------------------------Register User-----------------------------------------------------------------------------------------------------------------------
     // Test that a user is added to the list
-//    @Test
-//    public void UserRegistered() {
-//        //Arrange
-//        User newUser = new User(4, "User4", "Last4", "us4", "ps4","us4@email.com", UserRole.BASIC);
-//        when(mockUserRepository.save(newUser)).thenReturn(aUser);
-//        //Act
-//        mockUserService.register(newUser);
-//        //Assert
-//        verify(mockUserRepository, times(1)).save(newUser);
-//    }
+    @Test
+    public void UserRegistered() {
+
+
+        //Arrange
+        User newUser = new User(4, "User4", "Last4", "us4", "ps4","us4@email.com", UserRole.BASIC);
+        doReturn(true).when(spyUserService).isUserValid(new User(4, "User4", "Last4", "us4", "ps4","us4@email.com", UserRole.BASIC));
+        doReturn(null).when(spyUserService).getUserByUsername("us4");
+        when(mockUserRepository.save(newUser)).thenReturn(aUser);
+        //Act
+        spyUserService.register(newUser);
+        //Assert
+        verify(mockUserRepository, times(1)).save(newUser);
+    }
 
     // Test that an InvalidRequestException is thrown
     @Test(expected = InvalidRequestException.class)
@@ -200,16 +219,17 @@ public class UserServiceTest {
     }
 
     // Test that a ResourcePersistenceException is thrown
-//    @Test(expected = ResourcePersistenceException.class)
-//    public void UsernameInUse() {
-//        //Arrange
-//        User newUser = new User(6, "NewUser", "NewLastUser", "AP", "AnyPass", "NewU@email.com", UserRole.BASIC);
-//        when(mockUserRepository.save(newUser)).thenReturn(aUser);
-//        //Act
-//        mockUserService.register(newUser);
-//        //Assert
-//        verify(mockUserRepository, times(0)).save(newUser);
-//    }
+    @Test(expected = ResourcePersistenceException.class)
+    public void UsernameInUse() {
+        //Arrange
+        User newUser = new User(6, "NewUser", "NewLastUser", "AP", "AnyPass", "NewU@email.com", UserRole.BASIC);
+        doReturn(new User(1, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC)).when(spyUserService).getUserByUsername("AP");
+        when(mockUserRepository.save(newUser)).thenReturn(aUser);
+        //Act
+        spyUserService.register(newUser);
+        //Assert
+        verify(mockUserRepository, times(0)).save(newUser);
+    }
 
 // ---------------------------------------------- getAllUsers()---------------------------------------------------------------------------------------------
     // Test that gets all users
@@ -241,6 +261,17 @@ public class UserServiceTest {
     // Test that gets Basic Users
     @Test
     public void getBasicUsers() {
+//        Set<User> usersSet = new HashSet<>();
+//
+//        usersSet.add(users.get(0));
+//        usersSet.add(users.get(1));
+//        usersSet.add(users.get(2));
+//
+//
+//        Optional<User> existingUser = Optional.of( new User(1, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC));
+//        doReturn(existingUser).when(spyUserRepository).findUserByUsername("AP");
+
+
         // Arrange
         when(mockUserRepository.findUsersByRole(UserRole.BASIC.toString())).thenReturn(basicUsers);
         // Nothing to arrange
@@ -434,14 +465,26 @@ public class UserServiceTest {
     }
 
     // Test that the username is already taken
-//    @Test(expected = ResourcePersistenceException.class)
-//    public void updatedUserHasAUsernameThatIsAlreadyTaken(){
-//        // Arrange
-//        User updatedUser = new User(5, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC);
-//        // Act
-//        mockUserService.updateProfile(updatedUser);
-//        // Assert
-//        verify(mockUserRepository, times(0)).save(updatedUser);
-//            // Nothing to assert because we expect an exception
-//    }
+    @Test(expected = ResourcePersistenceException.class)
+    public void updatedUserHasAUsernameThatIsAlreadyTaken(){
+//        //Arrange
+//        User newUser = new User(4, "User4", "Last4", "us4", "ps4","us4@email.com", UserRole.BASIC);
+//        doReturn(null).when(spyUserService).getUserByUsername("us4");
+//        when(mockUserRepository.save(newUser)).thenReturn(aUser);
+//        //Act
+//        spyUserService.register(newUser);
+//        //Assert
+//        verify(mockUserRepository, times(1)).save(newUser);
+
+        // Arrange
+        Optional<User> existingUser = Optional.of( new User(1, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC));
+        doReturn(existingUser).when(spyUserRepository).findUserByUsername("AP");
+
+        User updatedUser = new User(5, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC);
+        // Act
+        mockUserService.updateProfile(updatedUser);
+        // Assert
+        verify(mockUserRepository, times(0)).save(updatedUser);
+            // Nothing to assert because we expect an exception
+    }
 }
