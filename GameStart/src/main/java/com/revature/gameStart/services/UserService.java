@@ -147,6 +147,7 @@ public class UserService {
 
 
         if(persistedUser.isPresent() && persistedUser.get().getId() != updatedUser.getId()) {
+            System.out.println("peristed user" + persistedUser.get());
             throw new ResourcePersistenceException("That username is taken by someone else");
         }
         userRepository.save(updatedUser);
