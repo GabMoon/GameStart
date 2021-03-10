@@ -1,36 +1,36 @@
-//package com.revature.gameStart.api;
-//
-//import com.fasterxml.jackson.databind.annotation.JsonAppend;
-//import com.revature.gameStart.models.Developer;
-//import com.revature.gameStart.models.Game;
-//import com.revature.gameStart.models.Platform;
-//import com.revature.gameStart.models.Publisher;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.web.client.RestTemplateBuilder;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.http.*;
-//import org.springframework.http.converter.HttpMessageConverter;
-//import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-//import org.springframework.stereotype.Component;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RestController;
-//import org.springframework.web.client.RestTemplate;
-//
-//import java.io.File;
-//import java.io.FileInputStream;
-//import java.io.FileReader;
-//import java.io.IOException;
-//import java.util.*;
-//
-//@RestController
-//@RequestMapping("/myGames")
-//public class RawgApi {
-//
-//    @Autowired
-//    private RestTemplate rawgClient;
-//    private String rawgUrl = "https://api.rawg.io/api";
+package com.revature.gameStart.api;
+
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import com.revature.gameStart.models.Developer;
+import com.revature.gameStart.models.Game;
+import com.revature.gameStart.models.Platform;
+import com.revature.gameStart.models.Publisher;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+
+@RestController
+@RequestMapping("/myGames")
+public class RawgApi {
+
+    @Autowired
+    private RestTemplate rawgClient;
+    private String rawgUrl = "https://api.rawg.io/api";
 //    private static Properties props = new Properties();
 //
 ////    static {
@@ -88,4 +88,4 @@
 //        return restTemplate.getForObject(rawgUrl+"/games/"+name, Game.class);
 //    }
 //
-//}
+}
