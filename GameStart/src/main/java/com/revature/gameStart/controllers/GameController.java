@@ -26,9 +26,14 @@ public class GameController {
 
     //Get -----------------------------------------------------------
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Game> getAllGames(){
-        return gameService.getAllGames();
+    public String getAllGames(){
+        return "Its alive!!";
     }
+
+//    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+//    public List<Game> getAllGames(){
+//        return gameService.getAllGames();
+//    }
 
 //    @GetMapping(path = "/id/{id}")
 //    public Game getGameById(@PathVariable int id){
