@@ -84,7 +84,7 @@ public class ReviewService {
        Optional<Review> persistedReview = reviewRepo.findReviewByUserAndGame(newReview.getUser().getId(),newReview.getGame().getId());
        // Optional<Review> persistedReview = reviewRepo.findReviewByUserAndGame(1,1);
         if(!persistedReview.isPresent()){
-            System.out.println("value" + persistedReview.toString());
+            //System.out.println("value" + persistedReview.toString());
             throw new ResourceNotFoundException();
 
         }
