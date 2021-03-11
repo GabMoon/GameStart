@@ -42,12 +42,7 @@ public class GameService {
             throw new InvalidRequestException();
         }
 
-        Optional<Game> game = gameRepo.findById(id);
-
-        if (!game.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        return game.orElse(null);
+        return gameRepo.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     public Game getGameByName(String name){
@@ -56,12 +51,17 @@ public class GameService {
             throw new InvalidRequestException();
         }
 
-        Optional<Game> game = gameRepo.findGameByName(name);
+        return gameRepo.findGameByName(name).orElseThrow(ResourceNotFoundException::new);
+    }
 
-        if (!game.isPresent()) {
-            throw new ResourceNotFoundException();
+    public void insertGame(List<Game> gameList) {
+        if (gameList == null || gameList.isEmpty()) {
+            throw new InvalidRequestException();
         }
 
-        return game.orElse(null);
+        for(Game game: gameList ) {
+            gameRepo.save(game);
+        }
+
     }
 }

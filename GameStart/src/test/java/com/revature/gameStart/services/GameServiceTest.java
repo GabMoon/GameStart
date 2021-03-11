@@ -1,5 +1,6 @@
 package com.revature.gameStart.services;
 
+import com.revature.gameStart.exceptions.InvalidRequestException;
 import com.revature.gameStart.exceptions.ResourceNotFoundException;
 import com.revature.gameStart.models.*;
 import com.revature.gameStart.repositories.GameRepository;
@@ -35,6 +36,13 @@ public class GameServiceTest {
 
     Optional<Game> gameWithIdZeroOptional;
     Game gameWithIdZero;
+    Game gameWithNameApple;
+    Optional<Game> gamewithNameAppleOptional;
+
+    List<Game> nullGame;
+
+
+
 
     @Before
     public void setUp() throws Exception {
@@ -57,7 +65,14 @@ public class GameServiceTest {
         gameWithIdZero = new Game("MyGame", genres, "Description", 6, devs, pubs, plats);
         gameWithIdZero.setId(0);
 
-        //gameWithIdZeroOptional = Optional.of()
+        gameWithIdZeroOptional = Optional.of(gameWithIdZero);
+
+        gameWithNameApple = new Game("Apple", genres, "Description", 6, devs, pubs, plats);
+        gameWithNameApple.setId(5);
+
+        gamewithNameAppleOptional = Optional.of(gameWithNameApple);
+
+        nullGame = null;
     }
 
     @After
@@ -100,13 +115,113 @@ public class GameServiceTest {
     @Test
     public void grabGameById() {
         // Arrange
-        //when(mockGameRepo.findById(0)).thenReturn(gameWithIdZero);
+        when(mockGameRepo.findById(1)).thenReturn(gameWithIdZeroOptional);
         // Act
-
+        Game testGame = mockGameService.getGameById(1);
         // Assert
+
+        verify(mockGameRepo, times(1)).findById(1);
+    }
+
+    @Test(expected = InvalidRequestException.class)
+    public void grabGameByIdInvalidRequestException() {
+        // Arrange
+        when(mockGameRepo.findById(-1)).thenReturn(gameWithIdZeroOptional);
+        // Act
+        Game testGame = mockGameService.getGameById(-1);
+        // Assert
+
+        verify(mockGameRepo, times(0)).findById(-1);
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void grabGameByIdResourceNotFoundException() {
+        // Arrange
+        when(mockGameRepo.findById(5)).thenReturn(Optional.empty());
+        // Act
+        Game testGame = mockGameService.getGameById(5);
+        // Assert
+
+        verify(mockGameRepo, times(1)).findById(5);
     }
 
 
+
+    @Test
+    public void getGameByName() {
+        // Arrange
+        when(mockGameRepo.findGameByName("Apple")).thenReturn(gamewithNameAppleOptional);
+        // Act
+        Game testGame = mockGameService.getGameByName("Apple");
+        // Assert
+
+        verify(mockGameRepo, times(1)).findGameByName("Apple");
+    }
+
+    @Test(expected = InvalidRequestException.class)
+    public void getGameByNameInvalidRequestExceptionNull() {
+        // Arrange
+        when(mockGameRepo.findGameByName(null)).thenReturn(Optional.empty());
+        // Act
+        Game testGame = mockGameService.getGameByName(null);
+        // Assert
+
+        verify(mockGameRepo, times(0)).findGameByName(null);
+    }
+    @Test(expected = InvalidRequestException.class)
+    public void getGameByNameInvalidRequestExceptionEmptyString() {
+        // Arrange
+        when(mockGameRepo.findGameByName("")).thenReturn(Optional.empty());
+        // Act
+        Game testGame = mockGameService.getGameByName("");
+        // Assert
+
+        verify(mockGameRepo, times(0)).findGameByName("");
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void getGameByNameResourceNotFoundException() {
+        // Arrange
+        when(mockGameRepo.findGameByName("Anything")).thenReturn(Optional.empty());
+        // Act
+        Game testGame = mockGameService.getGameByName("Anything");
+        // Assert
+
+        verify(mockGameRepo, times(1)).findGameByName("Anything");
+    }
+
+    @Test
+    public void insertGames() {
+        // Arrange
+        when(mockGameRepo.save(games.get(0))).thenReturn(games.get(0));
+        when(mockGameRepo.save(games.get(1))).thenReturn(games.get(1));
+        when(mockGameRepo.save(games.get(2))).thenReturn(games.get(2));
+        // Act
+        mockGameService.insertGame(games);
+        // Assert
+        verify(mockGameRepo, times(1)).save(games.get(0));
+        verify(mockGameRepo, times(1)).save(games.get(1));
+        verify(mockGameRepo, times(1)).save(games.get(2));
+    }
+
+    @Test(expected = InvalidRequestException.class)
+    public void insertGamesInvalidRequestExceptionNull () {
+        // Arrange
+
+        // Act
+        mockGameService.insertGame(nullGame);
+        // Assert
+        verify(mockGameRepo, times(0)).save(games.get(0));
+    }
+    @Test(expected = InvalidRequestException.class)
+    public void insertGamesInvalidRequestExceptionEmpty () {
+        // Arrange
+
+        // Act
+        mockGameService.insertGame(emptyGames);
+        // Assert
+        verify(mockGameRepo, times(0)).save(games.get(0));
+    }
 }
 
 
