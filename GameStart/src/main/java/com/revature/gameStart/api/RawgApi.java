@@ -3,24 +3,29 @@ package com.revature.gameStart.api;
 import com.revature.gameStart.models.Game;
 import com.revature.gameStart.models.Platform;
 import com.revature.gameStart.services.GameService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.PostConstruct;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+@Component
 public class RawgApi {
 
     private RestTemplate rawgClient;
     private String rawgUrl = "https://api.rawg.io/api";
     private static Properties props = new Properties();
     private static String token;
+    private final GameService gameService;
 
     static {
         boolean found = false;
@@ -45,7 +50,10 @@ public class RawgApi {
         }
     }
 
-    public RawgApi(RestTemplateBuilder restTemplateBuilder) {
+    @Autowired
+    public RawgApi(GameService gameService) {
+        this.gameService = gameService;
+        RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
         this.rawgClient = restTemplateBuilder.build();
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
@@ -54,10 +62,14 @@ public class RawgApi {
         this.rawgClient.setMessageConverters(messageConverters);
     }
 
-    private RawgApi() {
-
+    @PostConstruct
+    private void init()
+    {
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("In Post Construct");
+        saveGames(100, 50);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
-
 
     public RawgGame[] getGames() {
         HttpHeaders headers = new HttpHeaders();
@@ -154,16 +166,10 @@ public class RawgApi {
         return games;
     }
 
-    public void saveGames() {
-        RawgGame[] rawGames = getPaginatedGames(-1, -1);
+    public void saveGames(int pageSize, int numPages) {
+        ArrayList<Game> games = getGamesFromPageSizeAndNumPages(pageSize, numPages);
 
-        ArrayList<Game> games = new ArrayList<>();
-
-        for (RawgGame game : rawGames) {
-            games.add(convertRawgGame(game));
-        }
-
-        GameService service;
+        gameService.insertGame(games);
     }
 
     public Game convertRawgGame(RawgGame game) {
