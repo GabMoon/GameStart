@@ -1,13 +1,14 @@
 import com.revature.gameStart.api.RawgApi;
 import com.revature.gameStart.api.RawgGame;
 import com.revature.gameStart.models.Game;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class RawgApiTest {
     public static void main(String[] args) {
-        RawgApi api = new RawgApi();
+        RawgApi api = new RawgApi(new RestTemplateBuilder());
 
         RawgGame[] games = api.getGames();
 

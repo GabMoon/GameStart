@@ -18,11 +18,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-@RestController
-@RequestMapping("/myGames")
 public class RawgApi {
 
-    @Autowired
     private RestTemplate rawgClient;
     private String rawgUrl = "https://api.rawg.io/api";
     private static Properties props = new Properties();
@@ -44,12 +41,6 @@ public class RawgApi {
         } catch (IOException e) {
         }
 
-        try {
-            token = System.getProperty("rawgToken");
-            found = true;
-        } catch (Exception e) {
-        }
-
         if (!found) try {
             throw new FileNotFoundException();
         } catch (FileNotFoundException e) {
@@ -57,17 +48,16 @@ public class RawgApi {
         }
     }
 
-//    @Autowired
-//    public RawgApi(RestTemplateBuilder restTemplateBuilder) {
-//        this.rawgClient = restTemplateBuilder.build();
-//        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-//        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
-//        messageConverters.add(converter);
-//        this.rawgClient.setMessageConverters(messageConverters);
-//    }
+    public RawgApi(RestTemplateBuilder restTemplateBuilder) {
+        this.rawgClient = restTemplateBuilder.build();
+        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+        messageConverters.add(converter);
+        this.rawgClient.setMessageConverters(messageConverters);
+    }
 
-    public RawgApi() {
+    private RawgApi() {
 
     }
 
@@ -79,9 +69,8 @@ public class RawgApi {
         //headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Game> game = new HttpEntity<>(headers);
 
-        RestTemplate restTemplate = new RestTemplate();
         //restTemplate.headForHeaders()
-        GameWrapperClass response = restTemplate.getForObject(rawgUrl+"/games", GameWrapperClass.class);
+        GameWrapperClass response = rawgClient.getForObject(rawgUrl+"/games", GameWrapperClass.class);
 
         return response.getResults();
     }
@@ -93,8 +82,7 @@ public class RawgApi {
         //headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Game> game = new HttpEntity<>(headers);
 
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(rawgUrl+"/games/"+name, RawgGame.class, game);
+        return rawgClient.getForObject(rawgUrl+"/games/"+name, RawgGame.class, game);
     }
 
     /**
@@ -120,9 +108,7 @@ public class RawgApi {
 
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
-
-        RestTemplate restTemplate = new RestTemplate();
-        GameWrapperClass response = restTemplate.getForObject(builder.toUriString(), GameWrapperClass.class, entity);
+        GameWrapperClass response = rawgClient.getForObject(builder.toUriString(), GameWrapperClass.class, entity);
 
         return response.getResults();
     }
@@ -140,21 +126,20 @@ public class RawgApi {
 
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
-        RestTemplate restTemplate = new RestTemplate();
-
         int counter = 0;
         ArrayList<Game> games = new ArrayList<>();
 
         String url = builder.toUriString();
 
         while (counter < numPages) {
-            GameWrapperClass response = restTemplate.getForObject(url, GameWrapperClass.class, entity);
+            GameWrapperClass response = rawgClient.getForObject(url, GameWrapperClass.class, entity);
 
             RawgGame[] rawgGames;
 
             try {
+                assert response != null;
                 rawgGames = response.getResults();
-            } catch (NullPointerException n) {
+            } catch (Exception n) {
                 return null;
             }
 
