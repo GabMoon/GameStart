@@ -1,9 +1,7 @@
 package com.revature.gameStart.api;
 
-import com.revature.gameStart.controllers.GameController;
 import com.revature.gameStart.models.Game;
 import com.revature.gameStart.models.Platform;
-import com.revature.gameStart.repositories.GameRepository;
 import com.revature.gameStart.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -85,10 +83,7 @@ public class RawgApi {
         //restTemplate.headForHeaders()
         GameWrapperClass response = restTemplate.getForObject(rawgUrl+"/games", GameWrapperClass.class);
 
-        RawgGame[] games = response.getResults();
-
-        return games;
-
+        return response.getResults();
     }
 
     public RawgGame getGame(String name) {
@@ -99,7 +94,7 @@ public class RawgApi {
         HttpEntity<Game> game = new HttpEntity<>(headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(rawgUrl+"/games/"+name, RawgGame.class);
+        return restTemplate.getForObject(rawgUrl+"/games/"+name, RawgGame.class, game);
     }
 
     /**
@@ -155,7 +150,13 @@ public class RawgApi {
         while (counter < numPages) {
             GameWrapperClass response = restTemplate.getForObject(url, GameWrapperClass.class, entity);
 
-            RawgGame[] rawgGames = response.getResults();
+            RawgGame[] rawgGames;
+
+            try {
+                rawgGames = response.getResults();
+            } catch (NullPointerException n) {
+                return null;
+            }
 
             for (RawgGame game: rawgGames) {
                 games.add(convertRawgGame(game));
@@ -190,14 +191,11 @@ public class RawgApi {
             platforms.add(convertWrapperPlatform(plat));
         }
 
-        Game conGame = new Game(game.getName(), game.getGenres(), game.getDescription(), game.getRating(),
+        return new Game(game.getName(), game.getGenres(), game.getDescription(), game.getRating(),
                 game.getDevelopers(), game.getPublishers(), platforms);
-
-        return conGame;
     }
 
     public Platform convertWrapperPlatform(PlatformWrapperClass platform) {
-        Platform newPlat = new Platform(platform.getPlatform().getId(), platform.getPlatform().getName());
-        return newPlat;
+        return new Platform(platform.getPlatform().getId(), platform.getPlatform().getName());
     }
 }
