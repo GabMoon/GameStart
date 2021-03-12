@@ -40,9 +40,9 @@ public class GameController {
         return gameService.getGameByName(name);
     }
 
-    @GetMapping(path = "/slug/{slug}")
-    public Game getGameBySlug(@PathVariable String slug){
-        return gameService.getGameBySlug(slug);
-    }
+//    @GetMapping(path = "/slug/{slug}")
+//    public Game getGameBySlug(@PathVariable String slug){
+//        return gameService.getGameBySlug(slug);
+//    }
 
 }

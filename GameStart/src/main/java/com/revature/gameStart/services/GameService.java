@@ -59,6 +59,8 @@ public class GameService {
             throw new InvalidRequestException();
         }
 
+        System.out.println(gameList.toString());
+
         for(Game game: gameList ) {
             gameRepo.save(game);
         }
