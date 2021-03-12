@@ -1,7 +1,5 @@
 package com.revature.gameStart.api;
 
-import com.revature.gameStart.models.Game;
-
 import java.util.Arrays;
 import java.util.Objects;
 
