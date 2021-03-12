@@ -1,5 +1,6 @@
 package com.revature.gameStart.services;
 
+import com.revature.gameStart.exceptions.InvalidRequestException;
 import com.revature.gameStart.exceptions.ResourceNotFoundException;
 import com.revature.gameStart.models.Game;
 import com.revature.gameStart.repositories.GameRepository;
@@ -24,7 +25,7 @@ public class GameService {
         this.gameRepo = repo;
     }
 
-    //Other ---------------------------------------------------------
+    //Get ---------------------------------------------------------
     public List<Game> getAllGames(){
         List<Game> games;
 
@@ -36,17 +37,31 @@ public class GameService {
     }
 
     public Game getGameById(int id){
-        Optional<Game> game = gameRepo.findById(id);
-        return game.orElse(null);
+
+        if (id < 0) {
+            throw new InvalidRequestException();
+        }
+
+        return gameRepo.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     public Game getGameByName(String name){
-        Optional<Game> game = gameRepo.findGameByName(name);
-        return game.orElse(null);
+
+        if (name == null || name.trim().equals("")){
+            throw new InvalidRequestException();
+        }
+
+        return gameRepo.findGameByName(name).orElseThrow(ResourceNotFoundException::new);
     }
 
-    public Game getGameBySlug(String slug){
-        Optional<Game> game = gameRepo.findGameBySlug(slug);
-        return game.orElse(null);
+    public void insertGame(List<Game> gameList) {
+        if (gameList == null || gameList.isEmpty()) {
+            throw new InvalidRequestException();
+        }
+
+        for(Game game: gameList ) {
+            gameRepo.save(game);
+        }
+
     }
 }

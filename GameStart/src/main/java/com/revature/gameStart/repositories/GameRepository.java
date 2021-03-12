@@ -12,5 +12,4 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
 
     Optional<Game> findGameByName(String name);
     Optional<Game> findGameBySlug(String slug);
-
 }
