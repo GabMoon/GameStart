@@ -33,5 +33,11 @@ public class RawgApiTest {
                 pageGames) {
             System.out.println(game.toString());
         }
+
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+        ArrayList<Game> testing = api.getGamesFromPageSizeAndNumPages(10, 5);
+        System.out.println("The number of games grabbed is: "+testing.size());
+        System.out.println(testing.toString());
     }
 }

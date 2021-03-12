@@ -132,6 +132,45 @@ public class RawgApi {
         return response.getResults();
     }
 
+    public ArrayList<Game> getGamesFromPageSizeAndNumPages(int pageSize, int numPages) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        headers.set("token", props.getProperty("rawgToken"));
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(rawgUrl + "/games");
+
+        if (pageSize != -1) {
+            builder = builder.queryParam("page_size", pageSize);
+        }
+
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        int counter = 0;
+        ArrayList<Game> games = new ArrayList<>();
+
+        String url = builder.toUriString();
+
+        while (counter < numPages) {
+            GameWrapperClass response = restTemplate.getForObject(url, GameWrapperClass.class, entity);
+
+            RawgGame[] rawgGames = response.getResults();
+
+            for (RawgGame game: rawgGames) {
+                games.add(convertRawgGame(game));
+            }
+
+            url = response.getNext();
+
+            if (url == null) break;
+
+            counter++;
+        }
+
+        return games;
+    }
+
     public void saveGames() {
         RawgGame[] rawGames = getPaginatedGames(-1, -1);
 
