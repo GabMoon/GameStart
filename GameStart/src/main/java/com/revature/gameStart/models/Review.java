@@ -13,7 +13,7 @@ public class Review {
     @Column
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "integer default -1")
     private int score;
 
     @Id

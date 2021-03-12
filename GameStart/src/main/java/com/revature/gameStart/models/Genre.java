@@ -28,7 +28,7 @@ public class Genre {
     }
 
     public Genre(String name) {
-        this.name = name;
+            this.name = name;
     }
 
     public Genre(int id, String name) {

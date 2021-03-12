@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -29,9 +30,23 @@ public class GameService {
 
         games = (List<Game>) gameRepo.findAll();
         if(games.isEmpty()){
-          throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
-
         return games;
+    }
+
+    public Game getGameById(int id){
+        Optional<Game> game = gameRepo.findById(id);
+        return game.orElse(null);
+    }
+
+    public Game getGameByName(String name){
+        Optional<Game> game = gameRepo.findGameByName(name);
+        return game.orElse(null);
+    }
+
+    public Game getGameBySlug(String slug){
+        Optional<Game> game = gameRepo.findGameBySlug(slug);
+        return game.orElse(null);
     }
 }
