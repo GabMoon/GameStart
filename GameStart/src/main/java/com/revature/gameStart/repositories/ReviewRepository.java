@@ -23,5 +23,5 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     Review updateScore(int userId, int gameId,int newScore);
 
     @Query("DELETE FROM Review WHERE user = :userId AND game = :gameId")
-    Review deleteReviewByUserIdAndGameId(@Param("userId") int userId, @Param("gameId") int gameId);
+    Review deleteReviewByUserIdAndGameId(int userId, int gameId);
 }
