@@ -40,7 +40,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-
+             
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
@@ -52,15 +52,15 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>2.4.3</version>
         </dependency>
-
-        <!--              PostgreSQL -->
+      
+<!--              PostgreSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.2.19</version>
         </dependency>
-
-        <!--              Logging -->
+             
+<!--              Logging -->
         <dependency>
             <groupId>org.simplejavamail</groupId>
             <artifactId>simple-java-mail</artifactId>
@@ -72,9 +72,9 @@
             <artifactId>aspectjweaver</artifactId>
             <scope>compile</scope>
         </dependency>
-
-        <!--              Convert to SpringBootStarterTest -->
-        <dependency>
+        
+<!--              Convert to SpringBootStarterTest -->
+        <dependency>  
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
@@ -99,4 +99,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
