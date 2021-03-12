@@ -1,6 +1,10 @@
 server:
   port: 5000 # ElasticBeanstalk expects for Java apps to be deployed on port 5000
 
+tokens:
+  apiToken: ${rawgToken}
+
+
 spring:
   # Basic application info
   application:
@@ -12,6 +16,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: ${db.username}
     password: ${db.password}
+
 
 
   # Spring Data JPA configurations

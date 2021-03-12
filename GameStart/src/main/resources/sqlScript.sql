@@ -38,7 +38,7 @@ create table publisher (
 
 create table game(
     id            	serial,
-    name            varchar(50) not null,
+    name            varchar not null,
     description     text,
     rating          int default -1,
 
