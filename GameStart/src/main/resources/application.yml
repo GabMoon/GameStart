@@ -13,9 +13,10 @@ spring:
     username: ${db.username}
     password: ${db.password}
 
+
   # Spring Data JPA configurations
   jpa:
-    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     show-sql: true
     hibernate:
       ddl-auto: validate

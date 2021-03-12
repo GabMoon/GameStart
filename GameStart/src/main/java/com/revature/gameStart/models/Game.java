@@ -43,6 +43,14 @@ public class Game {
         super();
     }
 
+    public Game(int id, String name, List<Genre> genres, String description, int rating) {
+        this.id = id;
+        this.name = name;
+        this.genres = genres;
+        this.description = description;
+        this.rating = rating;
+    }
+
     public Game(String name, List<Genre> genres, List<Developer> developers, List<Publisher> publishers, List<Platform> platforms) {
         this.name = name;
         this.genres = genres;

@@ -57,15 +57,15 @@ public class RawgApi {
         }
     }
 
-    @Autowired
-    public RawgApi(RestTemplateBuilder restTemplateBuilder) {
-        this.rawgClient = restTemplateBuilder.build();
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
-        messageConverters.add(converter);
-        this.rawgClient.setMessageConverters(messageConverters);
-    }
+//    @Autowired
+//    public RawgApi(RestTemplateBuilder restTemplateBuilder) {
+//        this.rawgClient = restTemplateBuilder.build();
+//        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+//        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+//        messageConverters.add(converter);
+//        this.rawgClient.setMessageConverters(messageConverters);
+//    }
 
     public RawgApi() {
 
