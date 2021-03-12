@@ -34,6 +34,7 @@ public class ReviewServiceTest {
     private ReviewService reviewService;
 
     List<Review> reviews = new ArrayList<>();
+    List<Review> reviewsUG = new ArrayList<>();
     List<User> users = new ArrayList<>();
     List<Game> games = new ArrayList<>();
     List<Genre> genres = new ArrayList<>();
@@ -48,6 +49,7 @@ public class ReviewServiceTest {
         users.add(new User(2, "Apple", "Pie", "AP", "Pass", "ap@amurica.com", UserRole.BASIC));
         games.add(new Game(1,"GTA", genres, "GTA game", 2));
         reviews.add(new Review("work", 5, games.get(0), users.get(0)));
+        reviewsUG.add(new Review("work", 5, games.get(0), users.get(0)));
 
 //        Review review = new Review("work", 5, games.get(0), users.get(0));
 
@@ -93,7 +95,7 @@ public class ReviewServiceTest {
         List<Review> testReviews = reviewService.findAllReview();
 
         assertEquals(1, testReviews.size());
-        verify(reviewRepository, times(1)).findAll();
+       verify(reviewRepository, times(1)).findAll();
     }
 
     @Test
@@ -108,21 +110,22 @@ public class ReviewServiceTest {
 
     @Test
     public void findReviewByGameId(){
-        when(reviewRepository.findById(games.get(0).getId())).thenReturn(Optional.ofNullable(reviews.get(0)));
 
-        Review testReview = reviewService.getReviewsByGameId(games.get(0).getId());
+        when(reviewRepository.findReviewByGameId(games.get(0).getId())).thenReturn(reviewsUG);
 
-        assertEquals(reviews.get(0),testReview);
+        List<Review> testReview = reviewService.getReviewsByGameId(games.get(0).getId());
+
+        assertEquals(testReview,reviewsUG);
 
     }
 
     @Test
     public void findReviewByUserId() {
-        when(reviewRepository.findById(users.get(0).getId())).thenReturn(Optional.ofNullable(reviews.get(0)));
+        when(reviewRepository.findReviewByUserId(users.get(0).getId())).thenReturn(reviewsUG);
 
-        Review testReview = reviewService.getReviewsByUserId(users.get(0).getId());
+        List<Review> testReview = reviewService.getReviewsByUserId(users.get(0).getId());
 
-        assertEquals(reviews.get(0), testReview);
+        assertEquals(testReview, reviewsUG);
 
     }
 

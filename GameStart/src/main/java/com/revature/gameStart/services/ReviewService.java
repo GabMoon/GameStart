@@ -50,21 +50,31 @@ public class ReviewService {
         if(gameId <= 0 || userId <= 0) throw new InvalidRequestException();
 
         Optional<Review> review = reviewRepo.findReviewByUserAndGame(userId, gameId);
-        return review.orElse(null);
+        return review.orElseThrow(ResourceNotFoundException::new);
     }
 
-    public Review getReviewsByGameId(int gameId) {
+    public List<Review> getReviewsByGameId(int gameId) {
         if(gameId <= 0) throw  new InvalidRequestException();
 
-        Optional<Review> review = reviewRepo.findById(gameId);
-        return review.orElse(null);
+       //Optional<Review> review = reviewRepo.findById(gameId);
+        List<Review> reviewList = reviewRepo.findReviewByGameId(gameId);
+
+        if (reviewList.isEmpty()){
+            throw new ResourceNotFoundException();
+        }
+        return reviewList;
     }
 
-    public Review getReviewsByUserId(int userId) {
+    public List<Review> getReviewsByUserId(int userId) {
         if(userId <= 0) throw  new InvalidRequestException();
 
-        Optional<Review> review = reviewRepo.findById(userId);
-        return review.orElse(null);
+        //Optional<Review> review = reviewRepo.findById(userId);
+        List<Review> reviewList = reviewRepo.findReviewByUserId(userId);
+        if(reviewList.isEmpty()){
+            throw new ResourceNotFoundException();
+        }
+
+        return reviewList;
     }
 
     public List<Review> findAllReview() {
