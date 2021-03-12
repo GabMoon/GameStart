@@ -10,6 +10,8 @@ import com.revature.gameStart.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+
+import javax.naming.AuthenticationException;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -130,10 +132,14 @@ public class UserService {
 
         return usersSet;
     }
-    // Currently not able to test this because this requires a column for confirm account that we decided not to use
-//    public Principal authenticate(String username, String password){
+  //   Currently not able to test this because this requires a column for confirm account that we decided not to use
+//    public Principal authenticate(String username, String password) throws AuthenticationException {
+//        User authUser = userRepository.findUserByUsernameAndPassword(username, password).orElseThrow(AuthenticationException::new);
 //
-//
+//        if (authUser != null){
+//            Principal principal = new Principal(authUser);
+//            String token = authClient
+//        }
 //        return null;
 //    }
 
