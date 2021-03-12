@@ -1,91 +1,189 @@
 package com.revature.gameStart.api;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
-import com.revature.gameStart.models.Developer;
 import com.revature.gameStart.models.Game;
 import com.revature.gameStart.models.Platform;
-import com.revature.gameStart.models.Publisher;
+import com.revature.gameStart.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.File;
-import java.io.FileInputStream;
+import javax.annotation.PostConstruct;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-@RestController
-@RequestMapping("/myGames")
+@Component
 public class RawgApi {
 
-    @Autowired
     private RestTemplate rawgClient;
     private String rawgUrl = "https://api.rawg.io/api";
-//    private static Properties props = new Properties();
-//
-////    static {
-////        try {
-////            //props.load(new FileReader("src/main/resources/application.properties"));
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////        }
-////    }
-//
-//    @Autowired
-//    public RawgApi(RestTemplateBuilder restTemplateBuilder) {
-//        this.rawgClient = restTemplateBuilder.build();
-//        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-//        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
-//        messageConverters.add(converter);
-//        this.rawgClient.setMessageConverters(messageConverters);
-//    }
-//
-//    public RawgApi() {
-//
-//    }
-//
-//
-//    public Game[] getGames() {
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.set("Content-Type", "application/json");
-//        //headers.set("token", props.getProperty("rawgToken"));
-//        //headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-//        HttpEntity<Game> game = new HttpEntity<>(headers);
-//
-//////        return rawgClient.getForEntity(rawgUrl+"/games/portal-2", Game.class).getBody();
-////
-//////        Game games = rawgClient.getForObject(rawgUrl+"/games/portal-2", Game.class);
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//        //estTemplate.headForHeaders()
-//        GameWrapperClass response = restTemplate.getForObject(rawgUrl+"/games", GameWrapperClass.class);
-//
-//        Game[] games = response.getResults();
-//
-//        return games;
-//
-//    }
-//
-//    public Game getGame(String name) {
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.set("Content-Type", "application/json");
-//        //headers.set("token", props.getProperty("rawgToken"));
-//        //headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-//        HttpEntity<Game> game = new HttpEntity<>(headers);
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//        return restTemplate.getForObject(rawgUrl+"/games/"+name, Game.class);
-//    }
-//
+    private static Properties props = new Properties();
+    private static String token;
+    private final GameService gameService;
+
+    static {
+        boolean found = false;
+        try {
+            props.load(new FileReader("GameStart/src/main/resources/application.properties"));
+            token = props.getProperty("rawgToken");
+            found = true;
+        } catch (IOException e) {
+        }
+
+        try {
+            props.load(new FileReader("src/main/resources/application.properties"));
+            token = props.getProperty("rawgToken");
+            found = true;
+        } catch (IOException e) {
+        }
+
+        if (!found) try {
+            throw new FileNotFoundException();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Autowired
+    public RawgApi(GameService gameService) {
+        this.gameService = gameService;
+        RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
+        this.rawgClient = restTemplateBuilder.build();
+        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+        messageConverters.add(converter);
+        this.rawgClient.setMessageConverters(messageConverters);
+    }
+
+    @PostConstruct
+    private void init()
+    {
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("In Post Construct");
+        saveGames(100, 50);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    }
+
+    public RawgGame[] getGames() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        headers.set("token", props.getProperty("rawgToken"));
+        //headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<Game> game = new HttpEntity<>(headers);
+
+        //restTemplate.headForHeaders()
+        GameWrapperClass response = rawgClient.getForObject(rawgUrl+"/games", GameWrapperClass.class);
+
+        return response.getResults();
+    }
+
+    public RawgGame getGame(String name) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        headers.set("token", props.getProperty("rawgToken"));
+        //headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<Game> game = new HttpEntity<>(headers);
+
+        return rawgClient.getForObject(rawgUrl+"/games/"+name, RawgGame.class, game);
+    }
+
+    /**
+     * Get a list of games from a specific page, with a specified number of games per page. Give a page size of -1 to
+     *  use the default page size, and -1 for pageNumber to set no specific page.
+     * @param pageSize The number of games to request from RAWG
+     * @param pageNumber the page number to look at
+     * @return returns an array of RawgGames.
+     */
+    public RawgGame[] getPaginatedGames(int pageSize, int pageNumber) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        headers.set("token", props.getProperty("rawgToken"));
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(rawgUrl + "/games");
+
+        if (pageSize != -1) {
+            builder = builder.queryParam("page_size", pageSize);
+        }
+        if (pageNumber != -1) {
+            builder = builder.queryParam("page", pageNumber);
+        }
+
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        GameWrapperClass response = rawgClient.getForObject(builder.toUriString(), GameWrapperClass.class, entity);
+
+        return response.getResults();
+    }
+
+    public ArrayList<Game> getGamesFromPageSizeAndNumPages(int pageSize, int numPages) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        headers.set("token", props.getProperty("rawgToken"));
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(rawgUrl + "/games");
+
+        if (pageSize != -1) {
+            builder = builder.queryParam("page_size", pageSize);
+        }
+
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        int counter = 0;
+        ArrayList<Game> games = new ArrayList<>();
+
+        String url = builder.toUriString();
+
+        while (counter < numPages) {
+            GameWrapperClass response = rawgClient.getForObject(url, GameWrapperClass.class, entity);
+
+            RawgGame[] rawgGames;
+
+            try {
+                assert response != null;
+                rawgGames = response.getResults();
+            } catch (Exception n) {
+                return null;
+            }
+
+            for (RawgGame game: rawgGames) {
+                games.add(convertRawgGame(game));
+            }
+
+            url = response.getNext();
+
+            if (url == null) break;
+
+            counter++;
+        }
+
+        return games;
+    }
+
+    public void saveGames(int pageSize, int numPages) {
+        ArrayList<Game> games = getGamesFromPageSizeAndNumPages(pageSize, numPages);
+
+        gameService.insertGame(games);
+    }
+
+    public Game convertRawgGame(RawgGame game) {
+        List<Platform> platforms = new ArrayList<>();
+
+        for (PlatformWrapperClass plat : game.getPlatforms()) {
+            platforms.add(convertWrapperPlatform(plat));
+        }
+
+        return new Game(game.getName(), game.getGenres(), game.getDescription(), game.getRating(),
+                game.getDevelopers(), game.getPublishers(), platforms);
+    }
+
+    public Platform convertWrapperPlatform(PlatformWrapperClass platform) {
+        return new Platform(platform.getPlatform().getId(), platform.getPlatform().getName());
+    }
 }

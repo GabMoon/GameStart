@@ -16,9 +16,6 @@ public class Game {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "gamesGenres")
-    private List<Genre> genres;
-
     @Column
     private String description;
 
@@ -38,9 +35,20 @@ public class Game {
     @OneToMany(mappedBy = "game", targetEntity = Review.class)
     private List<Review> reviews;
 
+    @ManyToMany(mappedBy = "gamesGenres")
+    private List<Genre> genres;
+
     //Constructors --------------------------------------------------
     public Game() {
         super();
+    }
+
+    public Game(int id, String name, List<Genre> genres, String description, int rating) {
+        this.id = id;
+        this.name = name;
+        this.genres = genres;
+        this.description = description;
+        this.rating = rating;
     }
 
     public Game(String name, List<Genre> genres, List<Developer> developers, List<Publisher> publishers, List<Platform> platforms) {
