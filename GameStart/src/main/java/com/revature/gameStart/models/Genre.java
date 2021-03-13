@@ -54,14 +54,7 @@ public class Genre {
         return this;
     }
 
-    public List<Game> getGamesGenres() {
-        return gamesGenres;
-    }
 
-    public Genre setGamesGenres(List<Game> gamesGenres) {
-        this.gamesGenres = gamesGenres;
-        return this;
-    }
 
     @Override
     public boolean equals(Object o) {

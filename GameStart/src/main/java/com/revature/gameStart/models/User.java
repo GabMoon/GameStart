@@ -1,5 +1,7 @@
 package com.revature.gameStart.models;
 
+import com.revature.gameStart.util.RoleConverter;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -28,8 +30,8 @@ public class User {
     private String email;
 
     @Column(name = "role_name", nullable = false)
-    @Enumerated(EnumType.STRING)
-
+    //@Enumerated(EnumType.STRING)
+    @Convert(converter = RoleConverter.class)
     private UserRole role;
 
     @OneToMany(mappedBy = "user", targetEntity = Review.class)
@@ -38,6 +40,10 @@ public class User {
     //Constructors --------------------------------------------------
     public User() {
         super();
+    }
+
+    public User(int id) {
+        this.id = id;
     }
 
     public User(String firstName, String lastName, String username, String password, String email) {
