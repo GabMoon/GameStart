@@ -13,9 +13,9 @@ import java.util.Optional;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
-//    @Modifying
-//    @Query(value = "INSERT INTO review (description,score,game_id,creator_id) VALUES (:description,:score,:gameId,:userId)",nativeQuery = true)
-//    void registerReview(int userId,int gameId,String description,int score);
+    @Modifying
+    @Query(value = "insert into Review (description,score,user.id,game.id) values (:description,:score,:gameId,:userId)",nativeQuery = true)
+    void insertReview(int userId,int gameId,String description,int score);
 
     @Query("From Review WHERE user.id = :userId AND game.id = :gameId")
     Optional<Review> findReviewByUserAndGame(int userId, int gameId);

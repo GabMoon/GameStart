@@ -41,12 +41,12 @@ public class ReviewService {
         }
 
 
-        reviewRepo.save(newReview);
-//        String description = newReview.getDescription();
-//        int gameId = newReview.getGame().getId();
-//        int userId  = newReview.getUser().getId();
-//        int score = newReview.getScore();
-//        reviewRepo.registerReview(userId,gameId,description,score);
+       // reviewRepo.save(newReview);
+        String description = newReview.getDescription();
+        int gameId = newReview.getGame().getId();
+        int userId  = newReview.getUser().getId();
+        int score = newReview.getScore();
+        reviewRepo.insertReview(userId,gameId,description,score);
 
     }
 
