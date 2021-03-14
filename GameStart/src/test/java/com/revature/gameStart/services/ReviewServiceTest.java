@@ -169,7 +169,7 @@ public class ReviewServiceTest {
         Review newReview = new Review("hiugyuvovy",0,games.get(0),users.get(0));
         //Optional<Review> existReview = Optional.of(newReview);
         doReturn(newReview).when(spyreviewRepo).updateDescription(newReview.getUser().getId(),newReview.getGame().getId(),newReview.getDescription());
-        when(reviewRepository.updateDescription(newReview.getUser().getId(),newReview.getGame().getId(),newReview.getDescription())).thenReturn(newReview);
+       // when(reviewRepository.updateDescription(newReview.getUser().getId(),newReview.getGame().getId(),newReview.getDescription())).thenReturn(newReview);
 
         reviewService.updateReviewDescription(newReview.getUser().getId(),newReview.getGame().getId(),newReview.getDescription());
         assertNotEquals(reviews.get(0),newReview);
@@ -178,7 +178,7 @@ public class ReviewServiceTest {
 
     @Test(expected = ResourceNotFoundException.class)
     public void updateReviewDescriptionTestNotPresent(){
-        when(reviewRepository.updateDescription(users.get(0).getId(),games.get(0).getId(),"CHANGED DESCRIPTION")).thenReturn(reviews.get(0));
+     //   when(reviewRepository.updateDescription(users.get(0).getId(),games.get(0).getId(),"CHANGED DESCRIPTION")).thenReturn(reviews.get(0));
 
         reviewService.updateReviewDescription(users.get(0).getId(),games.get(0).getId(),"CHANGED DESCRIPTION");
 
@@ -195,7 +195,7 @@ public class ReviewServiceTest {
         Review newReview = new Review("hiugyuvovy",0,games.get(0),users.get(0));
         //Optional<Review> existReview = Optional.of(newReview);
         doReturn(newReview).when(spyreviewRepo).updateScore(newReview.getUser().getId(),newReview.getGame().getId(),newReview.getScore());
-        when(reviewRepository.updateScore(newReview.getUser().getId(),newReview.getGame().getId(),newReview.getScore())).thenReturn(newReview);
+     //   when(reviewRepository.updateScore(newReview.getUser().getId(),newReview.getGame().getId(),newReview.getScore())).thenReturn(newReview);
 
         reviewService.updateReviewScore(newReview.getUser().getId(),newReview.getGame().getId(),newReview.getScore());
         assertNotEquals(reviews.get(0),newReview);
@@ -203,7 +203,7 @@ public class ReviewServiceTest {
 
     @Test(expected = ResourceNotFoundException.class)
     public void updateReviewScoreTestNotPresent(){
-        when(reviewRepository.updateScore(users.get(0).getId(),games.get(0).getId(),1)).thenReturn(reviews.get(0));
+     //   when(reviewRepository.updateScore(users.get(0).getId(),games.get(0).getId(),1)).thenReturn(reviews.get(0));
 
         reviewService.updateReviewScore(users.get(0).getId(),games.get(0).getId(),1);
 
@@ -220,7 +220,7 @@ public class ReviewServiceTest {
         Review newReview = new Review("hiugyuvovy",0,games.get(0),users.get(0));
         //Optional<Review> existReview = Optional.of(newReview);
         doReturn(newReview).when(spyreviewRepo).delete(newReview);
-        when(reviewRepository.deleteReviewByUserIdAndGameId(newReview.getUser().getId(),newReview.getGame().getId())).thenReturn(newReview);
+        //when(reviewRepository.deleteReviewByUserIdAndGameId(newReview.getUser().getId(),newReview.getGame().getId())).thenReturn(newReview);
 
         reviewService.deleteReviewByUserIdAndGameId(newReview.getUser().getId(),newReview.getGame().getId());
         assertNotEquals(reviews.get(0),newReview);
@@ -228,7 +228,7 @@ public class ReviewServiceTest {
 
     @Test(expected = ResourceNotFoundException.class)
     public void deleteReviewNotPresent(){
-        when(reviewRepository.deleteReviewByUserIdAndGameId(reviews.get(0).getUser().getId(),reviews.get(0).getGame().getId())).thenReturn(reviews.get(0));
+        //when(reviewRepository.deleteReviewByUserIdAndGameId(reviews.get(0).getUser().getId(),reviews.get(0).getGame().getId())).thenReturn(reviews.get(0));
 
         reviewService.deleteReviewByUserIdAndGameId(reviews.get(0).getUser().getId(),reviews.get(0).getGame().getId());
 

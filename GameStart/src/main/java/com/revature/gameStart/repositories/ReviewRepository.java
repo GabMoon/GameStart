@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     @Modifying
-    @Query(value = "insert into Review (description,score,user.id,game.id) values (:description,:score,:gameId,:userId)",nativeQuery = true)
+    @Query(value = "insert into review (description,score,game_id,creator_id) values (:description,:score,:gameId,:userId)",nativeQuery = true)
     void insertReview(int userId,int gameId,String description,int score);
 
     @Query("From Review WHERE user.id = :userId AND game.id = :gameId")
@@ -29,12 +29,19 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     @Query("FROM Review WHERE user.id = :userId")
     List<Review> findReviewByUserId(int userId);
 
-    @Query("UPDATE Review SET description = :newDescription WHERE user = :userId and game = :gameId")
-    Review updateDescription(int userId, int gameId,String newDescription);
+    @Modifying
+    @Query("UPDATE Review SET description = :newDescription WHERE user.id = :userId and game.id = :gameId")
+    void updateDescription(int userId, int gameId,String newDescription);
 
-    @Query("UPDATE Review SET score = :newScore WHERE user = :userId and game = :gameId")
-    Review updateScore(int userId, int gameId,int newScore);
+    @Modifying
+    @Query("UPDATE Review SET score = :newScore WHERE user.id = :userId and game.id = :gameId")
+    void updateScore(int userId, int gameId,int newScore);
 
+    @Modifying
+    @Query("UPDATE Review SET description = :description, score = :newScore WHERE user.id = :userId and game.id = :gameId")
+    void updateDescriptionAndScore(int userId, int gameId,int newScore,String description);
+
+    @Modifying
     @Query("DELETE FROM Review WHERE user.id = :userId AND game.id = :gameId")
-    Review deleteReviewByUserIdAndGameId(int userId, int gameId);
+    void deleteReviewByUserIdAndGameId(int userId, int gameId);
 }
