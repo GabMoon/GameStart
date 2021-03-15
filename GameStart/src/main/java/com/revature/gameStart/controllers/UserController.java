@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
@@ -23,10 +24,12 @@ import java.util.Set;
 public class UserController {
 
     private final UserService userService;
+    private final HttpSession session;
 
     @Autowired
-    public UserController(UserService userService){
+    public UserController(UserService userService, HttpSession session){
         this.userService = userService;
+        this.session = session;
     }
 
     // Get------------------------------------------------------------------------------
@@ -77,6 +80,9 @@ public class UserController {
         Principal principal = userService.authenticate(credentials.getUsername(), credentials.getPassword());
         //response.addCookie(new Cookie("quizzard-token", principal.getToken()));
         System.out.println("The Principal is " + principal.getId() + " " + principal.getUsername() + " " + principal.getRole().toString());
+        session.setAttribute("userid",principal.getId());
+        session.setAttribute("username",principal.getUsername());
+        session.setAttribute("userrole",principal.getRole());
         return principal;
     }
 
@@ -92,5 +98,11 @@ public class UserController {
     @DeleteMapping(path = "/favorite/delete/{userid}/{gameid}")
     public void DeleteFavorite(@PathVariable int userid, @PathVariable int gameid) {
         userService.deleteFavorite(userid, gameid);
+    }
+
+    //Logout
+    @PostMapping(path = "/logout")
+    public void logout(){
+        session.invalidate();
     }
 }

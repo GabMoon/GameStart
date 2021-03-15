@@ -19,7 +19,7 @@ create table app_user(
     first_name varchar(25) not null,
     last_name varchar(25) not null,
     username varchar(25) not null Unique,
-    password varchar(25) not null,
+    password varchar not null,
     email varchar(256) not null Unique,
     role_name varchar(25) not null default 'Basic',
 
