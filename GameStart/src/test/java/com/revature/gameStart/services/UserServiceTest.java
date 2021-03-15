@@ -273,13 +273,13 @@ public class UserServiceTest {
 
 
         // Arrange
-       // when(mockUserRepository.findUsersByRole(UserRole.BASIC.toString())).thenReturn(basicUsers);
+        when(mockUserRepository.findUsersByRole(UserRole.BASIC.toString())).thenReturn(basicUsers);
         // Nothing to arrange
         // Act
         Set<User> testUsers= mockUserService.getUsersByRole(UserRole.BASIC);
         // Assert
         assertEquals(3, testUsers.size());
-        //verify(mockUserRepository, times(1)).findUsersByRole(UserRole.BASIC.toString());
+        verify(mockUserRepository, times(1)).findUsersByRole(UserRole.BASIC.toString());
     }
     // Test that throws InvalidRequestException
     @Test(expected = InvalidRequestException.class)
@@ -299,12 +299,12 @@ public class UserServiceTest {
     public void getNoUsers() {
 
         // Arrange
-        //when(mockUserRepository.findUsersByRole(UserRole.BASIC.toString())).thenReturn(adminUsers);
+        when(mockUserRepository.findUsersByRole(UserRole.BASIC.toString())).thenReturn(adminUsers);
         // Nothing to arrange
         // Act
         Set<User> testUsers= mockUserService.getUsersByRole(UserRole.ADMIN);
         // Assert
-        //verify(mockUserRepository, times(1)).findUsersByRole(UserRole.ADMIN.toString());
+        verify(mockUserRepository, times(1)).findUsersByRole(UserRole.ADMIN.toString());
     }
 
 //-------------------------------------------------sortUsers-------------------------------------------------------------------------------------------

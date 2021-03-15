@@ -36,11 +36,13 @@ public class UserController {
     public User UserById(@PathVariable int id) {
         return userService.getUserById(id);
     }
+
     // @Secured({"Admin", "Dev"})
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> AllUsers() {
         return userService.getAllUsers();
     }
+
     // @Secured({"Admin", "Dev"})
     @GetMapping(path = "/role/{userRole}",  produces = MediaType.APPLICATION_JSON_VALUE)
     public Set<User> UserByRole(@PathVariable String userRole) {
