@@ -137,6 +137,17 @@ public class Game {
        this.rating = rating;
     }
 
+    public Game(String name, List<Genre> genres, String description, int rating, String slug, String background_image, List<Developer> developers, List<Publisher> publishers, List<Platform> platforms) {
+        this.name = name;
+        this.genres = genres;
+        this.description = description;
+        this.rating = rating;
+        this.slug = slug;
+        this.background_image = background_image;
+        this.developers = developers;
+        this.publishers = publishers;
+        this.platforms = platforms;
+    }
 
     //Getters and Setters -------------------------------------------
 

@@ -67,8 +67,9 @@ public class RawgApi {
     {
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         System.out.println("In Post Construct");
-        saveGames(100, 50);
+        saveGames(100, 20);
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+//        System.out.println(Arrays.toString(getPaginatedGames(10, 1)));
     }
 
     public RawgGame[] getGames() {
@@ -223,8 +224,8 @@ public class RawgApi {
             platforms.add(convertWrapperPlatform(plat));
         }
 
-        return new Game(game.getName(), game.getGenres(), game.getDescription(), game.getRating(),
-                game.getDevelopers(), game.getPublishers(), platforms);
+        return new Game(game.getName(), game.getGenres(), game.getDescription(), game.getRating(), game.getSlug(),
+                game.getBackground_image(), game.getDevelopers(), game.getPublishers(), platforms);
     }
 
     public Platform convertWrapperPlatform(PlatformWrapperClass platform) {

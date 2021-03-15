@@ -38,9 +38,11 @@ create table publisher (
 
 create table game(
     id            	serial,
-    name            varchar(50) not null,
+    name            varchar not null,
     description     text,
     rating          int default -1,
+    slug			varchar,
+    background_image	varchar,
 
     constraint game_pk
     primary key (id)
@@ -152,8 +154,6 @@ create table game_genre(
     foreign key (genre_id)
     references genre
 );
-
-
 
 --Inserts
 --user_role Table
