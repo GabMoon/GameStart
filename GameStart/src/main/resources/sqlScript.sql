@@ -156,9 +156,6 @@ create table game_genre(
 );
 
 --Inserts
---user_role Table
-insert into user_role(role_name) values ('Administration');
-insert into user_role(role_name) values ('Basic');
 
 --app_user Table
 --Calvin
@@ -177,15 +174,45 @@ insert into publisher(name) values ('Rockstar Games');
 --Rust
 insert into publisher(name) values ('Facepunch Studios');
 
+
 --game Table
-insert into game(name,genre,description,publisher_id)
-    values ('Valheim','Open World Survival Craft','A brutal exploration and survival game for 1-10 players, set in a procedurally-generated purgatory inspired by viking culture. Battle, build, and conquer your way to a saga worthy of Odin’s patronage!', 1);
+insert into game(name,description)
+    values ('Valheim','A brutal exploration and survival game for 1-10 players, set in a procedurally-generated purgatory inspired by viking culture. Battle, build, and conquer your way to a saga worthy of Odin’s patronage!');
 
-insert into game(name,genre,description,publisher_id)
-    values ('Grand Theft Auto V','Open World', 'Grand Theft Auto V for PC offers players the option to explore the award-winning world of Los Santos and Blaine County in resolutions of up to 4k and beyond, as well as the chance to experience the game running at 60 frames per second.',2);
+insert into game(name,description)
+    values ('Grand Theft Auto V', 'Grand Theft Auto V for PC offers players the option to explore the award-winning world of Los Santos and Blaine County in resolutions of up to 4k and beyond, as well as the chance to experience the game running at 60 frames per second.');
 
-insert into game(name,genre,description,publisher_id)
-    values ('Rust','Open World Survival Craft','The only aim in Rust is to survive - Overcome struggles such as hunger, thirst and cold. Build a fire. Build a shelter. Kill animals. Protect yourself from other players.',3);
+insert into game(name,description)
+    values ('Rust','The only aim in Rust is to survive - Overcome struggles such as hunger, thirst and cold. Build a fire. Build a shelter. Kill animals. Protect yourself from other players.');
+
+
+--genre Table
+--valheim and Rust
+insert into genre(name) values ('Open World Survival Craft');
+insert into genre(name) values ('Online Co-Op');
+insert into genre(name) values ('Survival');
+
+--GTA 5
+insert into genre(name) values ('Open World');
+insert into genre(name) values ('Action');
+insert into genre(name) values ('Multiplayer');
+
+--game_genre
+--valheim
+insert into game_genre(game_id,genre_id) values (1,1);
+insert into game_genre(game_id,genre_id) values (1,2);
+insert into game_genre(game_id,genre_id) values (1,3);
+
+--GTA 5
+insert into game_genre(game_id,genre_id) values (2,4);
+insert into game_genre(game_id,genre_id) values (2,5);
+insert into game_genre(game_id,genre_id) values (2,6);
+
+--Rust
+insert into game_genre(game_id,genre_id) values (3,1);
+insert into game_genre(game_id,genre_id) values (3,2);
+insert into game_genre(game_id,genre_id) values (3,3);
+
 
 
 --review Table
@@ -219,6 +246,14 @@ insert into review (description, score, game_id, creator_id)
 insert into review (description, score, game_id, creator_id)
     values ('Worst game I have ever played',1,3,3);
 
+
+--Game Publisher Table
+
+insert into game_publisher(game_id,publisher_id) values (1,1);
+
+insert into game_publisher(game_id,publisher_id) values (2,2);
+
+insert into game_publisher(game_id,publisher_id) values (3,3);
 
 --favorite Table
 --user 1 Calvin
@@ -290,8 +325,13 @@ select g.name, r.score,u.first_name , u.last_name from app_user u, review r, gam
 --get all games
 select * from game;
 
+--get all games with genre
+select g.name,  array_to_string( array_agg(distinct gen."name"),',') as Genre from game g, genre gen, game_genre gg
+	where g.id = gg.game_id and gen.id = gg.genre_id
+	group by g."name" ;
+
 --get Game with publisher, developer, and platform(s)
 select g.name as GAME, p."name" as Publisher, d."name" as Developer ,array_to_string( array_agg(distinct plat."name"),',') as platform
-	from game g, developer d, publisher p, platform plat, game_developer gd , game_platform gp
-	where g.publisher_id = p.id and gd.developer_id = d.id and gd.game_id = g.id and gp.game_id = g.id and gp.platform_id = plat.id
+	from game g, developer d, publisher p, platform plat, game_developer gd , game_platform gp, game_publisher gpub
+	where gd.developer_id = d.id and gd.game_id = g.id and gp.game_id = g.id and gp.platform_id = plat.id and gpub.game_id = g.id and gpub.publisher_id = p.id
 	group by g.name, p."name",d."name" ;
