@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.mockito.Mockito.*;
 
@@ -26,6 +27,9 @@ public class UserServiceTest {
 
     @Mock
     UserRepository mockUserRepository;
+
+//    @Mock
+//    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Spy
     UserService spyUserService;
