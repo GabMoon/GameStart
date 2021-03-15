@@ -62,7 +62,6 @@ public class UserService {
         if (userList.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-System.out.println(userList.toString());
         return userList;
     }
 
@@ -108,6 +107,36 @@ System.out.println(userList.toString());
 
 
     }
+
+    public void addFavoriteGame(int userid, int gameid) {
+        if (userid <= 0 || gameid <=0)
+        {
+            throw new InvalidRequestException();
+        }
+
+        Optional<Integer> optionalGameId = userRepository.findFavoriteByGameIdAndUserId( userid, gameid);
+
+        if (optionalGameId.isPresent()) {
+            throw new ResourcePersistenceException();
+        }
+        userRepository.InsertFavorite(userid, gameid);
+    }
+
+    public void deleteFavorite(int userid, int gameid) {
+        if (userid <= 0 || gameid <=0)
+        {
+            throw new InvalidRequestException();
+        }
+
+        Optional<Integer> optionalGameId = userRepository.findFavoriteByGameIdAndUserId( userid, gameid);
+
+        if (!optionalGameId.isPresent()) {
+            throw new ResourceNotFoundException();
+        }
+        userRepository.DeleteFavorite(userid, gameid);
+    }
+
+
 
     // Currently no way to test because this field does not exist in User. It is a column that exists in User, but not in the model
 //    public void confirmAccount(int userId){
