@@ -9,7 +9,10 @@ import com.revature.gameStart.models.UserRole;
 import com.revature.gameStart.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.naming.AuthenticationException;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,11 +22,13 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private UserRepository userRepository;
+    //private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         super();
         this.userRepository = userRepository;
+        //this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 
     }
 
@@ -38,11 +43,13 @@ public class UserService {
     @Transactional
     public void register(User newUser){
         if (!isUserValid(newUser)) throw new InvalidRequestException();
-        System.out.println("I got past the first if");
+
         if (getUserByUsername(newUser.getUsername()) != null) {
             throw new ResourcePersistenceException("Username is already in use");
         }
-        System.out.println("I got past the second if " + newUser.toString());
+
+        // newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+
         userRepository.save(newUser);
     }
 
@@ -81,6 +88,24 @@ public class UserService {
             throw new InvalidRequestException();
         }
         return userRepository.findUserByUsername(username).orElseThrow(ResourceNotFoundException::new);
+    }
+
+    public Principal authenticate(String username, String password) {
+        System.out.println("I am in authenticate in UserService");
+        User tempUser = getUserByUsername(username);
+        System.out.println("I am in authenticate in UserService after");
+//        if (!bCryptPasswordEncoder.matches(password, tempUser.getPassword())) {
+//            // 401 code
+//            return null;
+//        }
+
+
+        Principal principal = new Principal(tempUser);
+        System.out.println("I am in authenticate in UserService after Principal");
+        return  principal;
+
+
+
     }
 
     // Currently no way to test because this field does not exist in User. It is a column that exists in User, but not in the model
@@ -130,10 +155,14 @@ public class UserService {
 
         return usersSet;
     }
-    // Currently not able to test this because this requires a column for confirm account that we decided not to use
-//    public Principal authenticate(String username, String password){
+    //   Currently not able to test this because this requires a column for confirm account that we decided not to use
+//    public Principal authenticate(String username, String password) throws AuthenticationException {
+//        User authUser = userRepository.findUserByUsernameAndPassword(username, password).orElseThrow(AuthenticationException::new);
 //
-//
+//        if (authUser != null){
+//            Principal principal = new Principal(authUser);
+//            String token = authClient
+//        }
 //        return null;
 //    }
 
@@ -147,7 +176,6 @@ public class UserService {
 
 
         if(persistedUser.isPresent() && persistedUser.get().getId() != updatedUser.getId()) {
-            System.out.println("peristed user" + persistedUser.get());
             throw new ResourcePersistenceException("That username is taken by someone else");
         }
         userRepository.save(updatedUser);
