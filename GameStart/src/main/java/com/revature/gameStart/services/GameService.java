@@ -36,6 +36,11 @@ public class GameService {
         return games;
     }
 
+    public List<Game> getTop10Games(){
+
+        return gameRepo.findTop10RatedGames().orElseThrow(ResourceNotFoundException::new);
+    }
+
     public Game getGameById(int id){
 
         if (id < 0) {
