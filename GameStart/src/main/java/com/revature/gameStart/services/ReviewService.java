@@ -32,25 +32,7 @@ public class ReviewService {
         this.reviewRepo = repo;
     }
 
-    public void registerReview(Review newReview) {
 
-        if(!isReviewValid(newReview)) throw new InvalidRequestException();
-
-        Optional<Review> persistedReview = reviewRepo.findReviewByUserAndGame(newReview.getUser().getId(),newReview.getGame().getId());
-        if(persistedReview.isPresent()){
-            throw new ResourcePersistenceException();
-        }
-
-
-       // reviewRepo.save(newReview);
-        String description = newReview.getDescription();
-        int gameId = newReview.getGame().getId();
-        int userId  = newReview.getUser().getId();
-        int score = newReview.getScore();
-
-        reviewRepo.insertReview(userId,gameId,description,score);
-
-    }
     public void insertReview(int userId,int gameId, String description,int score){
 
         if(userId <= 0 || gameId <=0 || (score <0 || score >6)) throw  new InvalidRequestException();
@@ -104,14 +86,6 @@ public class ReviewService {
         return allReviews;
     }
 
-    public void updateReview(Review newReview){
-        if (!isReviewValid(newReview)) {
-            throw new InvalidRequestException();
-        }
-        getReviewByUserAndGameId(newReview.getUser().getId(),newReview.getGame().getId());
-        reviewRepo.save(newReview);
-
-    }
 
     public void updateReviewDescriptionAndScore(int userId, int gameId,int score,String description){
         if(userId <= 0 || gameId<=0) throw new InvalidRequestException();
