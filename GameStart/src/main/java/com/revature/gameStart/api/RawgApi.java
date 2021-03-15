@@ -62,14 +62,14 @@ public class RawgApi {
         this.rawgClient.setMessageConverters(messageConverters);
     }
 
-    @PostConstruct
-    private void init()
-    {
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("In Post Construct");
-        saveGames(100, 50);
-        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    }
+//    @PostConstruct
+//    private void init()
+//    {
+//        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+//        System.out.println("In Post Construct");
+//        saveGames(100, 50);
+//        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+//    }
 
     public RawgGame[] getGames() {
         HttpHeaders headers = new HttpHeaders();
