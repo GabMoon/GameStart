@@ -73,8 +73,8 @@ public class UserService {
         if (role == null) {
             throw new InvalidRequestException();
         }
-
-        usersSet = userRepository.findUsersByRole(role.toString());
+        System.out.println("The role is  " + role.toString());
+        usersSet = userRepository.findUsersByRole(role);
 
         if (usersSet.isEmpty()) {
             throw new ResourceNotFoundException();
