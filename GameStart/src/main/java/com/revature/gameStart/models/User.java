@@ -31,7 +31,6 @@ public class User {
 
     @Column(name = "role_name", nullable = false)
     @Convert(converter = RoleConverter.class)
-
     private UserRole role;
 
     @OneToMany(mappedBy = "user", targetEntity = Review.class)
@@ -40,6 +39,10 @@ public class User {
     //Constructors --------------------------------------------------
     public User() {
         super();
+    }
+
+    public User(int id) {
+        this.id = id;
     }
 
     public User(String firstName, String lastName, String username, String password, String email) {
