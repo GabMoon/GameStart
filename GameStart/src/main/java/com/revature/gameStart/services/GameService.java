@@ -29,7 +29,7 @@ public class GameService {
     public List<Game> getAllGames(){
         List<Game> games;
 
-        games = (List<Game>) gameRepo.findAll();
+        games = gameRepo.findAll();
         if(games.isEmpty()){
             throw new ResourceNotFoundException();
         }
@@ -58,6 +58,8 @@ public class GameService {
         if (gameList == null || gameList.isEmpty()) {
             throw new InvalidRequestException();
         }
+
+        System.out.println(gameList.toString());
 
         for(Game game: gameList ) {
             gameRepo.save(game);

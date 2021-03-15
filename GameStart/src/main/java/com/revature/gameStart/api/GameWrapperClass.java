@@ -1,27 +1,36 @@
 package com.revature.gameStart.api;
 
-import com.revature.gameStart.models.Game;
-
 import java.util.Arrays;
+import java.util.Objects;
 
 public class GameWrapperClass {
 
-    Game[] results;
+    private RawgGame[] results;
+    private String next;
 
     public GameWrapperClass() {
 
     }
 
-    GameWrapperClass(Game[] games) {
+    GameWrapperClass(RawgGame[] games) {
         results = games;
     }
 
-    public Game[] getResults() {
+    public RawgGame[] getResults() {
         return results;
     }
 
-    public GameWrapperClass setResults(Game[] results) {
+    public GameWrapperClass setResults(RawgGame[] results) {
         this.results = results;
+        return this;
+    }
+
+    public String getNext() {
+        return next;
+    }
+
+    public GameWrapperClass setNext(String next) {
+        this.next = next;
         return this;
     }
 
@@ -30,18 +39,21 @@ public class GameWrapperClass {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GameWrapperClass that = (GameWrapperClass) o;
-        return Arrays.equals(results, that.results);
+        return Arrays.equals(results, that.results) && Objects.equals(next, that.next);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(results);
+        int result = Objects.hash(next);
+        result = 31 * result + Arrays.hashCode(results);
+        return result;
     }
 
     @Override
     public String toString() {
         return "GameWrapperClass{" +
                 "results=" + Arrays.toString(results) +
+                ", next='" + next + '\'' +
                 '}';
     }
 }

@@ -9,6 +9,7 @@ public class ReviewId  implements Serializable {
     private Game game;
 
     public ReviewId() {
+
         super();
     }
 

@@ -30,7 +30,6 @@ public class User {
     private String email;
 
     @Column(name = "role_name", nullable = false)
-    //@Enumerated(EnumType.STRING)
     @Convert(converter = RoleConverter.class)
     private UserRole role;
 
