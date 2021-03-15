@@ -5,6 +5,7 @@ import com.revature.gameStart.dtos.Principal;
 import com.revature.gameStart.models.User;
 import com.revature.gameStart.models.UserRole;
 import com.revature.gameStart.services.UserService;
+import com.revature.gameStart.util.RoleConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
-@Controller
+@RestController
 @RequestMapping("/users")
 public class UserController {
 
@@ -41,10 +42,11 @@ public class UserController {
         return userService.getAllUsers();
     }
     // @Secured({"Admin", "Dev"})
-    @GetMapping(path = "/role", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Set<User> UserByRole(@RequestBody UserRole userRole) {
+    @GetMapping(path = "/role/{userRole}",  produces = MediaType.APPLICATION_JSON_VALUE)
+    public Set<User> UserByRole(@PathVariable String userRole) {
+        RoleConverter roleConverter = new RoleConverter();
 
-        return userService.getUsersByRole(userRole);
+        return userService.getUsersByRole(roleConverter.convertToEntityAttribute(userRole));
     }
     //@Secured({"Admin", "Dev"})
     @GetMapping(path="/username/{username}")
