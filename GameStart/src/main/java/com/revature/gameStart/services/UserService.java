@@ -62,7 +62,7 @@ public class UserService {
         if (userList.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-
+System.out.println(userList.toString());
         return userList;
     }
 
@@ -74,7 +74,7 @@ public class UserService {
             throw new InvalidRequestException();
         }
 
-        usersSet = userRepository.findUsersByRole(role.toString());
+        usersSet = userRepository.findUsersByRole(role);
 
         if (usersSet.isEmpty()) {
             throw new ResourceNotFoundException();
