@@ -153,6 +153,8 @@ public class RawgApi {
             }
 
             for (RawgGame game: rawgGames) {
+                Game newGame = convertRawgGame(game);
+                newGame.setRating(-1);
                 games.add(convertRawgGame(game));
             }
 
