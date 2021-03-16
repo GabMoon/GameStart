@@ -62,7 +62,7 @@ public class UserService {
         if (userList.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-System.out.println(userList.toString());
+        //System.out.println(userList.toString());
         return userList;
     }
 

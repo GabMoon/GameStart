@@ -40,7 +40,7 @@ create table game(
     id            	serial,
     name            varchar(50) not null,
     description     text,
-    rating          int default -1,
+    rating          numeric(3,2) default -1,
 
     constraint game_pk
     primary key (id)
@@ -175,11 +175,11 @@ insert into publisher(name) values ('Facepunch Studios');
 
 
 --game Table
-insert into game(name,description)
-    values ('Valheim','A brutal exploration and survival game for 1-10 players, set in a procedurally-generated purgatory inspired by viking culture. Battle, build, and conquer your way to a saga worthy of Odin’s patronage!');
+insert into game(name,description,rating)
+    values ('Valheim','A brutal exploration and survival game for 1-10 players, set in a procedurally-generated purgatory inspired by viking culture. Battle, build, and conquer your way to a saga worthy of Odin’s patronage!', 3);
 
-insert into game(name,description)
-    values ('Grand Theft Auto V', 'Grand Theft Auto V for PC offers players the option to explore the award-winning world of Los Santos and Blaine County in resolutions of up to 4k and beyond, as well as the chance to experience the game running at 60 frames per second.');
+insert into game(name,description,rating)
+    values ('Grand Theft Auto V', 'Grand Theft Auto V for PC offers players the option to explore the award-winning world of Los Santos and Blaine County in resolutions of up to 4k and beyond, as well as the chance to experience the game running at 60 frames per second.', 2);
 
 insert into game(name,description)
     values ('Rust','The only aim in Rust is to survive - Overcome struggles such as hunger, thirst and cold. Build a fire. Build a shelter. Kill animals. Protect yourself from other players.');

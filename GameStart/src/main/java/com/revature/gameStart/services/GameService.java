@@ -3,26 +3,33 @@ package com.revature.gameStart.services;
 import com.revature.gameStart.exceptions.InvalidRequestException;
 import com.revature.gameStart.exceptions.ResourceNotFoundException;
 import com.revature.gameStart.models.Game;
+import com.revature.gameStart.models.Review;
 import com.revature.gameStart.repositories.GameRepository;
+import com.revature.gameStart.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
 public class GameService {
     //Attributes ----------------------------------------------------
     private final GameRepository gameRepo;
+    private final ReviewRepository reviewRepository;
+//    private final ReviewService reviewService;
 
     //Constructors --------------------------------------------------
     @Autowired
-    public GameService(GameRepository repo){
+    public GameService(GameRepository repo, ReviewRepository reviewRepository ){
         super();
         this.gameRepo = repo;
+        this.reviewRepository = reviewRepository;
+//        this.reviewService = reviewService;
     }
 
     //Get ---------------------------------------------------------
@@ -39,6 +46,26 @@ public class GameService {
     public List<Game> getTop10Games(){
 
         return gameRepo.findTop10RatedGames().orElseThrow(ResourceNotFoundException::new);
+    }
+
+    public void updateGameRating(int gameId) {
+
+        int rating = 0;
+        double avgB4Precision;
+        List<Review> reviews = reviewRepository.findReviewByGameId(gameId);
+
+        for(Review review: reviews) {
+            rating += review.getScore();
+        }
+
+        avgB4Precision = rating/(double)reviews.size();
+
+        double avg = BigDecimal.valueOf(avgB4Precision)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
+
+        gameRepo.updateRating(gameId, avg);
+
     }
 
     public Game getGameById(int id){
@@ -69,6 +96,7 @@ public class GameService {
         for(Game game: gameList ) {
             gameRepo.save(game);
         }
+
 
     }
 }

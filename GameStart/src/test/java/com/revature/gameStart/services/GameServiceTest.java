@@ -114,6 +114,15 @@ public class GameServiceTest {
     }
 
     @Test
+    public void grabTop10Games() {
+        when(mockGameRepo.findTop10RatedGames()).thenReturn(Optional.ofNullable(games));
+
+        List<Game> testGames = mockGameService.getTop10Games();
+
+        verify(mockGameRepo, times(1)).findTop10RatedGames();
+    }
+
+    @Test
     public void grabGameById() {
         // Arrange
         when(mockGameRepo.findById(1)).thenReturn(gameWithIdZeroOptional);

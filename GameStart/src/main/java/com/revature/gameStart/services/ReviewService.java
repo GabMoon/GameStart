@@ -20,15 +20,16 @@ import java.util.Optional;
 public class ReviewService {
 
     private ReviewRepository reviewRepo;
-
+    private GameService gameService;
 
     public ReviewService(){
         super();
     }
 
     @Autowired
-    public ReviewService(ReviewRepository repo) {
+    public ReviewService(ReviewRepository repo, GameService gameService) {
         super();
+        this.gameService = gameService;
         this.reviewRepo = repo;
     }
 
@@ -43,6 +44,8 @@ public class ReviewService {
 
         }
         reviewRepo.insertReview(userId,gameId,description,score);
+
+        gameService.updateGameRating(gameId);
 
     }
 
@@ -94,6 +97,7 @@ public class ReviewService {
 
 
         reviewRepo.updateDescriptionAndScore(userId,gameId,score,description);
+        gameService.updateGameRating(gameId);
     }
 
     public void updateReviewDescription(int userId, int gameId,String description){
@@ -111,6 +115,7 @@ public class ReviewService {
         getReviewByUserAndGameId(userId,gameId);
 
         reviewRepo.updateScore(userId,gameId,score);
+        gameService.updateGameRating(gameId);
     }
 
 
@@ -120,6 +125,7 @@ public class ReviewService {
        getReviewByUserAndGameId(userId,gameId);
 
         reviewRepo.deleteReviewByUserIdAndGameId(userId,gameId);
+        gameService.updateGameRating(gameId);
     }
     public boolean isReviewValid(Review review) {
 
