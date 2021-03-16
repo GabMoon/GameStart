@@ -71,6 +71,7 @@ public class ReviewServiceTest {
     //-----------------------------Test------------------------------
 
     @Test @Ignore
+
     public void registerReviewTest() {
 
         int user = reviews.get(0).getUser().getId();
@@ -98,6 +99,7 @@ public class ReviewServiceTest {
 
 
     @Test @Ignore
+
     public void findAllTest() {
 
         //doReturn(reviews).when(spyreviewService).findAllReview();
@@ -118,6 +120,7 @@ public class ReviewServiceTest {
     }
 
     @Test @Ignore
+
     public void findReviewByUserIdandGameId(){
         Optional<Review> newReviews = Optional.of(reviews.get(0));
         int user = newReviews.get().getUser().getId();
@@ -142,6 +145,7 @@ public class ReviewServiceTest {
     }
 
     @Test @Ignore
+
     public void findReviewByGameId(){
 
         int user = reviews.get(0).getUser().getId();
@@ -168,6 +172,7 @@ public class ReviewServiceTest {
     }
 
     @Test @Ignore
+
     public void findReviewByUserId() {
         int user = reviews.get(0).getUser().getId();
         int game = reviews.get(0).getGame().getId();
@@ -193,6 +198,7 @@ public class ReviewServiceTest {
     }
 
     @Test @Ignore
+
     public void updateReviewTest(){
 
         int user = reviews.get(0).getUser().getId();
@@ -223,6 +229,7 @@ public class ReviewServiceTest {
     }
 
     @Test @Ignore
+
     public void updateReviewDescriptionTest(){
 
         int user = reviews.get(0).getUser().getId();

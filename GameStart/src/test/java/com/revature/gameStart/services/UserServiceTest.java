@@ -98,7 +98,9 @@ public class UserServiceTest {
 
     // --------------------------------------------------------------------- getUserById----------------------------------------------------------------------------
     // Test that I get the right user and they equal
+
     @Test @Ignore
+
     public void UserBanana() {
 
         //Arrange
@@ -137,6 +139,7 @@ public class UserServiceTest {
 
     //---------------------------------------------------------getUserByUsername------------------------------------------------------------------------------------------------------------
     // Test that a user is returned
+
     @Test @Ignore
     public void UserAP() {
 
@@ -193,6 +196,7 @@ public class UserServiceTest {
 
     // -------------------------------------------------------Register User-----------------------------------------------------------------------------------------------------------------------
     // Test that a user is added to the list
+
     @Test @Ignore
     public void UserRegistered() {
 
@@ -236,6 +240,7 @@ public class UserServiceTest {
 
 // ---------------------------------------------- getAllUsers()---------------------------------------------------------------------------------------------
     // Test that gets all users
+
     @Test @Ignore
     public void getUsers() {
         // Arrange
@@ -262,6 +267,7 @@ public class UserServiceTest {
 
     //-----------------------------------------------getUsersByRole--------------------------------------------------------------------------------------------------------------------
     // Test that gets Basic Users
+
     @Test @Ignore
     public void getBasicUsers() {
 //        Set<User> usersSet = new HashSet<>();
@@ -442,6 +448,7 @@ public class UserServiceTest {
 
 //-----------------------------------updateProfile----------------------------------------------------------------------
     // Test that updates a user that exists
+
     @Test @Ignore
     public void updateAUserThatExists(){
         //Arrange

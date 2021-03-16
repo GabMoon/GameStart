@@ -4,6 +4,7 @@ import com.revature.gameStart.models.Game;
 import com.revature.gameStart.models.Platform;
 import com.revature.gameStart.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -19,6 +20,8 @@ import java.io.IOException;
 import java.util.*;
 
 @Component
+@EnableConfigurationProperties
+
 public class RawgApi {
 
     private RestTemplate rawgClient;
@@ -31,14 +34,12 @@ public class RawgApi {
 //        boolean found = false;
 //        try {
 //            props.load(new FileReader("GameStart/src/main/resources/application.properties"));
-////            token = props.getProperty("rawgToken");
 //            found = true;
 //        } catch (IOException e) {
 //        }
 //
 //        try {
 //            props.load(new FileReader("src/main/resources/application.properties"));
-////            token = props.getProperty("rawgToken");
 //            found = true;
 //        } catch (IOException e) {
 //        }
@@ -71,6 +72,7 @@ public class RawgApi {
 //        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 //        System.out.println(Arrays.toString(getPaginatedGames(10, 1)));
 //    }
+
 
     public RawgGame[] getGames() {
         HttpHeaders headers = new HttpHeaders();
