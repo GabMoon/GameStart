@@ -79,4 +79,18 @@ public class UserController {
         System.out.println("The Principal is " + principal.getId() + " " + principal.getUsername() + " " + principal.getRole().toString());
         return principal;
     }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(path = "/favorite/{userid}/{gameid}")
+    public void Favorite(@PathVariable int userid, @PathVariable int gameid) {
+        userService.addFavoriteGame(userid, gameid);
+    }
+
+    //DELETE--------------------------------------------------------------------------------------------------------
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping(path = "/favorite/delete/{userid}/{gameid}")
+    public void DeleteFavorite(@PathVariable int userid, @PathVariable int gameid) {
+        userService.deleteFavorite(userid, gameid);
+    }
 }

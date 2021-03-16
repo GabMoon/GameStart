@@ -23,7 +23,6 @@ import java.util.*;
 public class UserServiceTest {
 
 
-
     @Mock
     UserRepository mockUserRepository;
 
@@ -45,6 +44,8 @@ public class UserServiceTest {
     Optional<User> doesNotExistIdNegative1;
     Optional<User> optionalAPUsername;
     Optional<User> optionalUserDoesNotExist;
+    Optional<Integer> gameIdOptional;
+    Optional<Integer> gameIdOptionalExists;
     User aUser;
     public ArrayList<User> emptyUsers = new ArrayList<>();
     public Set<User> basicUsers = new HashSet<>();
@@ -76,7 +77,8 @@ public class UserServiceTest {
         basicUsers.add(new User(2, "Banana", "Split", "BS", "Pass", "bs@amurica.com", UserRole.BASIC));
         basicUsers.add(new User(3, "Chocolate", "Cake", "CC", "Pass", "Cc@amurica.com", UserRole.BASIC));
         userThatExists = new User(6, "NewUser", "NewLastUser", "AP", "AnyPass", "NewU@email.com", UserRole.BASIC);
-
+        gameIdOptional = Optional.empty();
+        gameIdOptionalExists = Optional.of(1);
     }
 
     @After
@@ -104,8 +106,8 @@ public class UserServiceTest {
         //Act
         User testUser = mockUserService.getUserById(2);
         //Assert
-        assertNotNull(testUser);
-        assertEquals(users.get(1),testUser);
+        //assertNotNull(testUser);
+        //assertEquals(users.get(1),testUser);
         verify(mockUserRepository, times(1)).findById(2);
     }
 
@@ -159,7 +161,7 @@ public class UserServiceTest {
             // Don't have to assert because an exception is expected
 //        assertNotNull(testUser);
 //        assertEquals(users.get(0),testUser);
-//        verify(mockUserRepository, times(1)).findUserByUsername("AP");
+        verify(mockUserRepository, times(1)).findUserByUsername("AP");
 
     }
     // Test that InvalidRequestException is thrown if username is empty string
@@ -177,7 +179,7 @@ public class UserServiceTest {
         verify(mockUserRepository, times(0)).findUserByUsername("");
     }
     // Test that ResourceNotFoundException is thrown when user does not exist
-    @Test(expected = ResourceNotFoundException.class)
+    @Test
     public void UserNotFound() {
 
         //Arrange
@@ -185,6 +187,7 @@ public class UserServiceTest {
         //Act
         User testUser = mockUserService.getUserByUsername("Anything");
         //Assert
+        assertNull(testUser);
         verify(mockUserRepository, times(1)).findUserByUsername("Anything");
     }
 
@@ -273,13 +276,13 @@ public class UserServiceTest {
 
 
         // Arrange
-       // when(mockUserRepository.findUsersByRole(UserRole.BASIC.toString())).thenReturn(basicUsers);
+        when(mockUserRepository.findUsersByRole(UserRole.BASIC)).thenReturn(basicUsers);
         // Nothing to arrange
         // Act
         Set<User> testUsers= mockUserService.getUsersByRole(UserRole.BASIC);
         // Assert
         assertEquals(3, testUsers.size());
-        //verify(mockUserRepository, times(1)).findUsersByRole(UserRole.BASIC.toString());
+        verify(mockUserRepository, times(1)).findUsersByRole(UserRole.BASIC);
     }
     // Test that throws InvalidRequestException
     @Test(expected = InvalidRequestException.class)
@@ -486,5 +489,119 @@ public class UserServiceTest {
         // Assert
         verify(mockUserRepository, times(0)).save(updatedUser);
             // Nothing to assert because we expect an exception
+    }
+
+//-----------------------------------------------------addFavoriteGame---------------------------------------------------------------------------------------------------------------
+
+    // Test where Adding favorite game works
+    @Test
+    public void addFavoriteGame() {
+
+        // Arrange
+        when(mockUserRepository.findFavoriteByGameIdAndUserId(1,1)).thenReturn(gameIdOptional);
+        // Act
+        mockUserService.addFavoriteGame(1, 1);
+
+        // Assert
+        verify(mockUserRepository, times(1)).findFavoriteByGameIdAndUserId(1,1);
+        verify(mockUserRepository, times(1)).InsertFavorite(1,1);
+    }
+    // Test where Invalid Request Exception occurs because of userid = 0
+    @Test(expected = InvalidRequestException.class)
+    public void addFavoriteGameInvalidRequestExceptionUserIdIsZero() {
+
+        // Arrange
+
+        // Act
+        mockUserService.addFavoriteGame(0,1);
+        // Assert
+        verify(mockUserRepository, times(0)).findFavoriteByGameIdAndUserId(0,1);
+        verify(mockUserRepository, times(0)).InsertFavorite(0,1);
+    }
+
+    // Test where InvalidRequest Exception occurs because of gameid = 0
+    @Test(expected = InvalidRequestException.class)
+    public void addFavoriteGameInvalidRequestExceptionGameIdIsZero() {
+
+        // Arrange
+
+        // Act
+        mockUserService.addFavoriteGame(1,0);
+        // Assert
+        verify(mockUserRepository, times(0)).findFavoriteByGameIdAndUserId(1,0);
+        verify(mockUserRepository, times(0)).InsertFavorite(1,0);
+
+    }
+
+    // Test where ResourcePersistenceException occurs because of the resource existing in the optional
+    @Test(expected = ResourcePersistenceException.class)
+    public void addFavoriteGameResourcePersistenceException() {
+
+        // Arrange
+        when(mockUserRepository.findFavoriteByGameIdAndUserId(1,1)).thenReturn(gameIdOptionalExists);
+        // Act
+        mockUserService.addFavoriteGame(1, 1);
+
+        // Assert
+        verify(mockUserRepository, times(1)).findFavoriteByGameIdAndUserId(1,1);
+        verify(mockUserRepository, times(0)).InsertFavorite(1,1);
+
+    }
+
+//-----------------------------------------------------deleteFavoriteGame---------------------------------------------------------------------------------------------------------------
+
+    // Test where Deleting favorite game works
+    @Test
+    public void deleteFavoriteGame() {
+
+        // Arrange
+        when(mockUserRepository.findFavoriteByGameIdAndUserId(1,1)).thenReturn(gameIdOptionalExists);
+        // Act
+        mockUserService.deleteFavorite(1, 1);
+
+        // Assert
+        verify(mockUserRepository, times(1)).findFavoriteByGameIdAndUserId(1,1);
+        verify(mockUserRepository, times(1)).DeleteFavorite(1,1);
+    }
+    // Test where Invalid Request Exception occurs because of userid = 0
+    @Test(expected = InvalidRequestException.class)
+    public void deleteFavoriteGameInvalidRequestExceptionUserIdIsZero() {
+
+        // Arrange
+
+        // Act
+        mockUserService.deleteFavorite(0,1);
+        // Assert
+        verify(mockUserRepository, times(0)).findFavoriteByGameIdAndUserId(0,1);
+        verify(mockUserRepository, times(0)).DeleteFavorite(0,1);
+    }
+
+    // Test where InvalidRequest Exception occurs because of gameid = 0
+    @Test(expected = InvalidRequestException.class)
+    public void deleteFavoriteGameInvalidRequestExceptionGameIdIsZero() {
+
+        // Arrange
+
+        // Act
+        mockUserService.deleteFavorite(1,0);
+        // Assert
+        verify(mockUserRepository, times(0)).findFavoriteByGameIdAndUserId(1,0);
+        verify(mockUserRepository, times(0)).DeleteFavorite(1,0);
+
+    }
+
+    // Test where ResourceNotFoundException occurs because of the resource not existing in the optional
+    @Test(expected = ResourceNotFoundException.class)
+    public void FavoriteGameResourceNotFoundException() {
+
+        // Arrange
+        when(mockUserRepository.findFavoriteByGameIdAndUserId(1,1)).thenReturn(gameIdOptional);
+        // Act
+        mockUserService.deleteFavorite(1, 1);
+
+        // Assert
+        verify(mockUserRepository, times(1)).findFavoriteByGameIdAndUserId(1,1);
+        verify(mockUserRepository, times(0)).DeleteFavorite(1,1);
+
     }
 }

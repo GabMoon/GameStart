@@ -109,6 +109,9 @@ public class Game {
     @ManyToMany(mappedBy = "gamesGenres")
     private List<Genre> genres;
 
+    @ManyToMany(mappedBy = "gameFavorites")
+    private List<User> userFavorite;
+
     //Constructors --------------------------------------------------
     public Game() {
         super();
