@@ -20,8 +20,79 @@ public class Game {
     private String description;
 
     @Column(columnDefinition = "integer default -1")
-    private int rating;
+    private double rating;
 
+    @Column
+    private String slug;
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", genres=" + genres +
+                ", description='" + description + '\'' +
+                ", rating=" + rating +
+                ", slug='" + slug + '\'' +
+                ", background_image='" + background_image + '\'' +
+                ", developers=" + developers +
+                ", publishers=" + publishers +
+                ", platforms=" + platforms +
+                ", reviews=" + reviews +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return id == game.id && rating == game.rating && Objects.equals(name, game.name) && Objects.equals(genres, game.genres) && Objects.equals(description, game.description) && Objects.equals(slug, game.slug) && Objects.equals(background_image, game.background_image) && Objects.equals(developers, game.developers) && Objects.equals(publishers, game.publishers) && Objects.equals(platforms, game.platforms) && Objects.equals(reviews, game.reviews);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, genres, description, rating, slug, background_image, developers, publishers, platforms, reviews);
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public Game setGenres(List<Genre> genres) {
+        this.genres = genres;
+        return this;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public Game setSlug(String slug) {
+        this.slug = slug;
+        return this;
+    }
+
+    public String getBackground_image() {
+        return background_image;
+    }
+
+    public Game setBackground_image(String background_image) {
+        this.background_image = background_image;
+        return this;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public Game setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+        return this;
+    }
+
+    @Column
+    private String background_image;
 
     @ManyToMany(mappedBy = "gamesDeveloped")
     private List<Developer> developers;
@@ -38,9 +109,16 @@ public class Game {
     @ManyToMany(mappedBy = "gamesGenres")
     private List<Genre> genres;
 
+    @ManyToMany(mappedBy = "gameFavorites")
+    private List<User> userFavorite;
+
     //Constructors --------------------------------------------------
     public Game() {
         super();
+    }
+
+    public Game(int id) {
+        this.id = id;
     }
 
     public Game(int id, String name, List<Genre> genres, String description, int rating) {
@@ -66,6 +144,17 @@ public class Game {
        this.rating = rating;
     }
 
+    public Game(String name, List<Genre> genres, String description, int rating, String slug, String background_image, List<Developer> developers, List<Publisher> publishers, List<Platform> platforms) {
+        this.name = name;
+        this.genres = genres;
+        this.description = description;
+        this.rating = rating;
+        this.slug = slug;
+        this.background_image = background_image;
+        this.developers = developers;
+        this.publishers = publishers;
+        this.platforms = platforms;
+    }
 
     //Getters and Setters -------------------------------------------
 
@@ -101,7 +190,7 @@ public class Game {
         this.description = description;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 
@@ -137,31 +226,4 @@ public class Game {
     //Other ---------------------------------------------------------
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Game game = (Game) o;
-        return id == game.id && rating == game.rating && Objects.equals(name, game.name) && Objects.equals(genres, game.genres) && Objects.equals(description, game.description) && Objects.equals(developers, game.developers) && Objects.equals(publishers, game.publishers) && Objects.equals(platforms, game.platforms) && Objects.equals(reviews, game.reviews);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, genres, description, rating, developers, publishers, platforms, reviews);
-    }
-
-    @Override
-    public String toString() {
-        return "Game{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", genres=" + genres +
-                ", description='" + description + '\'' +
-                ", rating=" + rating +
-                ", developers=" + developers +
-                ", publishers=" + publishers +
-                ", platforms=" + platforms +
-                ", reviews=" + reviews +
-                '}';
-    }
 }

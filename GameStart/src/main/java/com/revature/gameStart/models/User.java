@@ -1,5 +1,7 @@
 package com.revature.gameStart.models;
 
+import com.revature.gameStart.util.RoleConverter;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -28,16 +30,27 @@ public class User {
     private String email;
 
     @Column(name = "role_name", nullable = false)
-    @Enumerated(EnumType.STRING)
-
+    @Convert(converter = RoleConverter.class)
     private UserRole role;
 
     @OneToMany(mappedBy = "user", targetEntity = Review.class)
     private List<Review> reviews;
 
+    @ManyToMany
+    @JoinTable(
+            name = "favorite",
+            joinColumns = @JoinColumn (name = "user_id"),
+            inverseJoinColumns = @JoinColumn (name = "game_id")
+    )
+    private List<Game> gameFavorites;
+
     //Constructors --------------------------------------------------
     public User() {
         super();
+    }
+
+    public User(int id) {
+        this.id = id;
     }
 
     public User(String firstName, String lastName, String username, String password, String email) {
@@ -119,6 +132,13 @@ public class User {
         this.role = role;
     }
 
+    public List<Game> getGameFavorites() {
+        return gameFavorites;
+    }
+
+    public void setGameFavorites(List<Game> gameFavorites) {
+        this.gameFavorites = gameFavorites;
+    }
 
     //Others --------------------------------------------------------
 

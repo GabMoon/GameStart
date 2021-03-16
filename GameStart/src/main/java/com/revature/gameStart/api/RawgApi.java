@@ -34,14 +34,12 @@ public class RawgApi {
 //        boolean found = false;
 //        try {
 //            props.load(new FileReader("GameStart/src/main/resources/application.properties"));
-//            token = props.getProperty("rawgToken");
 //            found = true;
 //        } catch (IOException e) {
 //        }
 //
 //        try {
 //            props.load(new FileReader("src/main/resources/application.properties"));
-//            token = props.getProperty("rawgToken");
 //            found = true;
 //        } catch (IOException e) {
 //        }
@@ -65,14 +63,16 @@ public class RawgApi {
         this.rawgClient.setMessageConverters(messageConverters);
     }
 
-    @PostConstruct
-    private void init()
-    {
+//    @PostConstruct
+//    private void init()
+//    {
 //        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 //        System.out.println("In Post Construct");
-////        saveGames(100, 50);
+//        saveGames(100, 20);
 //        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    }
+//        System.out.println(Arrays.toString(getPaginatedGames(10, 1)));
+//    }
+
 
     public RawgGame[] getGames() {
         HttpHeaders headers = new HttpHeaders();
@@ -226,8 +226,8 @@ public class RawgApi {
             platforms.add(convertWrapperPlatform(plat));
         }
 
-        return new Game(game.getName(), game.getGenres(), game.getDescription(), game.getRating(),
-                game.getDevelopers(), game.getPublishers(), platforms);
+        return new Game(game.getName(), game.getGenres(), game.getDescription(), game.getRating(), game.getSlug(),
+                game.getBackground_image(), game.getDevelopers(), game.getPublishers(), platforms);
     }
 
     public Platform convertWrapperPlatform(PlatformWrapperClass platform) {

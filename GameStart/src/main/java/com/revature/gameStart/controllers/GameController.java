@@ -42,6 +42,11 @@ public class GameController {
         return gameService.getGameById(id);
     }
 
+    @GetMapping(path = "/top10")
+    public List<Game> getTop10(){
+        return gameService.getTop10Games();
+    }
+
     @GetMapping(path = "/name/{name}")
     public Game getGameByName(@PathVariable String name){
 
