@@ -82,14 +82,14 @@ public class Game {
         return this;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public Game setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-        return this;
-    }
+//    public List<Review> getReviews() {
+//        return reviews;
+//    }
+//
+//    public Game setReviews(List<Review> reviews) {
+//        this.reviews = reviews;
+//        return this;
+//    }
 
     @Column
     private String background_image;
