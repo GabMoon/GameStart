@@ -25,6 +25,11 @@ public class GameController {
     }
 
     //Get -----------------------------------------------------------
+//    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+//    public String getAllGames(){
+//        return "Its alive!!";
+//    }
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Game> getAllGames(){
 
@@ -47,6 +52,5 @@ public class GameController {
 
         return gameService.getGameByName(name);
     }
-
 
 }
