@@ -24,31 +24,31 @@ public class RawgApi {
     private RestTemplate rawgClient;
     private String rawgUrl = "https://api.rawg.io/api";
     private static Properties props = new Properties();
-    private static String token;
+//    private static String token;
     private final GameService gameService;
 
-    static {
-        boolean found = false;
-        try {
-            props.load(new FileReader("GameStart/src/main/resources/application.properties"));
-            token = props.getProperty("rawgToken");
-            found = true;
-        } catch (IOException e) {
-        }
-
-        try {
-            props.load(new FileReader("src/main/resources/application.properties"));
-            token = props.getProperty("rawgToken");
-            found = true;
-        } catch (IOException e) {
-        }
-
-        if (!found) try {
-            throw new FileNotFoundException();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+//    static {
+//        boolean found = false;
+//        try {
+//            props.load(new FileReader("GameStart/src/main/resources/application.properties"));
+////            token = props.getProperty("rawgToken");
+//            found = true;
+//        } catch (IOException e) {
+//        }
+//
+//        try {
+//            props.load(new FileReader("src/main/resources/application.properties"));
+////            token = props.getProperty("rawgToken");
+//            found = true;
+//        } catch (IOException e) {
+//        }
+//
+//        if (!found) try {
+//            throw new FileNotFoundException();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Autowired
     public RawgApi(GameService gameService) {
@@ -75,7 +75,7 @@ public class RawgApi {
     public RawgGame[] getGames() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
-        headers.set("token", props.getProperty("rawgToken"));
+//        headers.set("token", props.getProperty("rawgToken"));
         //headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Game> game = new HttpEntity<>(headers);
 
@@ -88,7 +88,7 @@ public class RawgApi {
     public RawgGame getGame(String name) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
-        headers.set("token", props.getProperty("rawgToken"));
+//        headers.set("token", props.getProperty("rawgToken"));
         //headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Game> game = new HttpEntity<>(headers);
 
@@ -105,7 +105,7 @@ public class RawgApi {
     public RawgGame[] getPaginatedGames(int pageSize, int pageNumber) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
-        headers.set("token", props.getProperty("rawgToken"));
+//        headers.set("token", props.getProperty("rawgToken"));
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(rawgUrl + "/games");
 
@@ -126,7 +126,7 @@ public class RawgApi {
     public ArrayList<Game> getGamesFromPageSizeAndNumPages(int pageSize, int numPages) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
-        headers.set("token", props.getProperty("rawgToken"));
+//        headers.set("token", props.getProperty("rawgToken"));
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(rawgUrl + "/games");
 
