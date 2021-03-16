@@ -40,7 +40,7 @@ create table game(
     id            	serial,
     name            varchar not null,
     description     text,
-    rating          double percision,
+    rating          double precision,
     slug			varchar,
     background_image	varchar,
 
