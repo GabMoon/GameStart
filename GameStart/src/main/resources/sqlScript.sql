@@ -19,7 +19,7 @@ create table app_user(
     first_name varchar(25) not null,
     last_name varchar(25) not null,
     username varchar(25) not null Unique,
-    password varchar(25) not null,
+    password varchar not null,
     email varchar(256) not null Unique,
     role_name varchar(25) not null default 'Basic',
 
@@ -38,9 +38,12 @@ create table publisher (
 
 create table game(
     id            	serial,
-    name            varchar(50) not null,
+    name            varchar not null,
     description     text,
-    rating          numeric(3,2) default -1,
+    rating          double percision,
+    slug			varchar,
+    background_image	varchar,
+
 
     constraint game_pk
     primary key (id)
@@ -152,7 +155,6 @@ create table game_genre(
     foreign key (genre_id)
     references genre
 );
-
 
 --Inserts
 

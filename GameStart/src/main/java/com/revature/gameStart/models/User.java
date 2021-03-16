@@ -36,6 +36,14 @@ public class User {
     @OneToMany(mappedBy = "user", targetEntity = Review.class)
     private List<Review> reviews;
 
+    @ManyToMany
+    @JoinTable(
+            name = "favorite",
+            joinColumns = @JoinColumn (name = "user_id"),
+            inverseJoinColumns = @JoinColumn (name = "game_id")
+    )
+    private List<Game> gameFavorites;
+
     //Constructors --------------------------------------------------
     public User() {
         super();
@@ -124,6 +132,13 @@ public class User {
         this.role = role;
     }
 
+    public List<Game> getGameFavorites() {
+        return gameFavorites;
+    }
+
+    public void setGameFavorites(List<Game> gameFavorites) {
+        this.gameFavorites = gameFavorites;
+    }
 
     //Others --------------------------------------------------------
 

@@ -67,8 +67,9 @@ public class RawgApi {
 //    {
 //        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 //        System.out.println("In Post Construct");
-//        saveGames(100, 50);
+//        saveGames(100, 20);
 //        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+//        System.out.println(Arrays.toString(getPaginatedGames(10, 1)));
 //    }
 
     public RawgGame[] getGames() {
@@ -153,6 +154,50 @@ public class RawgApi {
             }
 
             for (RawgGame game: rawgGames) {
+                Game newGame = convertRawgGame(game);
+                newGame.setRating(-1);
+                games.add(convertRawgGame(game));
+            }
+
+            url = response.getNext();
+
+            if (url == null) break;
+
+            counter++;
+        }
+
+        return games;
+    }
+
+    public ArrayList<Game> getGamesByParameters(int numberOfPages, Map<String, String> parameters) {
+        int counter = 0;
+        ArrayList<Game> games = new ArrayList<>();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(rawgUrl + "/games");
+
+        for (Map.Entry<String, String> param : parameters.entrySet()) {
+            builder = builder.queryParam(param.getKey(), param.getValue());
+        }
+
+        String url = builder.toUriString();
+
+        while(counter < numberOfPages) {
+            GameWrapperClass response = rawgClient.getForObject(url, GameWrapperClass.class, entity);
+
+            RawgGame[] rawgGames;
+
+            try {
+                assert response != null;
+                rawgGames = response.getResults();
+            } catch (Exception n) {
+                return null;
+            }
+
+            for (RawgGame game: rawgGames) {
                 games.add(convertRawgGame(game));
             }
 
@@ -179,8 +224,8 @@ public class RawgApi {
             platforms.add(convertWrapperPlatform(plat));
         }
 
-        return new Game(game.getName(), game.getGenres(), game.getDescription(), game.getRating(),
-                game.getDevelopers(), game.getPublishers(), platforms);
+        return new Game(game.getName(), game.getGenres(), game.getDescription(), game.getRating(), game.getSlug(),
+                game.getBackground_image(), game.getDevelopers(), game.getPublishers(), platforms);
     }
 
     public Platform convertWrapperPlatform(PlatformWrapperClass platform) {
