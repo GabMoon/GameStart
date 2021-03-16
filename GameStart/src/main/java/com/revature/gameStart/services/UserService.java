@@ -62,6 +62,7 @@ public class UserService {
         if (userList.isEmpty()) {
             throw new ResourceNotFoundException();
         }
+
         return userList;
     }
 

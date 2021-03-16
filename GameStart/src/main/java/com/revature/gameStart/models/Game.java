@@ -20,7 +20,7 @@ public class Game {
     private String description;
 
     @Column(columnDefinition = "integer default -1")
-    private int rating;
+    private double rating;
 
     @Column
     private String slug;
@@ -190,7 +190,7 @@ public class Game {
         this.description = description;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 
