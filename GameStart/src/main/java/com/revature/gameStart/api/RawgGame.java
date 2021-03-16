@@ -3,6 +3,7 @@ package com.revature.gameStart.api;
 import com.revature.gameStart.models.*;
 
 import java.util.List;
+import java.util.Objects;
 
 public class RawgGame {
 
@@ -23,6 +24,58 @@ public class RawgGame {
     private List<PlatformWrapperClass> platforms;
 
     private List<Review> reviews;
+
+    private String slug;
+
+    private String background_image;
+
+    @Override
+    public String toString() {
+        return "RawgGame{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", genres=" + genres +
+                ", description='" + description + '\'' +
+                ", rating=" + rating +
+                ", developers=" + developers +
+                ", publishers=" + publishers +
+                ", platforms=" + platforms +
+                ", reviews=" + reviews +
+                ", slug='" + slug + '\'' +
+                ", background_image='" + background_image + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RawgGame game = (RawgGame) o;
+        return id == game.id && rating == game.rating && Objects.equals(name, game.name) && Objects.equals(genres, game.genres) && Objects.equals(description, game.description) && Objects.equals(developers, game.developers) && Objects.equals(publishers, game.publishers) && Objects.equals(platforms, game.platforms) && Objects.equals(reviews, game.reviews) && Objects.equals(slug, game.slug) && Objects.equals(background_image, game.background_image);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, genres, description, rating, developers, publishers, platforms, reviews, slug, background_image);
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public RawgGame setSlug(String slug) {
+        this.slug = slug;
+        return this;
+    }
+
+    public String getBackground_image() {
+        return background_image;
+    }
+
+    public RawgGame setBackground_image(String background_image) {
+        this.background_image = background_image;
+        return this;
+    }
 
     //Constructors --------------------------------------------------
     public RawgGame() {
@@ -127,18 +180,4 @@ public class RawgGame {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "RawgGame{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", genres=" + genres +
-                ", description='" + description + '\'' +
-                ", rating=" + rating +
-                ", developers=" + developers +
-                ", publishers=" + publishers +
-                ", platforms=" + platforms +
-                ", reviews=" + reviews +
-                '}';
-    }
 }
