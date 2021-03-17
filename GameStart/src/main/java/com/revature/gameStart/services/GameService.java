@@ -86,6 +86,15 @@ public class GameService {
         return gameRepo.findGameByName(name).orElseThrow(ResourceNotFoundException::new);
     }
 
+    public Game getGameBySlug(String slug){
+
+        if (slug == null || slug.trim().equals("")){
+            throw new InvalidRequestException();
+        }
+
+        return gameRepo.getSlug(slug);
+    }
+
     public void insertGame(List<Game> gameList) {
         if (gameList == null || gameList.isEmpty()) {
             throw new InvalidRequestException();

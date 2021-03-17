@@ -68,7 +68,7 @@ public class RawgApi {
 //    {
 //        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 //        System.out.println("In Post Construct");
-//        saveGames(100, 20);
+//        saveGames(10, 5);
 //        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 //        System.out.println(Arrays.toString(getPaginatedGames(10, 1)));
 //    }

@@ -22,4 +22,7 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     @Query("UPDATE Game SET rating = :rating WHERE id = :gameId")
     void updateRating(int gameId, double rating);
 
+    @Query("FROM Game WHERE slug = :slug")
+    Game getSlug(String slug);
+
 }
