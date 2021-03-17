@@ -54,17 +54,17 @@ public class GameController {
     @GetMapping(path = "/slug/{slug}")
     public Game getGameByName(@PathVariable String slug){
 
-//        Game game = gameService.getGameBySlug(slug);
+       Game game = gameService.getGameBySlug(slug);
 
-//        if(game.getDescription().isEmpty()) {
+////        if(game.getDescription().isEmpty()) {
+//
+//            RawgGame rawgGame = rawgApi.getGame(slug);
+//
+//            gameService.populateGame(rawgGame);
+//
+////        }
 
-            RawgGame rawgGame = rawgApi.getGame(slug);
-
-            gameService.populateGame(rawgGame);
-
-//        }
-
-        return null;
+        return game;
     }
 
 }

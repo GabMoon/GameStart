@@ -69,10 +69,19 @@ public class RawgApi {
 //        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 //        System.out.println("In Post Construct");
 //        saveGames(10, 5);
-//        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-//        System.out.println(Arrays.toString(getPaginatedGames(10, 1)));
+//        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+//        System.out.println("Insert Data into Game, Platform, Genre, Developer, Publisher");
+//        insertExtraData();
 //    }
-
+//
+//    public void insertExtraData(){
+//        List<Game> allgames = gameService.getAllGames();
+//        RawgGame rawgGame;
+//        for(Game theGame: allgames) {
+//            rawgGame = getGame(theGame.getSlug());
+//            gameService.populateGame(rawgGame);
+//        }
+//    }
 
     public RawgGame[] getGames() {
         HttpHeaders headers = new HttpHeaders();

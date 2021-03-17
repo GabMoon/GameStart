@@ -1,12 +1,11 @@
 package com.revature.gameStart.services;
 
+import com.revature.gameStart.api.PlatformWrapperClass;
 import com.revature.gameStart.api.RawgApi;
 import com.revature.gameStart.api.RawgGame;
 import com.revature.gameStart.exceptions.InvalidRequestException;
 import com.revature.gameStart.exceptions.ResourceNotFoundException;
-import com.revature.gameStart.models.Game;
-import com.revature.gameStart.models.Genre;
-import com.revature.gameStart.models.Review;
+import com.revature.gameStart.models.*;
 import com.revature.gameStart.repositories.GameRepository;
 import com.revature.gameStart.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,6 +132,49 @@ public class GameService {
             }
 
         }
+
+        //insert into game_publisher and publisher
+        for(Publisher publisher: game.getPublishers()) {
+
+            Publisher currentPublisher = gameRepo.findPublisher(publisher.getName());
+            if(currentPublisher != null) {
+                gameRepo.insertGamePublisher(DBgame.getId(), currentPublisher.getId());
+            }else {
+                gameRepo.insertPublisher(publisher.getName());
+                Publisher realPublisher = gameRepo.findPublisher(publisher.getName());
+                gameRepo.insertGamePublisher(DBgame.getId(), realPublisher.getId());
+            }
+
+        }
+
+        //insert into game_developer and developer
+        for(Developer developer: game.getDevelopers()) {
+
+            Developer currentDeveloper = gameRepo.findDeveloper(developer.getName());
+            if(currentDeveloper != null) {
+                gameRepo.insertGameDeveloper(DBgame.getId(), currentDeveloper.getId());
+            }else {
+                gameRepo.insertDeveloper(developer.getName());
+                Developer realDeveloper = gameRepo.findDeveloper(developer.getName());
+                gameRepo.insertGameDeveloper(DBgame.getId(), realDeveloper.getId());
+            }
+
+        }
+
+        //insert into game_developer and developer
+        for(PlatformWrapperClass platform: game.getPlatforms()) {
+
+            Platform currentPlatform = gameRepo.findPlatform(platform.getPlatform().getName());
+            if(currentPlatform != null) {
+                gameRepo.insertGamePlatform(DBgame.getId(), currentPlatform.getId());
+            }else {
+                gameRepo.insertPlatform(platform.getPlatform().getName());
+                Platform realPlatform = gameRepo.findPlatform(platform.getPlatform().getName());
+                gameRepo.insertGamePlatform(DBgame.getId(), realPlatform.getId());
+            }
+
+        }
+
 
 
     }
