@@ -6,10 +6,7 @@ import com.revature.gameStart.api.RawgGame;
 import com.revature.gameStart.models.*;
 import com.revature.gameStart.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.MediaType;
 import java.util.*;
@@ -55,16 +52,20 @@ public class GameController {
     public Game getGameByName(@PathVariable String slug){
 
        Game game = gameService.getGameBySlug(slug);
-
-////        if(game.getDescription().isEmpty()) {
-//
-//            RawgGame rawgGame = rawgApi.getGame(slug);
-//
-//            gameService.populateGame(rawgGame);
-//
-////        }
+//        if (game == null){
+//            gameService.insertNewGame(slug);
+//        Game newGame = gameService.getGameBySlug(slug);
+//        return newGame;
+//        }
 
         return game;
     }
 
+    @PostMapping(path = "/newGame/{slug}")
+    public void addNewGame(@PathVariable String slug){
+
+            gameService.insertNewGame(slug);
+
+
+    }
 }

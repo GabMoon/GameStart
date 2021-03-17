@@ -9,6 +9,7 @@ import com.revature.gameStart.models.*;
 import com.revature.gameStart.repositories.GameRepository;
 import com.revature.gameStart.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -24,14 +25,16 @@ public class GameService {
     //Attributes ----------------------------------------------------
     private final GameRepository gameRepo;
     private final ReviewRepository reviewRepository;
+    private final RawgApi rawgApi;
 //    private final ReviewService reviewService;
 
     //Constructors --------------------------------------------------
     @Autowired
-    public GameService(GameRepository repo, ReviewRepository reviewRepository ){
+    public GameService(GameRepository repo, ReviewRepository reviewRepository,RawgApi rawgApi ){
         super();
         this.gameRepo = repo;
         this.reviewRepository = reviewRepository;
+        this.rawgApi = rawgApi;
 //        this.reviewService = reviewService;
     }
 
@@ -89,11 +92,17 @@ public class GameService {
         return gameRepo.findGameByName(name).orElseThrow(ResourceNotFoundException::new);
     }
 
+    //Will get the game by slug name if not insert game into our database and populate it
     public Game getGameBySlug(String slug){
 
         if (slug == null || slug.trim().equals("")){
             throw new InvalidRequestException();
         }
+
+
+
+        Game game = gameRepo.findSlugGame(slug);
+
 
         return gameRepo.getSlug(slug);
     }
@@ -111,6 +120,15 @@ public class GameService {
 
     }
 
+    public void insertNewGame(String slug){
+        Game newGame = new Game();
+        RawgGame newRawgGame = rawgApi.getGame(slug);
+        newGame.setName(newRawgGame.getName());
+        newGame.setSlug(newRawgGame.getSlug());
+        newGame.setBackground_image(newRawgGame.getBackground_image());
+        gameRepo.save(newGame);
+        populateGame(newRawgGame);
+    }
 
     public void populateGame(RawgGame game) {
         // setting the description for the game

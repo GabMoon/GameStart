@@ -108,6 +108,18 @@ public class Game {
         this.rating = rating;
     }
 
+    public Game(String name, String description, String slug, String background_image, List<Developer> developers, List<Publisher> publishers, List<Platform> platforms,  List<Genre> genres) {
+        this.name = name;
+        this.description = description;
+        this.slug = slug;
+        this.background_image = background_image;
+        this.developers = developers;
+        this.publishers = publishers;
+        this.platforms = platforms;
+        this.reviews = reviews;
+        this.genres = genres;
+    }
+
     public Game(String name, List<Genre> genres, String description, int rating, String slug, String background_image, List<Developer> developers, List<Publisher> publishers, List<Platform> platforms) {
         this.name = name;
         this.genres = genres;

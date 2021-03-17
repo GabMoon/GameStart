@@ -6,6 +6,7 @@ import com.revature.gameStart.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -52,7 +53,7 @@ public class RawgApi {
 //    }
 
     @Autowired
-    public RawgApi(GameService gameService) {
+    public RawgApi(@Lazy GameService gameService) {
         this.gameService = gameService;
         RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
         this.rawgClient = restTemplateBuilder.build();
@@ -63,25 +64,26 @@ public class RawgApi {
         this.rawgClient.setMessageConverters(messageConverters);
     }
 
-//    @PostConstruct
-//    private void init()
-//    {
-//        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-//        System.out.println("In Post Construct");
-//        saveGames(10, 5);
-//        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-//        System.out.println("Insert Data into Game, Platform, Genre, Developer, Publisher");
-//        insertExtraData();
-//    }
-//
-//    public void insertExtraData(){
-//        List<Game> allgames = gameService.getAllGames();
-//        RawgGame rawgGame;
-//        for(Game theGame: allgames) {
-//            rawgGame = getGame(theGame.getSlug());
-//            gameService.populateGame(rawgGame);
-//        }
-//    }
+
+    @PostConstruct
+    private void init()
+    {
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("In Post Construct");
+        saveGames(100, 20);
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("Insert Data into Game, Platform, Genre, Developer, Publisher");
+        insertExtraData();
+    }
+
+    public void insertExtraData(){
+        List<Game> allgames = gameService.getAllGames();
+        RawgGame rawgGame;
+        for(Game theGame: allgames) {
+            rawgGame = getGame(theGame.getSlug());
+            gameService.populateGame(rawgGame);
+        }
+    }
 
     public RawgGame[] getGames() {
         HttpHeaders headers = new HttpHeaders();
@@ -235,8 +237,8 @@ public class RawgApi {
             platforms.add(convertWrapperPlatform(plat));
         }
 
-        return new Game(game.getName(), game.getGenres(), game.getDescription(), game.getRating(), game.getSlug(),
-                game.getBackground_image(), game.getDevelopers(), game.getPublishers(), platforms);
+        return new Game(game.getName(), game.getDescription(),  game.getSlug(),
+                game.getBackground_image(), game.getDevelopers(), game.getPublishers(), platforms,game.getGenres());
     }
 
     public Platform convertWrapperPlatform(PlatformWrapperClass platform) {
