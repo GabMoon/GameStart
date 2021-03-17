@@ -1,6 +1,8 @@
 package com.revature.gameStart.controllers;
 
 
+import com.revature.gameStart.api.RawgApi;
+import com.revature.gameStart.api.RawgGame;
 import com.revature.gameStart.models.*;
 import com.revature.gameStart.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,13 @@ import java.util.*;
 public class GameController {
     //Attributes ----------------------------------------------------
     private final GameService gameService;
+    private final RawgApi rawgApi;
 
     //Constructors --------------------------------------------------
     @Autowired
-    public GameController(GameService gameService) {
+    public GameController(GameService gameService, RawgApi rawgApi) {
         this.gameService = gameService;
+        this.rawgApi = rawgApi;
     }
 
     //Get -----------------------------------------------------------
@@ -50,7 +54,17 @@ public class GameController {
     @GetMapping(path = "/slug/{slug}")
     public Game getGameByName(@PathVariable String slug){
 
-        return gameService.getGameByName(slug);
+//        Game game = gameService.getGameBySlug(slug);
+
+//        if(game.getDescription().isEmpty()) {
+
+            RawgGame rawgGame = rawgApi.getGame(slug);
+
+            gameService.populateGame(rawgGame);
+
+//        }
+
+        return null;
     }
 
 }

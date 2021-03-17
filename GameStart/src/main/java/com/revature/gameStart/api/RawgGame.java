@@ -171,13 +171,5 @@ public class RawgGame {
         return this;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public RawgGame setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-        return this;
-    }
 
 }

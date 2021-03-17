@@ -1,8 +1,11 @@
 package com.revature.gameStart.services;
 
+import com.revature.gameStart.api.RawgApi;
+import com.revature.gameStart.api.RawgGame;
 import com.revature.gameStart.exceptions.InvalidRequestException;
 import com.revature.gameStart.exceptions.ResourceNotFoundException;
 import com.revature.gameStart.models.Game;
+import com.revature.gameStart.models.Genre;
 import com.revature.gameStart.models.Review;
 import com.revature.gameStart.repositories.GameRepository;
 import com.revature.gameStart.repositories.ReviewRepository;
@@ -14,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -104,6 +108,30 @@ public class GameService {
 
         for(Game game: gameList ) {
             gameRepo.save(game);
+        }
+
+    }
+
+
+    public void populateGame(RawgGame game) {
+        // setting the description for the game
+        gameRepo.setDescription(game.getDescription(), game.getSlug());
+
+        //find the game inside the database with the slug name from rawg API
+        Game DBgame = gameRepo.findSlugGame(game.getSlug());
+
+        //get all genres in rawg API game and inserting into our database with the correct genre ID and game ID
+        for(Genre genre: game.getGenres()) {
+
+            Genre currentGenre = gameRepo.findGenre(genre.getName());
+            if(currentGenre != null) {
+                gameRepo.insertGameGenre(DBgame.getId(), currentGenre.getId());
+            }else {
+                gameRepo.insertGenre(genre.getName());
+                Genre realGenre = gameRepo.findGenre(genre.getName());
+                gameRepo.insertGameGenre(DBgame.getId(), realGenre.getId());
+            }
+
         }
 
 
