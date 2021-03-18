@@ -95,7 +95,11 @@ public class GameService {
             throw new InvalidRequestException();
         }
 
-        return gameRepo.findGameByName(name).orElseThrow(ResourceNotFoundException::new);
+        Game game = gameRepo.findGameByName(name).orElseThrow(ResourceNotFoundException::new);
+
+//        updateGameRating(game.getId());
+
+        return game;
     }
 
     //Will get the game by slug name if not insert game into our database and populate it
