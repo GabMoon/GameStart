@@ -65,16 +65,16 @@ public class RawgApi {
     }
 
 
-    @PostConstruct
-    private void init()
-    {
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("In Post Construct");
-        saveGames(100, 20);
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("Insert Data into Game, Platform, Genre, Developer, Publisher");
-        insertExtraData();
-    }
+//    @PostConstruct
+//    private void init()
+//    {
+//        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+//        System.out.println("In Post Construct");
+//        saveGames(10, 3);
+//        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+//        System.out.println("Insert Data into Game, Platform, Genre, Developer, Publisher");
+//        insertExtraData();
+//    }
 
     public void insertExtraData(){
         List<Game> allgames = gameService.getAllGames();

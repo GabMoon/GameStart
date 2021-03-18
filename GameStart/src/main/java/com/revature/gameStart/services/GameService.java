@@ -54,6 +54,12 @@ public class GameService {
         return gameRepo.findTop10RatedGames().orElseThrow(ResourceNotFoundException::new);
     }
 
+    public List<Game> getLikeGames(String name){
+        if(name.isEmpty()){
+            throw new InvalidRequestException();
+        }
+        return gameRepo.getLikeGames(name);
+    }
     public void updateGameRating(int gameId) {
 
         int rating = 0;

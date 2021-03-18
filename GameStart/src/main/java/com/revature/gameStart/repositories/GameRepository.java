@@ -32,6 +32,9 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     @Query("UPDATE Game SET description = :description WHERE slug = :slug")
     void setDescription(String description, String slug);
 
+    @Query("FROM Game where slug LIKE %:name%")
+    List<Game> getLikeGames(String name);
+
     //All statements needed for inserting into genre and game_genre table
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO genre (name) VALUES (:genre)")
