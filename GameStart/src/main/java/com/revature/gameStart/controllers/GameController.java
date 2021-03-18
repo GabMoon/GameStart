@@ -62,6 +62,14 @@ public class GameController {
     }
 
     @GetMapping(path = "/like/{slug}")
+    public List<Game> getLikeGameBySlug(@PathVariable String slug){
+
+        List<Game> allLikeGames = gameService.getLikeGames(slug);
+
+        return allLikeGames;
+    }
+
+    @GetMapping(path = "/like/{name}")
     public List<Game> getLikeGameByName(@PathVariable String slug){
 
         List<Game> allLikeGames = gameService.getLikeGames(slug);
@@ -75,6 +83,11 @@ public class GameController {
             gameService.insertNewGame(slug);
 
     }
+
+    @GetMapping(path = "/search/{name}")
+    public List<Game> getSimilarGamesName(String name) {
+      return gameService.getGameByLikeName(name);
+    };
 
     @PatchMapping(path = "/updateRating/{id}")
     public void updateRating(@PathVariable int id) {

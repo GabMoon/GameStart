@@ -102,6 +102,19 @@ public class GameService {
         return game;
     }
 
+    public List<Game> getGameByLikeName(String name){
+        if (name == null || name.trim().equals("")){
+            throw new InvalidRequestException();
+        }
+
+        List<Game> game = gameRepo.getSimiliarGameNames(name);
+        if(game == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        return game;
+    }
+
     //Will get the game by slug name if not insert game into our database and populate it
     public Game getGameBySlug(String slug){
 

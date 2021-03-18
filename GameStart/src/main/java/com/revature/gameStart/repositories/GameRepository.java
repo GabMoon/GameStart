@@ -35,6 +35,9 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     @Query("FROM Game where slug LIKE %:name%")
     List<Game> getLikeGames(String name);
 
+    @Query(nativeQuery = true, value = "SELECT game g WHERE g.name ILIKE %:name%")
+    List<Game> getSimiliarGameNames(String name);
+
     //All statements needed for inserting into genre and game_genre table
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO genre (name) VALUES (:genre)")
