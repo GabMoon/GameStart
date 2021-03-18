@@ -127,7 +127,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = "/authentication", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Principal authenticateUser(@RequestBody @Valid Credentials credentials) {
-        System.out.println("I am in authenticateUser");
         Principal principal = userService.authenticate(credentials.getUsername(), credentials.getPassword());
         //inserting user credentials into http session
         httpSession.setAttribute("userid",principal.getId());
@@ -161,6 +160,7 @@ public class UserController {
     }
 
     //Logout
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping(path = "/logout")
     public void logout(){
         httpSession.invalidate();

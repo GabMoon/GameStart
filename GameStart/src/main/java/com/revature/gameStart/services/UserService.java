@@ -92,8 +92,8 @@ public class UserService {
             throw new InvalidRequestException();
         }
         Optional<User> user = userRepository.findUserByUsername(username);
-//        return user.orElseThrow(ResourceNotFoundException::new);
-        if (!user.isPresent())
+
+      if (!user.isPresent())
         {
             return null;
         }
