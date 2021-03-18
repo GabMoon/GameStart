@@ -75,8 +75,6 @@ public class UserController {
     public Principal authenticateUser(@RequestBody @Valid Credentials credentials) {
         System.out.println("I am in authenticateUser");
         Principal principal = userService.authenticate(credentials.getUsername(), credentials.getPassword());
-        //response.addCookie(new Cookie("quizzard-token", principal.getToken()));
-        System.out.println("The Principal is " + principal.getId() + " " + principal.getUsername() + " " + principal.getRole().toString());
         return principal;
     }
 
