@@ -92,7 +92,14 @@ public class UserService {
             throw new InvalidRequestException();
         }
         Optional<User> user = userRepository.findUserByUsername(username);
-        return user.orElseThrow(ResourceNotFoundException::new);
+//        return user.orElseThrow(ResourceNotFoundException::new);
+        if (!user.isPresent())
+        {
+            return null;
+        }
+        else {
+            return user.get();
+        }
     }
 
     public Principal authenticate(String username, String password) {
