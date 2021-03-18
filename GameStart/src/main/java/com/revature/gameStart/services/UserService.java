@@ -93,7 +93,7 @@ public class UserService {
         }
         Optional<User> user = userRepository.findUserByUsername(username);
 
-        if (!user.isPresent())
+      if (!user.isPresent())
         {
             return null;
         }
