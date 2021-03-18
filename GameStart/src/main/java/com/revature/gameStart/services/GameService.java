@@ -124,8 +124,6 @@ public class GameService {
 
 
         Game game = gameRepo.findSlugGame(slug);
-
-
         return gameRepo.getSlug(slug);
     }
 
