@@ -15,8 +15,6 @@ public class RawgGame {
 
     private String description;
 
-    private int rating;
-
     private List<Developer> developers;
 
     private List<Publisher> publishers;
@@ -36,7 +34,6 @@ public class RawgGame {
                 ", name='" + name + '\'' +
                 ", genres=" + genres +
                 ", description='" + description + '\'' +
-                ", rating=" + rating +
                 ", developers=" + developers +
                 ", publishers=" + publishers +
                 ", platforms=" + platforms +
@@ -51,12 +48,12 @@ public class RawgGame {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RawgGame game = (RawgGame) o;
-        return id == game.id && rating == game.rating && Objects.equals(name, game.name) && Objects.equals(genres, game.genres) && Objects.equals(description, game.description) && Objects.equals(developers, game.developers) && Objects.equals(publishers, game.publishers) && Objects.equals(platforms, game.platforms) && Objects.equals(reviews, game.reviews) && Objects.equals(slug, game.slug) && Objects.equals(background_image, game.background_image);
+        return id == game.id && Objects.equals(name, game.name) && Objects.equals(genres, game.genres) && Objects.equals(description, game.description) && Objects.equals(developers, game.developers) && Objects.equals(publishers, game.publishers) && Objects.equals(platforms, game.platforms) && Objects.equals(reviews, game.reviews) && Objects.equals(slug, game.slug) && Objects.equals(background_image, game.background_image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, genres, description, rating, developers, publishers, platforms, reviews, slug, background_image);
+        return Objects.hash(id, name, genres, description,  developers, publishers, platforms, reviews, slug, background_image);
     }
 
     public String getSlug() {
@@ -92,11 +89,10 @@ public class RawgGame {
     }
 
 
-    public RawgGame( String name, List<Genre> genres, String description, int rating, List<Developer> developers,
+    public RawgGame( String name, List<Genre> genres, String description, List<Developer> developers,
                      List<Publisher> publishers, List<PlatformWrapperClass> platforms) {
         this(name, genres, developers, publishers, platforms);
         this.description = description;
-        this.rating = rating;
     }
 
     public int getId() {
@@ -135,15 +131,6 @@ public class RawgGame {
         return this;
     }
 
-    public int getRating() {
-        return rating;
-    }
-
-    public RawgGame setRating(int rating) {
-        this.rating = rating;
-        return this;
-    }
-
     public List<Developer> getDevelopers() {
         return developers;
     }
@@ -171,13 +158,5 @@ public class RawgGame {
         return this;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public RawgGame setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-        return this;
-    }
 
 }
