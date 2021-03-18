@@ -1,13 +1,12 @@
 package com.revature.gameStart.controllers;
 
 
+import com.revature.gameStart.api.RawgApi;
+import com.revature.gameStart.api.RawgGame;
 import com.revature.gameStart.models.*;
 import com.revature.gameStart.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.http.MediaType;
 import java.util.*;
@@ -17,11 +16,13 @@ import java.util.*;
 public class GameController {
     //Attributes ----------------------------------------------------
     private final GameService gameService;
+    private final RawgApi rawgApi;
 
     //Constructors --------------------------------------------------
     @Autowired
-    public GameController(GameService gameService) {
+    public GameController(GameService gameService, RawgApi rawgApi) {
         this.gameService = gameService;
+        this.rawgApi = rawgApi;
     }
 
     //Get -----------------------------------------------------------
@@ -47,10 +48,57 @@ public class GameController {
         return gameService.getTop10Games();
     }
 
+    @GetMapping(path = "/slug/{slug}")
+    public Game getGameBySlug(@PathVariable String slug){
+
+       Game game = gameService.getGameBySlug(slug);
+//        if (game == null){
+//            gameService.insertNewGame(slug);
+//        Game newGame = gameService.getGameBySlug(slug);
+//        return newGame;
+//        }
+
+        return game;
+    }
+
+    @GetMapping(path = "/like/{slug}")
+    public List<Game> getLikeGameBySlug(@PathVariable String slug){
+
+        List<Game> allLikeGames = gameService.getLikeGames(slug);
+
+        return allLikeGames;
+    }
+
+    @GetMapping(path = "/like/{name}")
+    public List<Game> getLikeGameByName(@PathVariable String slug){
+
+        List<Game> allLikeGames = gameService.getLikeGames(slug);
+
+        return allLikeGames;
+    }
+
     @GetMapping(path = "/name/{name}")
     public Game getGameByName(@PathVariable String name){
 
-        return gameService.getGameByName(name);
+        Game foundGame = gameService.getGameByName(name);
+
+        return foundGame;
     }
 
+    @PostMapping(path = "/newGame/{slug}")
+    public void addNewGame(@PathVariable String slug){
+
+            gameService.insertNewGame(slug);
+    }
+
+    @GetMapping(path = "/search/{name}")
+    public List<Game> getSimilarGamesName(String name) {
+      return gameService.getGameByLikeName(name);
+    };
+
+    @PatchMapping(path = "/updateRating/{id}")
+    public void updateRating(@PathVariable int id) {
+        gameService.updateGameRating(id);
+
+    }
 }

@@ -55,42 +55,6 @@ public class Game {
         return Objects.hash(id, name, genres, description, rating, slug, background_image, developers, publishers, platforms, reviews);
     }
 
-    public List<Genre> getGenres() {
-        return genres;
-    }
-
-    public Game setGenres(List<Genre> genres) {
-        this.genres = genres;
-        return this;
-    }
-
-    public String getSlug() {
-        return slug;
-    }
-
-    public Game setSlug(String slug) {
-        this.slug = slug;
-        return this;
-    }
-
-    public String getBackground_image() {
-        return background_image;
-    }
-
-    public Game setBackground_image(String background_image) {
-        this.background_image = background_image;
-        return this;
-    }
-
-//    public List<Review> getReviews() {
-//        return reviews;
-//    }
-//
-//    public Game setReviews(List<Review> reviews) {
-//        this.reviews = reviews;
-//        return this;
-//    }
-
     @Column
     private String background_image;
 
@@ -139,9 +103,21 @@ public class Game {
 
 
     public Game( String name, List<Genre> genres, String description, int rating, List<Developer> developers, List<Publisher> publishers, List<Platform> platforms) {
-       this(name, genres, developers, publishers, platforms);
-       this.description = description;
-       this.rating = rating;
+        this(name, genres, developers, publishers, platforms);
+        this.description = description;
+        this.rating = rating;
+    }
+
+    public Game(String name, String description, String slug, String background_image, List<Developer> developers, List<Publisher> publishers, List<Platform> platforms,  List<Genre> genres) {
+        this.name = name;
+        this.description = description;
+        this.slug = slug;
+        this.background_image = background_image;
+        this.developers = developers;
+        this.publishers = publishers;
+        this.platforms = platforms;
+        this.reviews = reviews;
+        this.genres = genres;
     }
 
     public Game(String name, List<Genre> genres, String description, int rating, String slug, String background_image, List<Developer> developers, List<Publisher> publishers, List<Platform> platforms) {
@@ -220,6 +196,24 @@ public class Game {
 
     public void setPlatforms(List<Platform> platforms) {
         this.platforms = platforms;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public Game setSlug(String slug) {
+        this.slug = slug;
+        return this;
+    }
+
+    public String getBackground_image() {
+        return background_image;
+    }
+
+    public Game setBackground_image(String background_image) {
+        this.background_image = background_image;
+        return this;
     }
 
 

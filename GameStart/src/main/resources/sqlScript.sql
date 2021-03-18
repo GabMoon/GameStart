@@ -30,7 +30,7 @@ create table app_user(
 
 create table publisher (
     id        serial,
-    name    varchar(25) not null,
+    name    varchar not null,
 
     constraint publisher_pk
     primary key (id)
@@ -40,8 +40,8 @@ create table game(
     id            	serial,
     name            varchar not null,
     description     text,
-    rating          double precision,
-    slug			varchar,
+    rating          double precision default 0,
+    slug			varchar unique,
     background_image	varchar,
 
 
@@ -88,7 +88,7 @@ create table favorite(
 
 create table developer(
     id serial,
-    name varchar(25) not null,
+    name varchar not null,
 
     constraint developer_id_PK primary key (id)
 );
@@ -107,7 +107,7 @@ create table game_developer(
 
 create table platform (
     id        serial,
-    name    varchar(25) not null,
+    name    varchar not null,
 
     constraint platform_pk
     primary key (id)
@@ -134,7 +134,7 @@ create table game_platform (
 
 create table genre (
 	id		serial,
-	name	varchar(25) not null,
+	name	varchar not null,
 
     constraint genre_pk
     primary key (id)
@@ -183,9 +183,8 @@ insert into game(name,description,rating)
 insert into game(name,description,rating)
     values ('Grand Theft Auto V', 'Grand Theft Auto V for PC offers players the option to explore the award-winning world of Los Santos and Blaine County in resolutions of up to 4k and beyond, as well as the chance to experience the game running at 60 frames per second.', 2);
 
-insert into game(name,description)
-    values ('Rust','The only aim in Rust is to survive - Overcome struggles such as hunger, thirst and cold. Build a fire. Build a shelter. Kill animals. Protect yourself from other players.');
-
+insert into game(name,description,rating)
+    values ('Rust','The only aim in Rust is to survive - Overcome struggles such as hunger, thirst and cold. Build a fire. Build a shelter. Kill animals. Protect yourself from other players.',1);
 
 --genre Table
 --valheim and Rust

@@ -4,6 +4,8 @@ import com.revature.gameStart.dtos.Principal;
 import com.revature.gameStart.exceptions.InvalidRequestException;
 import com.revature.gameStart.exceptions.ResourceNotFoundException;
 import com.revature.gameStart.exceptions.ResourcePersistenceException;
+import com.revature.gameStart.models.Favorite;
+import com.revature.gameStart.models.Game;
 import com.revature.gameStart.models.User;
 import com.revature.gameStart.models.UserRole;
 import com.revature.gameStart.repositories.UserRepository;
@@ -90,7 +92,7 @@ public class UserService {
             throw new InvalidRequestException();
         }
         Optional<User> user = userRepository.findUserByUsername(username);
-        return user.orElse(null);
+        return user.orElseThrow(ResourceNotFoundException::new);
     }
 
     public Principal authenticate(String username, String password) {
@@ -112,6 +114,17 @@ public class UserService {
         System.out.println(principal.getId() + " " + principal.getUsername() + " " + principal.getRole() + " I am in authenticate");
         System.out.println("I am in authenticate in UserService after Principal");
         return  principal;
+    }
+
+    public List<Favorite> getFavoritesByUserId(int userId){
+        if (userId <= 0 )
+        {
+            throw new InvalidRequestException();
+        }
+
+        List<Favorite> favoriteList = userRepository.findFavoriteByUserId(userId);
+
+        return favoriteList;
     }
 
     public void addFavoriteGame(int userid, int gameid) {
