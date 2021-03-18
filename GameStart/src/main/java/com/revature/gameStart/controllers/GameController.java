@@ -74,6 +74,10 @@ public class GameController {
 
             gameService.insertNewGame(slug);
 
+    }
 
+    @PatchMapping(path = "/updateRating/{id}")
+    public void updateRating(@PathVariable int id) {
+        gameService.updateGameRating(id);
     }
 }
