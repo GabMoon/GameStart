@@ -20,9 +20,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * This class is used to talk to the RAWG api and populate our database with a # of games.
+ */
 @Component
 @EnableConfigurationProperties
-
 public class RawgApi {
 
     private RestTemplate rawgClient;
@@ -52,6 +54,10 @@ public class RawgApi {
 //        }
 //    }
 
+    /**
+     * Constructor to set our services
+     * @param gameService game service
+     */
     @Autowired
     public RawgApi(@Lazy GameService gameService) {
         this.gameService = gameService;
@@ -65,17 +71,25 @@ public class RawgApi {
     }
 
 
-//    @PostConstruct
-//    private void init()
-//    {
-//        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-//        System.out.println("In Post Construct");
-//        saveGames(10, 3);
-//        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-//        System.out.println("Insert Data into Game, Platform, Genre, Developer, Publisher");
-//        insertExtraData();
-//    }
+    /**
+     * This saves a list of games(pageSize, numPages) to our database and inserts
+     * a description, genre, platform, developer, name
+     */
+    @PostConstruct
+    private void init()
+    {
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("In Post Construct");
+        saveGames(5, 3);
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("Insert Data into Game, Platform, Genre, Developer, Publisher");
+        insertExtraData();
+    }
 
+    /**
+     * method used to get all the games from our games database and do a inividiual call to the rawg api with each game slug
+     * and populate our database
+     */
     public void insertExtraData(){
         List<Game> allgames = gameService.getAllGames();
         RawgGame rawgGame;
