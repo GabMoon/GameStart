@@ -61,6 +61,14 @@ public class GameController {
         return game;
     }
 
+    @GetMapping(path = "/like/{slug}")
+    public List<Game> getLikeGameByName(@PathVariable String slug){
+
+        List<Game> allLikeGames = gameService.getLikeGames(slug);
+
+        return allLikeGames;
+    }
+
     @PostMapping(path = "/newGame/{slug}")
     public void addNewGame(@PathVariable String slug){
 
