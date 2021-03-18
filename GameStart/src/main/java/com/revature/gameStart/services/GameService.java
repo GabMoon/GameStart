@@ -94,7 +94,6 @@ public class GameService {
         if (name == null || name.trim().equals("")){
             throw new InvalidRequestException();
         }
-
         Game game = gameRepo.findGameByName(name).orElseThrow(ResourceNotFoundException::new);
 
 //        updateGameRating(game.getId());

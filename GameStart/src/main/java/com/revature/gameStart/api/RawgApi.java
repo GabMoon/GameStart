@@ -75,16 +75,18 @@ public class RawgApi {
      * This saves a list of games(pageSize, numPages) to our database and inserts
      * a description, genre, platform, developer, picture, and name
      */
-    @PostConstruct
-    private void init()
-    {
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("In Post Construct");
-        saveGames(5, 3);
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("Insert Data into Game, Platform, Genre, Developer, Publisher");
-        insertExtraData();
-    }
+//
+//    @PostConstruct
+//    private void init()
+//    {
+//        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+//        System.out.println("In Post Construct");
+//        saveGames(100, 20);
+//        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+////        System.out.println(Arrays.toString(getPaginatedGames(10, 1)));
+//        insertExtraData();
+//    }
+
 
     /**
      * method used to get all the games from our games database and do a individual call to the rawg api with each game slug
