@@ -9,6 +9,7 @@ import com.revature.gameStart.models.Game;
 import com.revature.gameStart.models.User;
 import com.revature.gameStart.models.UserRole;
 import com.revature.gameStart.repositories.UserRepository;
+import com.revature.gameStart.util.PasswordEncryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -51,6 +52,7 @@ public class UserService {
         }
 
         // newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+        newUser.setPassword(PasswordEncryption.encryptString(newUser.getPassword()));
 
         userRepository.save(newUser);
     }
@@ -101,14 +103,17 @@ public class UserService {
 //            // 401 code
 //            return null;
 //        }
-
-
+        if(tempUser == null){
+            throw new ResourceNotFoundException();
+        }
+        if (!PasswordEncryption.verifyPassword(password, tempUser.getPassword())) {
+            System.out.println("The passwords were not the same!!!");
+            return null;
+        }
         Principal principal = new Principal(tempUser);
+        System.out.println(principal.getId() + " " + principal.getUsername() + " " + principal.getRole() + " I am in authenticate");
         System.out.println("I am in authenticate in UserService after Principal");
         return  principal;
-
-
-
     }
 
     public List<Favorite> getFavoritesByUserId(int userId){
