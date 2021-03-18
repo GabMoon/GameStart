@@ -5,6 +5,7 @@ import com.revature.gameStart.models.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     List<Game> getLikeGames(String name);
 
     @Query(nativeQuery = true, value = "SELECT * FROM game g WHERE g.name ILIKE %:name%")
-    List<Game> getSimiliarGameNames(String name);
+    List<Game> getSimiliarGameNames(@Param("name")String name);
 
     //All statements needed for inserting into genre and game_genre table
     @Modifying

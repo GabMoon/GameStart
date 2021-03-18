@@ -92,7 +92,7 @@ public class GameController {
     }
 
     @GetMapping(path = "/search/{name}")
-    public List<Game> getSimilarGamesName(String name) {
+    public List<Game> getSimilarGamesName( @PathVariable String name) {
       return gameService.getGameByLikeName(name);
     };
 
