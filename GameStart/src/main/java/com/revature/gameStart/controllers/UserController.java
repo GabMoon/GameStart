@@ -136,14 +136,14 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(path = "/favorite/{gameid}")
-    public void Favorite(@PathVariable int gameid) {
-        if (httpSession.getAttribute("userrole") == (UserRole.BASIC.toString())) {
-            userService.addFavoriteGame((Integer) httpSession.getAttribute("userid"), gameid);
-        }
-        else {
-            response.setStatus(403);
-        }
+    @PostMapping(path = "/favorite/{gameid}/{userId}")
+    public void Favorite(@PathVariable int gameid, @PathVariable int userId) {
+//        if (httpSession.getAttribute("userrole") == (UserRole.BASIC.toString())) {
+            userService.addFavoriteGame(userId, gameid);
+//        }
+//        else {
+//            response.setStatus(403);
+//        }
     }
 
     //DELETE--------------------------------------------------------------------------------------------------------

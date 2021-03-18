@@ -44,15 +44,15 @@ public class ReviewController {
         return reviewService.findAllReview();
     }
     //gets all user's reviews
-    @GetMapping(path= "/user")
-    public List<Review> getAllUserReviews(){
-        if(session.getAttribute("userrole") == (UserRole.BASIC.toString())) {
-            return reviewService.getReviewsByUserId((Integer) session.getAttribute("userid"));
-        }
-        else {
-            response.setStatus(403);
-            return null;
-        }
+    @GetMapping(path= "/user/{userId}")
+    public List<Review> getAllUserReviews(@PathVariable int userId){
+////        if(session.getAttribute("userrole") == (UserRole.BASIC.toString())) {
+            return reviewService.getReviewsByUserId(userId);
+////        }
+//        else {
+//            response.setStatus(403);
+//            return null;
+//        }
     }
 
     //get all reviews for a game
@@ -62,28 +62,28 @@ public class ReviewController {
     }
 
     //get a reviews base on user id and game id
-    @GetMapping(path = "/UserGameReview/{gameId}")
-    public Review getReviewWithGameIdAndUserId(@PathVariable int gameId) {
-        if (session.getAttribute("userrole") == (UserRole.BASIC.toString())){
-            return reviewService.getReviewByUserAndGameId((Integer) session.getAttribute("userid"), gameId);
-        }
-        else{
-            response.setStatus(403);
-            return null;
-        }
+    @GetMapping(path = "/UserGameReview/{gameId}/{userId}")
+    public Review getReviewWithGameIdAndUserId(@PathVariable int gameId, @PathVariable int userId) {
+//        if (session.getAttribute("userrole") == (UserRole.BASIC.toString())){
+            return reviewService.getReviewByUserAndGameId(userId, gameId);
+//        }
+//        else{
+//            response.setStatus(403);
+//            return null;
+//        }
 
     }
 
 
     //Post -----------------------------------------------------------
-    @PostMapping(path = "/register/{gameId}/{score}/{description}")
-    public void registerReview(@PathVariable int gameId,@PathVariable String description,@PathVariable int score){
-        if (session.getAttribute("userrole") == (UserRole.BASIC.toString())) {
-            reviewService.insertReview((Integer) session.getAttribute("userid"), gameId, description, score);
-        }
-        else{
-            response.setStatus(403);
-        }
+    @PostMapping(path = "/register/{gameId}/{userId}/{score}/{description}")
+    public void registerReview(@PathVariable int gameId,@PathVariable int userId, @PathVariable String description,@PathVariable int score){
+//        if (session.getAttribute("userrole") == (UserRole.BASIC.toString())) {
+            reviewService.insertReview(userId, gameId, description, score);
+//        }
+//        else{
+//            response.setStatus(403);
+//        }
     }
 
     //PATCH -----------------------------------------------------------
