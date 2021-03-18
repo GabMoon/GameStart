@@ -3,6 +3,9 @@ package com.revature.gameStart.api;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * This class is used to wrap a game object from RAWG api
+ */
 public class GameWrapperClass {
 
     private RawgGame[] results;
