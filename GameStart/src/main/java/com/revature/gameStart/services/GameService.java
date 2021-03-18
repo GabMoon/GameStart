@@ -96,7 +96,7 @@ public class GameService {
         }
         Game game = gameRepo.findGameByName(name).orElseThrow(ResourceNotFoundException::new);
 
-//        updateGameRating(game.getId());
+        updateGameRating(game.getId());
 
         return game;
     }
