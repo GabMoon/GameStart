@@ -4,6 +4,9 @@ import com.revature.gameStart.models.Platform;
 
 import java.util.Objects;
 
+/**
+ * This class is used to wrap a the platform object returned by RAWG api. Platforms has platforms inside of it.
+ */
 public class PlatformWrapperClass {
 
     private Platform platform;

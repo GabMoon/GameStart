@@ -20,9 +20,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * This class is used to talk to the RAWG api and populate our database with a # of games.
+ */
 @Component
 @EnableConfigurationProperties
-
 public class RawgApi {
 
     private RestTemplate rawgClient;
@@ -52,6 +54,10 @@ public class RawgApi {
 //        }
 //    }
 
+    /**
+     * Constructor to set our services
+     * @param gameService game service
+     */
     @Autowired
     public RawgApi(@Lazy GameService gameService) {
         this.gameService = gameService;
@@ -64,6 +70,11 @@ public class RawgApi {
         this.rawgClient.setMessageConverters(messageConverters);
     }
 
+
+    /**
+     * This saves a list of games(pageSize, numPages) to our database and inserts
+     * a description, genre, platform, developer, picture, and name
+     */
 //
 //    @PostConstruct
 //    private void init()
@@ -76,6 +87,11 @@ public class RawgApi {
 //        insertExtraData();
 //    }
 
+
+    /**
+     * method used to get all the games from our games database and do a individual call to the rawg api with each game slug
+     * and populate our database
+     */
     public void insertExtraData(){
         List<Game> allgames = gameService.getAllGames();
         RawgGame rawgGame;
@@ -85,6 +101,10 @@ public class RawgApi {
         }
     }
 
+    /**
+     * gets the games as an array of games
+     * @return returns an array of games
+     */
     public RawgGame[] getGames() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
@@ -98,6 +118,12 @@ public class RawgApi {
         return response.getResults();
     }
 
+    /**
+     * Get a specific game with a slug name. This will make a call to the rawg api, and get their
+     * platform, desription, genre, developer, publisher and map it to our RawgGame class
+     * @param name the slug name of the game inside the rawg api
+     * @return returns a game with details
+     */
     public RawgGame getGame(String name) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
@@ -135,6 +161,7 @@ public class RawgApi {
 
         return response.getResults();
     }
+
 
     public ArrayList<Game> getGamesFromPageSizeAndNumPages(int pageSize, int numPages) {
         HttpHeaders headers = new HttpHeaders();
