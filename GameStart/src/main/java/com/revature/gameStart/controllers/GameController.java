@@ -49,7 +49,7 @@ public class GameController {
     }
 
     @GetMapping(path = "/slug/{slug}")
-    public Game getGameByName(@PathVariable String slug){
+    public Game getGameBySlug(@PathVariable String slug){
 
        Game game = gameService.getGameBySlug(slug);
 //        if (game == null){
@@ -69,15 +69,23 @@ public class GameController {
         return allLikeGames;
     }
 
+    @GetMapping(path = "/name/{name}")
+    public Game getGameByName(@PathVariable String name){
+
+        Game foundGame = gameService.getGameByName(name);
+
+        return foundGame;
+    }
+
     @PostMapping(path = "/newGame/{slug}")
     public void addNewGame(@PathVariable String slug){
 
             gameService.insertNewGame(slug);
-
     }
 
     @PatchMapping(path = "/updateRating/{id}")
     public void updateRating(@PathVariable int id) {
         gameService.updateGameRating(id);
+
     }
 }

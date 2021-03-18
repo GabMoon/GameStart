@@ -64,15 +64,15 @@ public class RawgApi {
         this.rawgClient.setMessageConverters(messageConverters);
     }
 
-
+//
 //    @PostConstruct
 //    private void init()
 //    {
 //        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 //        System.out.println("In Post Construct");
-//        saveGames(10, 3);
-//        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-//        System.out.println("Insert Data into Game, Platform, Genre, Developer, Publisher");
+//        saveGames(100, 20);
+//        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+////        System.out.println(Arrays.toString(getPaginatedGames(10, 1)));
 //        insertExtraData();
 //    }
 
