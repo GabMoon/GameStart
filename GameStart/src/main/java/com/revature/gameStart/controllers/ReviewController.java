@@ -56,6 +56,7 @@ public class ReviewController {
         }
     }
 
+
     //get all reviews for a game
     @GetMapping(path = "/game/{id}")
     public List<Review> getReviewsWithGameId(@PathVariable int id) {

@@ -93,15 +93,15 @@ public class UserController {
         }
     }
 
-    @GetMapping(path = "/myFavorite")
-    public List<Favorite> getFavorite() {
-        if (httpSession.getAttribute("userrole") == (UserRole.BASIC.toString())) {
-            return userService.getFavoritesByUserId((Integer) httpSession.getAttribute("userid"));
-        }
-        else {
-            response.setStatus(403);
-            return null;
-        }
+    @GetMapping(path = "/myFavorite/{userId}")
+    public List<Favorite> getFavorite(@PathVariable int userId) {
+//        if (httpSession.getAttribute("userrole") == (UserRole.BASIC.toString())) {
+            return userService.getFavoritesByUserId(userId);
+      //  }
+//        else {
+//            response.setStatus(403);
+//            return null;
+//        }
     }
 
     // Put-----------------------------------------------------------------------------------
