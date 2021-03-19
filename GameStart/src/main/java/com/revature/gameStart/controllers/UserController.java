@@ -280,7 +280,9 @@ public class UserController {
 
 
         if (principal != null) {
-            return principal;
+            response.setStatus(403);
+            return null;
+           // return principal;
         }
         else {
             User authUser = userService.authenticate(credentials.getUsername(), credentials.getPassword());
