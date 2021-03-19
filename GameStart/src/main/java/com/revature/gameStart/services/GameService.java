@@ -19,6 +19,9 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Game service class that has all the services for a game with exception checking the validation of the data
+ */
 @Service
 @Transactional
 public class GameService {
@@ -30,6 +33,9 @@ public class GameService {
 
     //Constructors --------------------------------------------------
     @Autowired
+    /**
+     * constructor for game service that sets the game repository, review repository, and RAWG api
+     */
     public GameService(GameRepository repo, ReviewRepository reviewRepository,RawgApi rawgApi ){
         super();
         this.gameRepo = repo;
@@ -39,6 +45,11 @@ public class GameService {
     }
 
     //Get ---------------------------------------------------------
+
+    /**
+     * return a list of all the games and checks if they are empty
+     * @return returns a list of games
+     */
     public List<Game> getAllGames(){
         List<Game> games;
 
@@ -49,17 +60,31 @@ public class GameService {
         return games;
     }
 
+    /**
+     * returns a list of the top 10 games or else throw a resource exception
+     * @return returns a list of the top 10 rated games
+     */
     public List<Game> getTop10Games(){
 
         return gameRepo.findTop10RatedGames().orElseThrow(ResourceNotFoundException::new);
     }
 
+    /**
+     * return a list of games with similar names or throw an invalid request exception if the name is empty
+     * @param name name of game
+     * @return returns a list of games with similar name
+     */
     public List<Game> getLikeGames(String name){
         if(name.isEmpty()){
             throw new InvalidRequestException();
         }
         return gameRepo.getLikeGames(name);
     }
+
+    /**
+     * updates the game rating with the game id by taking the average of the review scoring for the game
+     * @param gameId game id
+     */
     public void updateGameRating(int gameId) {
 
         int rating = 0;
@@ -80,6 +105,11 @@ public class GameService {
 
     }
 
+    /**
+     * get a game by the game id
+     * @param id game id
+     * @return returns a game by their id
+     */
     public Game getGameById(int id){
 
         if (id < 0) {
@@ -89,6 +119,11 @@ public class GameService {
         return gameRepo.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
+    /**
+     * gets a game by their database name and checks if the name is valid (not null and trims)
+     * @param name name of game
+     * @return returns a game by their database name
+     */
     public Game getGameByName(String name){
 
         if (name == null || name.trim().equals("")){
@@ -101,6 +136,11 @@ public class GameService {
         return game;
     }
 
+    /**
+     * finds a list of games by similar names and checks if the name is valid and the list of games isn't empty
+     * @param name name of game
+     * @return returns a like of games with similar names
+     */
     public List<Game> getGameByLikeName(String name){
         if (name == null || name.trim().equals("")){
             throw new InvalidRequestException();
@@ -114,6 +154,11 @@ public class GameService {
         return game;
     }
 
+    /**
+     * get a game by the RAWG api slug and checks if the slug is valid
+     * @param slug slug name
+     * @return returns a game by the slug
+     */
     //Will get the game by slug name if not insert game into our database and populate it
     public Game getGameBySlug(String slug){
 
@@ -127,6 +172,10 @@ public class GameService {
         return gameRepo.getSlug(slug);
     }
 
+    /**
+     * inserts a list of games into the datbase and checks if the list if empty or not
+     * @param gameList list of games from the RAWG api
+     */
     public void insertGame(List<Game> gameList) {
         if (gameList == null || gameList.isEmpty()) {
             throw new InvalidRequestException();
@@ -140,6 +189,10 @@ public class GameService {
 
     }
 
+    /**
+     * inserts an individual game from the RAWG api. This game contains more details than the list of games
+     * @param slug slug name
+     */
     public void insertNewGame(String slug){
         Game newGame = new Game();
         RawgGame newRawgGame = rawgApi.getGame(slug);
@@ -150,6 +203,11 @@ public class GameService {
         populateGame(newRawgGame);
     }
 
+    /**
+     * this method will set the description of a game in the database from the RAWG api and also their developer,
+     * publisher, genre, and platform table along with their junction table
+     * @param game RAWG game
+     */
     public void populateGame(RawgGame game) {
         // setting the description for the game
         gameRepo.setDescription(game.getDescription(), game.getSlug());
@@ -199,7 +257,7 @@ public class GameService {
 
         }
 
-        //insert into game_developer and developer
+        //insert into game_platform and platform
         for(PlatformWrapperClass platform: game.getPlatforms()) {
 
             Platform currentPlatform = gameRepo.findPlatform(platform.getPlatform().getName());

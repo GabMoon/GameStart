@@ -6,6 +6,9 @@ import com.revature.gameStart.models.User;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * a review dto used to help transfer a review
+ */
 public class ReviewDto {
 
     private String description;

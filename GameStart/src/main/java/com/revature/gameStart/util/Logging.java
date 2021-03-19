@@ -11,33 +11,58 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
+/**
+ * class for logging INFO
+ */
 @Aspect
 @Component
 public class Logging {
 
     private final Logger logger = LogManager.getLogger(Logging.class);
 
+    /**
+     * logs all the point cuts
+     */
     @Pointcut("within(com.revature.gameStart..*)")
     public void logAllPointcut(){};
 
+    /**
+     * starts the logging
+     * @param joinPoint join point
+     */
     @Before("logAllPointcut()")
     public void logStart(JoinPoint joinPoint){
         String methodSignature = getMethodSignature(joinPoint);
         String argument = Arrays.toString(joinPoint.getArgs());
         logger.info("Invoked--->Time: {} Method: {} Input Arguments: {}", LocalDateTime.now(),methodSignature,argument); }
 
+    /**
+     * logs after
+     * @param joinPoint join point
+     * @param returned object returned
+     */
     @AfterReturning(pointcut = "logAllPointcut()",returning = "returned")
     public void logReturn(JoinPoint joinPoint, Object returned){
         String methodSignature = getMethodSignature(joinPoint);
         logger.info("Successful--->Time: {} Returned Method: {} Value: {}", LocalDateTime.now(),methodSignature,returned);
     }
 
+    /**
+     * logs after throwing an error
+     * @param joinPoint join point
+     * @param e error
+     */
     @AfterThrowing(pointcut = "logAllPointcut()", throwing ="e")
     public void logError(JoinPoint joinPoint,Exception e){
         String methodSignature = getMethodSignature(joinPoint);
         logger.error("Error--->Time: {} Method: {} Message: {}", LocalDateTime.now(),e.getClass().getSimpleName(),e.getMessage());
     }
 
+    /**
+     * returns a method signature
+     * @param joinPoint join point
+     * @return a method signature
+     */
     private String getMethodSignature(JoinPoint joinPoint){
         return joinPoint.getTarget().getClass().toString()+ "." + joinPoint.getSignature().getName();
     }

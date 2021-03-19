@@ -11,9 +11,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * Class for the controller's advice
+ */
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
+    /**
+     * class that handles teh conflict
+     * @param ex runtime exception
+     * @param request web request
+     * @return returns a response entity of type object
+     */
     @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class, InvalidRequestException.class,
             ResourceNotFoundException.class, ResourcePersistenceException.class})
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
@@ -24,6 +33,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
+    /**
+     * class for choosing the response body
+     * @param ex runtime exception
+     * @return returns a custom exception for the res body
+     */
     String ChooseResponseBody(RuntimeException ex) {
         if (ex.equals(IllegalArgumentException.class)) {
             return "Illegal Argument";

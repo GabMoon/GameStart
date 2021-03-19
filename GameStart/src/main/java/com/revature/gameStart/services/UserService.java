@@ -20,6 +20,9 @@ import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * User service class that has methods for calling the user repo and checking the validation of the data
+ */
 @Service
 @Transactional
 public class UserService {
@@ -27,6 +30,10 @@ public class UserService {
     private UserRepository userRepository;
     //private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    /**
+     * User service constructor that sets the user repository
+     * @param userRepository user repository
+     */
     @Autowired
     public UserService(UserRepository userRepository) {
         super();
@@ -35,6 +42,11 @@ public class UserService {
 
     }
 
+    /**
+     * gets a user from the database by their id
+     * @param id user id
+     * @return returns a user
+     */
     @Transactional
     public User getUserById(int id){
         if (id <= 0) {
@@ -43,6 +55,11 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
+    /**
+     * register a new user in the database. checks if the user is valid else throw a resource persistence exception.
+     * also sets the password to encrypted
+     * @param newUser new user
+     */
     @Transactional
     public void register(User newUser){
         if (!isUserValid(newUser)) throw new InvalidRequestException();
@@ -57,6 +74,10 @@ public class UserService {
         userRepository.save(newUser);
     }
 
+    /**
+     * gets a list of all the users. checks if that list is not empty
+     * @return returns a list of all the users
+     */
     public List<User> getAllUsers(){
 
         List<User> userList;
@@ -70,6 +91,11 @@ public class UserService {
         return userList;
     }
 
+    /**
+     * finds a set of users by their role
+     * @param role user role
+     * @return returns a set of users
+     */
     public Set<User> getUsersByRole(UserRole role){
 
         Set<User> usersSet;
@@ -87,6 +113,11 @@ public class UserService {
         return usersSet;
     }
 
+    /**
+     * get a user by the username and checks if the username is not empty
+     * @param username username
+     * @return returns an optional user
+     */
     public User getUserByUsername(String username){
         if (username == null || username.trim().equals("")) {
             throw new InvalidRequestException();
@@ -102,6 +133,13 @@ public class UserService {
         }
     }
 
+    /**
+     * checks to see if the user is in the database by their username and password and checks if their
+     * password is encrypted. returns a principal
+     * @param username username
+     * @param password password
+     * @return returns a principal
+     */
     public Principal authenticate(String username, String password) {
         System.out.println("I am in authenticate in UserService");
         User tempUser = getUserByUsername(username);
@@ -123,6 +161,11 @@ public class UserService {
         return  principal;
     }
 
+    /**
+     * gets a list of favorite game by the user id
+     * @param userId user id
+     * @return returns a list of favorite game made by a user
+     */
     public List<Favorite> getFavoritesByUserId(int userId){
         if (userId <= 0 )
         {
@@ -134,6 +177,11 @@ public class UserService {
         return favoriteList;
     }
 
+    /**
+     * adds a favorite game under a user with a game id
+     * @param userid user id
+     * @param gameid game id
+     */
     public void addFavoriteGame(int userid, int gameid) {
         if (userid <= 0 || gameid <=0)
         {
@@ -148,6 +196,11 @@ public class UserService {
         userRepository.InsertFavorite(userid, gameid);
     }
 
+    /**
+     * delete a game in the user's favorite list by their user id and game id
+     * @param userid user id
+     * @param gameid game id
+     */
     public void deleteFavorite(int userid, int gameid) {
         if (userid <= 0 || gameid <=0)
         {
@@ -175,6 +228,12 @@ public class UserService {
 //
 //    }
 
+    /**
+     * get a sorted set of users
+     * @param sortCriterion sort cirteria
+     * @param usersForSorting user to sort
+     * @return returns a sorted set of user
+     */
     public SortedSet<User> sortUsers(String sortCriterion, Set<User> usersForSorting){
 
         // DOES NOT WORK. I AM NOT ACTUALLY SORTING ANYTHING
@@ -222,6 +281,10 @@ public class UserService {
 //        return null;
 //    }
 
+    /**
+     * update a user's profile and make sure the user's information is unique
+     * @param updatedUser user being updated
+     */
     public void updateProfile(User updatedUser){
 
         if(!isUserValid(updatedUser)) {
@@ -237,6 +300,11 @@ public class UserService {
         userRepository.save(updatedUser);
     }
 
+    /**
+     * helper function to check if the user is a valid user
+     * @param user user
+     * @return returns true if the user is valid else false
+     */
     public Boolean isUserValid(User user){
         if (user == null) return false;
         if (user.getFirstName() == null || user.getFirstName().trim().equals("")) return false;

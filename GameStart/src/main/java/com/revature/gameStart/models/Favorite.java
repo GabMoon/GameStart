@@ -3,6 +3,9 @@ package com.revature.gameStart.models;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * This the model class for a favorite with annotations that maps to the database
+ */
 @Entity
 @IdClass(FavoriteId.class)
 @Table(name = "favorite")

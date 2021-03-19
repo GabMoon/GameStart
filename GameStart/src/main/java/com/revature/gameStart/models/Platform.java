@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This the model class for a platform with annotations that maps to the database
+ */
 @Entity
 @Table(name = "platform")
 public class Platform {

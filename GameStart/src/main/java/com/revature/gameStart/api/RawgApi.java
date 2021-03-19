@@ -162,7 +162,13 @@ public class RawgApi {
         return response.getResults();
     }
 
-
+    /**
+     * Sends a request to the RAWG api with a page size and page number as a query param to get a
+     * a list of paginated games.
+     * @param pageSize number of games in a page
+     * @param numPages number of pages to return
+     * @return returns an list of games specified by the pageSize * numPages
+     */
     public ArrayList<Game> getGamesFromPageSizeAndNumPages(int pageSize, int numPages) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
@@ -209,6 +215,12 @@ public class RawgApi {
         return games;
     }
 
+    /**
+     * Maps a list of games with a set of parameters
+     * @param numberOfPages number of games inside a page
+     * @param parameters a map
+     * @return returns a list of games
+     */
     public ArrayList<Game> getGamesByParameters(int numberOfPages, Map<String, String> parameters) {
         int counter = 0;
         ArrayList<Game> games = new ArrayList<>();
@@ -251,12 +263,23 @@ public class RawgApi {
         return games;
     }
 
+    /**
+     * Used to save a list of games inside our database by getting a list of games from the RAWG api
+     * and calling the insert method in game service
+     * @param pageSize number of games inside a page
+     * @param numPages number of pages
+     */
     public void saveGames(int pageSize, int numPages) {
         ArrayList<Game> games = getGamesFromPageSizeAndNumPages(pageSize, numPages);
 
         gameService.insertGame(games);
     }
 
+    /**
+     * helper function to convert the RAWG api platforms of platforms
+     * @param game the RAWG game
+     * @return returns a game that is set to our game model
+     */
     public Game convertRawgGame(RawgGame game) {
         List<Platform> platforms = new ArrayList<>();
 
@@ -268,6 +291,11 @@ public class RawgApi {
                 game.getBackground_image(), game.getDevelopers(), game.getPublishers(), platforms,game.getGenres());
     }
 
+    /**
+     * helper function to set the platform
+     * @param platform platform wrapper class
+     * @return returns our new platform class
+     */
     public Platform convertWrapperPlatform(PlatformWrapperClass platform) {
         return new Platform(platform.getPlatform().getId(), platform.getPlatform().getName());
     }

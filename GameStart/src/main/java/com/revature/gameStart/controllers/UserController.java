@@ -20,6 +20,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * controller to manipulate the user
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -28,6 +31,13 @@ public class UserController {
     private final HttpSession httpSession;
     private final HttpServletResponse response;
     @Autowired
+
+    /**
+     * constructor for the user controller that sets the user service, http session, and response
+     * @param userService user service
+     * @param httpSession https session
+     * @param response response
+     */
     public UserController(UserService userService, HttpSession httpSession,HttpServletResponse response){
         this.userService = userService;
         this.httpSession = httpSession;
@@ -36,6 +46,11 @@ public class UserController {
 
     // Get------------------------------------------------------------------------------
 
+    /**
+     * an endpoint used to get a user by their id
+     * @param id id of user
+     * @return returns a user
+     */
     //@Secured({"Admin", "Dev"})
     @GetMapping(path = "/id/{id}")
     public User UserById(@PathVariable int id) {
@@ -49,6 +64,10 @@ public class UserController {
         }
     }
 
+    /**
+     * default endpoint /users to get a list of all users
+     * @return returns a list of all users
+     */
     // @Secured({"Admin", "Dev"})
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> AllUsers() {
@@ -63,6 +82,11 @@ public class UserController {
 
     }
 
+    /**
+     * an endpoint that get the user by their role
+     * @param userRole the users role
+     * @return returns the user's role
+     */
     // @Secured({"Admin", "Dev"})
     @GetMapping(path = "/role/{userRole}",  produces = MediaType.APPLICATION_JSON_VALUE)
     public Set<User> UserByRole(@PathVariable String userRole) {
@@ -78,6 +102,10 @@ public class UserController {
         }
     }
 
+    /**
+     * an endpoint that returns a user by their username
+     * @return returns a user
+     */
     //@Secured({"Admin", "Dev"})
     @GetMapping(path="/username")
     public User UserByUsername() {
@@ -93,6 +121,10 @@ public class UserController {
         }
     }
 
+    /**
+     * an endpoint that returns a live of favorite by the user
+     * @return returns a list of favorite
+     */
     @GetMapping(path = "/myFavorite")
     public List<Favorite> getFavorite() {
         if (httpSession.getAttribute("userrole") == (UserRole.BASIC.toString())) {
@@ -105,6 +137,11 @@ public class UserController {
     }
 
     // Put-----------------------------------------------------------------------------------
+
+    /**
+     * an endpoint that updates a user
+     * @param updatedUser user being updated
+     */
     // @Secured({"Admin", "Dev", "Basic"})
     @PutMapping(path="/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void UpdatedUser(@RequestBody User updatedUser) {
@@ -118,12 +155,22 @@ public class UserController {
     }
 
     // Post-------------------------------------------------------------------------------------
+
+    /**
+     * an endpoint that registers a new user
+     * @param newUser the new user being register
+     */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public void RegisteredUser(@RequestBody User newUser){
         userService.register(newUser);
     }
 
+    /**
+     * an endpoint that authenticates a user by their username and password
+     * @param credentials the credentials of the user
+     * @return returns a principal
+     */
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(path = "/authentication", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Principal authenticateUser(@RequestBody @Valid Credentials credentials) {
@@ -135,6 +182,10 @@ public class UserController {
         return principal;
     }
 
+    /**
+     * an endpoint that adds a game to the favorite list of a user
+     * @param gameid game id
+     */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path = "/favorite/{gameid}")
     public void Favorite(@PathVariable int gameid) {
@@ -148,6 +199,10 @@ public class UserController {
 
     //DELETE--------------------------------------------------------------------------------------------------------
 
+    /**
+     * an endpoint to delete a favorite game from a user by the game id
+     * @param gameid game id
+     */
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(path = "/favorite/delete/{gameid}")
     public void DeleteFavorite(@PathVariable int gameid) {
@@ -159,6 +214,9 @@ public class UserController {
         }
     }
 
+    /**
+     * logs a user out by making session invalid
+     */
     //Logout
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping(path = "/logout")
