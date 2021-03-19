@@ -3,6 +3,9 @@ package com.revature.gameStart.dtos;
 import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 
+/**
+ * dto for validating a username and password
+ */
 public class Credentials {
     @NotEmpty
     private String username;

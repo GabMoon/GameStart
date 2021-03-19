@@ -4,6 +4,9 @@ package com.revature.gameStart.dtos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.revature.gameStart.models.User;
 
+/**
+ * dto used to set the principal of a user
+ */
 public class Principal {
     //Attribute -----------------------------------------------------
     private int id;

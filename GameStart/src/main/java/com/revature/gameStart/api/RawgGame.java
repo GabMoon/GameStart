@@ -5,6 +5,9 @@ import com.revature.gameStart.models.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class that models the RAWG game returned by the RAWG api
+ */
 public class RawgGame {
 
     private int id;

@@ -1,5 +1,8 @@
 package com.revature.gameStart.exceptions;
 
+/**
+ * An exception that is called when trying to persist a resource to the database
+ */
 public class ResourcePersistenceException extends RuntimeException {
 
     public ResourcePersistenceException() {

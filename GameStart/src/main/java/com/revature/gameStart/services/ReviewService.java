@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Review service class that has methods for calling the review repo and checking the validation of the data
+ */
 @Service
 @Transactional
 public class ReviewService {
@@ -26,6 +29,11 @@ public class ReviewService {
         super();
     }
 
+    /**
+     * constructor for review service that sets up the review repository and the game service
+     * @param repo review repository
+     * @param gameService game service
+     */
     @Autowired
     public ReviewService(ReviewRepository repo, GameService gameService) {
         super();
@@ -33,7 +41,14 @@ public class ReviewService {
         this.reviewRepo = repo;
     }
 
-
+    /**
+     * inserts a review in the review database with a user id, game id, and the review's description and score for the game. checks
+     * the user and game id to be above 0. Also makes sure the score for the game is 0 - 5.
+     * @param userId user id
+     * @param gameId game id
+     * @param description description of the game
+     * @param score score of the game
+     */
     public void insertReview(int userId,int gameId, String description,int score){
 
         if(userId <= 0 || gameId <=0 || (score <0 || score >6)) throw  new InvalidRequestException();
@@ -49,6 +64,12 @@ public class ReviewService {
 
     }
 
+    /**
+     * get a review by the user and game ids. checks to see if the user and game ids are above 0.
+     * @param userId user id
+     * @param gameId game is
+     * @return returns a review in a game made by a user
+     */
     public Review getReviewByUserAndGameId(int userId, int gameId) {
 
         if(gameId <= 0 || userId <= 0) throw new InvalidRequestException();
@@ -57,6 +78,12 @@ public class ReviewService {
         return review.orElseThrow(ResourceNotFoundException::new);
     }
 
+    /**
+     * gets a list of reviews by the game id. checks if the game id is 0 or above. Also checks to see
+     * if the list of review returned is not empty
+     * @param gameId game id
+     * @return returns a list of review for a game
+     */
     public List<Review> getReviewsByGameId(int gameId) {
         if(gameId <= 0) throw  new InvalidRequestException();
 
@@ -69,6 +96,12 @@ public class ReviewService {
         return reviewList;
     }
 
+    /**
+     * gets a list of reviews by the user with their id. checks to see if the user id is 0 or above. also
+     * checks if the list of reviews returns is not empty
+     * @param userId user id
+     * @return returns a list of reviews made by a user
+     */
     public List<Review> getReviewsByUserId(int userId) {
         if(userId <= 0) throw  new InvalidRequestException();
 
@@ -80,6 +113,10 @@ public class ReviewService {
         return reviewList;
     }
 
+    /**
+     * finds all the reviews made. checks if the list is not empty.
+     * @return returns a list of all reviews
+     */
     public List<Review> findAllReview() {
 
         List<Review> allReviews = reviewRepo.findAll();
@@ -89,7 +126,13 @@ public class ReviewService {
         return allReviews;
     }
 
-
+    /**
+     * updates a review by the game and user ids. sets the review's new score and description.
+     * @param userId user id
+     * @param gameId game id
+     * @param score new score for the game
+     * @param description new description for the review
+     */
     public void updateReviewDescriptionAndScore(int userId, int gameId,int score,String description){
         if(userId <= 0 || gameId<=0) throw new InvalidRequestException();
 
@@ -100,6 +143,12 @@ public class ReviewService {
         gameService.updateGameRating(gameId);
     }
 
+    /**
+     * update the review description by the user id and game id
+     * @param userId user id
+     * @param gameId game id
+     * @param description new description of a review
+     */
     public void updateReviewDescription(int userId, int gameId,String description){
         if(userId <= 0 || gameId<=0) throw new InvalidRequestException();
 
@@ -109,6 +158,12 @@ public class ReviewService {
         reviewRepo.updateDescription(userId,gameId,description);
     }
 
+    /**
+     * update the review score by the user id and game id
+     * @param userId user id
+     * @param gameId game id
+     * @param score new score for the review
+     */
     public void updateReviewScore(int userId, int gameId,int score){
         if(userId <= 0 || gameId<=0) throw  new InvalidRequestException();
 
@@ -118,7 +173,11 @@ public class ReviewService {
         gameService.updateGameRating(gameId);
     }
 
-
+    /**
+     * delete a review by the user id and game id. checks if the user id and game id is valid.
+     * @param userId user id
+     * @param gameId game id
+     */
     public void deleteReviewByUserIdAndGameId(int userId,int gameId){
         if(userId <= 0 || gameId<=0) throw  new InvalidRequestException();
 
@@ -127,6 +186,12 @@ public class ReviewService {
         reviewRepo.deleteReviewByUserIdAndGameId(userId,gameId);
         gameService.updateGameRating(gameId);
     }
+
+    /**
+     * helper function to check if the review is a valid review
+     * @param review review
+     * @return returns true if the review is valid else false
+     */
     public boolean isReviewValid(Review review) {
 
         if (review == null) return false;

@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This the model class for a genre with annotations that maps to the database
+ */
 @Entity
 @Table(name = "genre")
 public class Genre {

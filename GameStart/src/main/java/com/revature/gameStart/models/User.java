@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This the model class for the user with annotations that maps to the database
+ */
 @Entity
 @Table(name = "app_user")
 public class User {
