@@ -5,6 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
+/**
+ * User session class
+ */
 public class UserSession {
 
     private static final UserSession userSession = new UserSession();
@@ -12,14 +15,28 @@ public class UserSession {
     private UserSession() {
 
     }
+
+    /**
+     * constructor for user session that returns a user session
+     * @return returns a user session
+     */
     public static UserSession getUserSession(){
         return userSession;
     }
 
+    /**
+     * returns a http session array list
+     * @return returns a list of http session
+     */
     public ArrayList<HttpSession> getHttpSessionArrayList() {
         return httpSessionArrayList;
     }
 
+    /**
+     * creates a http session and sets the attribute of that session to the user that logs in
+     * @param req http request
+     * @param user user
+     */
     public void createSession(HttpServletRequest req , User user) {
         HttpSession httpSession = req.getSession();
 
@@ -35,6 +52,10 @@ public class UserSession {
         httpSessionArrayList.add(httpSession);
     }
 
+    /**
+     * checks the http session for a user
+     * @param req http servelet request
+     */
     public void checkForUser(HttpServletRequest req){
 
 
@@ -63,6 +84,10 @@ public class UserSession {
         }
     }
 
+    /**
+     * invalidates a user session and logs them out
+     * @param req http servlet request
+     */
     public void logoutUser(HttpServletRequest req) {
 
         for (HttpSession httpSession1: httpSessionArrayList) {
