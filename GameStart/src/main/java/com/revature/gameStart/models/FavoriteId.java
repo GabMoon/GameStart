@@ -3,6 +3,9 @@ package com.revature.gameStart.models;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * This is a helper model to map the favorite id to the database
+ */
 public class FavoriteId implements Serializable {
 
     private User user;

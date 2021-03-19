@@ -1,5 +1,8 @@
 package com.revature.gameStart.exceptions;
 
+/**
+ * An exception that gets called when an invalid request happens
+ */
 public class InvalidRequestException extends RuntimeException {
 
     public InvalidRequestException() {

@@ -2,6 +2,9 @@ package com.revature.gameStart.models;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * This is the user roles model
+ */
 public enum UserRole {
     //Attributes ----------------------------------------------------
     BASIC("Basic"), ADMIN("Admin"), DEV("Dev");
