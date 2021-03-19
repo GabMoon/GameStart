@@ -17,6 +17,10 @@ public class Principal {
     private String token;
 
     //Constructors --------------------------------------------------
+    public Principal() {
+        super();
+    }
+
     public Principal(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
