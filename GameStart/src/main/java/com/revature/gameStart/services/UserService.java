@@ -10,6 +10,7 @@ import com.revature.gameStart.models.User;
 import com.revature.gameStart.models.UserRole;
 import com.revature.gameStart.repositories.UserRepository;
 import com.revature.gameStart.util.PasswordEncryption;
+import com.revature.gameStart.util.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -133,14 +134,16 @@ public class UserService {
         }
     }
 
+
     /**
      * checks to see if the user is in the database by their username and password and checks if their
      * password is encrypted. returns a principal
      * @param username username
      * @param password password
-     * @return returns a principal
+     * @return returns a authenticated user
      */
-    public Principal authenticate(String username, String password) {
+    public User authenticate(String username, String password) {
+
         System.out.println("I am in authenticate in UserService");
         User tempUser = getUserByUsername(username);
         System.out.println("I am in authenticate in UserService after");
@@ -155,10 +158,12 @@ public class UserService {
             System.out.println("The passwords were not the same!!!");
             return null;
         }
-        Principal principal = new Principal(tempUser);
-        System.out.println(principal.getId() + " " + principal.getUsername() + " " + principal.getRole() + " I am in authenticate");
-        System.out.println("I am in authenticate in UserService after Principal");
-        return  principal;
+
+        return tempUser;
+//        Principal principal = new Principal(tempUser);
+//        System.out.println(principal.getId() + " " + principal.getUsername() + " " + principal.getRole() + " I am in authenticate");
+//        System.out.println("I am in authenticate in UserService after Principal");
+//        return  principal;
     }
 
     /**
@@ -297,6 +302,10 @@ public class UserService {
         if(persistedUser.isPresent() && persistedUser.get().getId() != updatedUser.getId()) {
             throw new ResourcePersistenceException("That username is taken by someone else");
         }
+
+        updatedUser.setPassword(PasswordEncryption.encryptString(updatedUser.getPassword()));
+
+
         userRepository.save(updatedUser);
     }
 
