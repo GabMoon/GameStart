@@ -46,6 +46,7 @@ public class ReviewController {
     }
     @ResponseStatus(HttpStatus.OK)
     //gets all user's reviews
+  
     @GetMapping(path= "/user")
     public List<Review> getAllUserReviews(HttpServletRequest request, HttpServletResponse response){
         UserSession.getUserSession().checkForUser(request);
@@ -70,6 +71,7 @@ public class ReviewController {
 //        }
     }
 
+
     //get all reviews for a game
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "/game/{id}")
@@ -80,6 +82,7 @@ public class ReviewController {
 
     //get a reviews base on user id and game id
     @GetMapping(path = "/UserGameReview/{gameId}")
+
     public Review getReviewWithGameIdAndUserId(@PathVariable int gameId, HttpServletRequest request, HttpServletResponse response) {
         UserSession.getUserSession().checkForUser(request);
 
@@ -104,8 +107,29 @@ public class ReviewController {
 
     }
 
+//    @GetMapping(path = "/UserGameReview/{gameId}/{userId}")
+//    public Review getReviewWithGameIdAndUserId(@PathVariable int gameId, @PathVariable int userId) {
+////        if (session.getAttribute("userrole") == (UserRole.BASIC.toString())){
+//        return reviewService.getReviewByUserAndGameId(userId, gameId);
+////        }
+////        else{
+////            response.setStatus(403);
+////            return null;
+////        }
+//
+//    }
 
     //Post -----------------------------------------------------------
+//    @PostMapping(path = "/register/{gameId}/{userId}/{score}/{description}")
+//    public void registerReview(@PathVariable int gameId,@PathVariable int userId, @PathVariable String description,@PathVariable int score){
+////        if (session.getAttribute("userrole") == (UserRole.BASIC.toString())) {
+//            reviewService.insertReview(userId, gameId, description, score);
+////        }
+////        else{
+////            response.setStatus(403);
+////        }
+//    }
+
     @PostMapping(path = "/register/{gameId}/{score}/{description}")
     public void registerReview(@PathVariable int gameId,@PathVariable String description,@PathVariable int score, HttpServletRequest request, HttpServletResponse response){
 

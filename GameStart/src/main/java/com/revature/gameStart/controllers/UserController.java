@@ -167,7 +167,7 @@ public class UserController {
 //            return null;
 //        }
     }
-
+  
     @GetMapping(path = "/myFavorite")
     public List<Favorite> getFavorite(HttpServletRequest request, HttpServletResponse response) {
 
