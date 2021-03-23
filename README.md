@@ -12,7 +12,7 @@ Java, SQL, JDBC, JUnit, PostgreSQL, Maven, AWS RDS, AWS EC2, AWS CodeBuild, Inte
 
 
 
-
+Note: This is one part of the project. To get a fully functional project, you need to set up the front end as well. Here is a link to that front end with its own README: https://github.com/GabMoon/GameStartWeb. This is a fully functional API that that has endpoints that can be hit. The paths for those endpoints are inside the controllers directory of the project.
 # GameStart
 
 ## Project Description
@@ -30,7 +30,6 @@ a list of the top 10 rated games based on users' ratings and a personal list of 
 * Maven - version 4.0.0
 * Mockito - 2.10.0
 * Git - 2.31.0
-* Spring
 * Spring Boot - version 2.4.3
 * Spring Data
 * S3 Bucket
@@ -41,13 +40,14 @@ a list of the top 10 rated games based on users' ratings and a personal list of 
 ## Features
 
 List of features ready and TODOs for future development
-* Awesome feature 1
-* Awesome feature 2
-* Awesome feature 3
+* Password Encryption
+* Ability to search by 1 or more letters for games
+* Store a review and grab reviews for a game
 
 To-do list:
-* Wow improvement to be done 1
-* Wow improvement to be done 2
+* Allow more than 1 user to log in on the website
+* Look up other users
+* Search a game by developer(s), publisher(s), or platform(s)
 
 ## Getting Started
    
@@ -61,16 +61,7 @@ To-do list:
 5. Run the program once. It will take a while because it is inserting about 2,000 different games and its data. Once it is finished inserting, stop the program and comment out the @PostConstruct code that was previously uncommented in the last step. You don't want this to run more than once. It will not work because of the primary key and foreign key constraints that was put on the tables.
 6. You now have your business logic and tables set up.
 7. This backend runs on port 5000. If you would like to change the port that it runs on, you need to go to the application.yml file and change the port number at the top of the file. Make sure to choose a port that you know is not being used.
-8. Note: This is one part of the project. To get a fully functional project, you need to set up the front end as well. Here is a link to that front end with its own README: https://github.com/GabMoon/GameStartWeb
-
-
-(include all environment setup steps)
-
-> Be sure to include BOTH Windows and Unix command  
-> Be sure to mention if the commands only work on a specific platform (eg. AWS, GCP)
-
-- All the `code` required to get started
-- Images of what it should look like
+8. Note: This is one part of the project. To get a fully functional project, you need to set up the front end as well. Here is a link to that front end with its own README: https://github.com/GabMoon/GameStartWeb. This is a fully functional API that that has endpoints that can be hit. The paths for those endpoints are inside the controllers directory of the project.
 
 ## Usage
 * This project is meant to be used in conjunction with a front end that was created and linked in step 8 on the Getting Started section.
