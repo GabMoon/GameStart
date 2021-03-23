@@ -17,7 +17,7 @@ a list of the top 10 rated games based on users' ratings and a personal list of 
 * Mockito - 2.10.0
 * Git - 2.31.0
 * Spring Boot - version 2.4.3
-* Spring Data
+* Spring Data - version 2.4.3
 * S3 Bucket
 * Spring Security
 * Tomcat - Located inside Spring Boot
