@@ -70,7 +70,3 @@ To-do list:
 ## Contributors
 
 > Gabrielle Luna, Calvin Zheng, Tuan Mai, and Daniel Skwarcha
-
-## License
-
-This project uses the following license: [<license_name>](<link>).
